@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Zip_ZipPayment Payment configuration
+*
+* @category    ZipMoney
+* @package     Zip_ZipPayment
+* @author    Zip Plugin Team <integration@zip.co>
+* @copyright   ZipMoney (http://zipmoney.com.au)
+* @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+*/
+-->
+
+<payment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd">
+    <methods>
+        <method name="zip_zippayment">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+    </methods>
+</payment>
