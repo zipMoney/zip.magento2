@@ -24,11 +24,11 @@
         </arguments>
     </virtualType>
     <!-- CheckoutsApi -->
-    <virtualType name="checkoutsApi" type="\\Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi"></virtualType>
+    <virtualType name="checkoutsApi" type="\Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi"></virtualType>
     <!-- ChargesApi -->
-    <virtualType name="chargesApi" type="\\Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi"></virtualType>
+    <virtualType name="chargesApi" type="\Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi"></virtualType>
     <!-- RefundsApi -->
-    <virtualType name="refundsApi" type="\\Zip\ZipPayment\MerchantApi\Lib\Api\RefundsApi"></virtualType>
+    <virtualType name="refundsApi" type="\Zip\ZipPayment\MerchantApi\Lib\Api\RefundsApi"></virtualType>
 
 
     <type name="Zip\ZipPayment\Model\Checkout">

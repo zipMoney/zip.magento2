@@ -395,12 +395,7 @@ class ChargesApi
                     $e->setResponseObject($data);
                     break;
             }
-            $file = 'C:\wamp64\www\magentoce233\var\log\charge.txt';
-// Open the file to get existing content
-            $current = file_get_contents($file);
-            $current .= "Header Data:".json_encode($data);
-// Write the contents back to the file
-            file_put_contents($file, $current);
+
             throw $e;
         }
     }
