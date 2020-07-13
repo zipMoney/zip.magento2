@@ -6,7 +6,7 @@ use \Zip\ZipPayment\Model\Config;
 use \Zip\ZipPayment\Model\Checkout\AbstractCheckout;
 
 class Checkout extends AbstractCheckout
-{   
+{
   /**
    * @var Magento\Checkout\Helper\Data
    */
@@ -16,7 +16,7 @@ class Checkout extends AbstractCheckout
    * @var string
    */
   protected $_redirectUrl  = null;
- 
+
   /**
    * @var string
    */
@@ -25,10 +25,10 @@ class Checkout extends AbstractCheckout
 
   const STATUS_MAGENTO_AUTHORIZED = "zip_authorised";
 
-  public function __construct(    
-    \Magento\Customer\Model\Session $customerSession,    
-    \Magento\Checkout\Model\Session $checkoutSession,   
-    \Magento\Checkout\Helper\Data $checkoutHelper,    
+  public function __construct(
+    \Magento\Customer\Model\Session $customerSession,
+    \Magento\Checkout\Model\Session $checkoutSession,
+    \Magento\Checkout\Helper\Data $checkoutHelper,
     \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
     \Magento\Sales\Model\OrderFactory $orderFactory,
     \Magento\Customer\Model\CustomerFactory $customerFactory,
@@ -43,18 +43,18 @@ class Checkout extends AbstractCheckout
     \Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi $checkoutsApi,
     array $data = []
   )
-  { 
+  {
     $this->_checkoutHelper = $checkoutHelper;
     $this->_api = $checkoutsApi;
 
     if (isset($data['quote'])) {
       if($data['quote'] instanceof \Magento\Quote\Model\Quote){
         $this->setQuote($data['quote']);
-      } else {      
+      } else {
         throw new \Magento\Framework\Exception\LocalizedException(__('Quote instance is required.'));
       }
     }
-  
+
     parent::__construct( $customerSession, $checkoutSession, $customerFactory, $quoteRepository, $payloadHelper, $logger, $helper, $config);
   }
 
@@ -80,7 +80,7 @@ class Checkout extends AbstractCheckout
     $checkoutMethod = $this->getCheckoutMethod();
     $isAllowedGuestCheckout = $this->_checkoutHelper->isAllowedGuestCheckout($this->_quote, $this->_quote->getStoreId());
     $isCustomerLoggedIn = $this->_getCustomerSession()->isLoggedIn();
-    
+
     $this->_logger->debug("Checkout Method:- ".$checkoutMethod);
     $this->_logger->debug("Is Allowed Guest Checkout :- ".$isAllowedGuestCheckout);
     $this->_logger->debug("Is Customer Logged In :- ".$isCustomerLoggedIn);
@@ -99,7 +99,7 @@ class Checkout extends AbstractCheckout
     }
 
     $this->_quote->reserveOrderId();
-    /* 
+    /*
       Commenting out the  following line.
       Apparantly triggering more than one quote save results in "We don't have as many "Produt Name" as you requested." error when the product has 1 item left.
     */
@@ -127,13 +127,13 @@ class Checkout extends AbstractCheckout
       //$this->_quote->setZipmoneyCheckoutId($this->_checkoutId);
       $this->_quoteRepository->save($this->_quote);
 
-      $this->_redirectUrl = $checkout->getUri();      
+      $this->_redirectUrl = $checkout->getUri();
     } catch(\Zip\ZipPayment\MerchantApi\Lib\ApiException $e){
-      $this->_logger->debug("Errors:- ".json_encode($e->getResponseBody()));      
-      $this->_logger->debug("Errors:- ".json_encode($e->getCode()));      
-      $this->_logger->debug("Errors:- ".json_encode($e->getResponseObject()));      
-      throw new \Magento\Framework\Exception\LocalizedException(__('An error occurred while to requesting the redirect url.'));
-    } 
+      $this->_logger->debug("Errors:- ".json_encode($e->getResponseBody()));
+      $this->_logger->debug("Errors:- ".json_encode($e->getCode()));
+      $this->_logger->debug("Errors:- ".json_encode($e->getResponseObject()));
+      throw new \Magento\Framework\Exception\LocalizedException(__('An error occurred while to requesting the redirect url.'),$e,$e->getCode());
+    }
 
     return $checkout;
   }
@@ -147,7 +147,7 @@ class Checkout extends AbstractCheckout
   {
     return $this->_redirectUrl;
   }
-  
+
   /**
    * Returns the zipMoney Checkout Id
    *
