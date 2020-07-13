@@ -24,7 +24,6 @@ define(
         Zip.Checkout.init({
           redirect: window.checkoutConfig.payment.zippayment.inContextCheckoutEnabled ? 0 : 1,
           checkoutUri: window.checkoutConfig.payment.zippayment.checkoutUri,
-          m2checkoutUri: window.checkoutConfig.payment.zippayment.m2checkoutUri,
           redirectUri: window.checkoutConfig.payment.zippayment.redirectUri,
           onComplete: this.onComplete.bind(this),
           onError: this.onError.bind(this),
