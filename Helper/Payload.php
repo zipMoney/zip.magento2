@@ -245,12 +245,14 @@ class Payload extends AbstractHelper
 
         $grand_total = $order->getGrandTotal() ? $order->getGrandTotal() : 0;
         $currency = $order->getOrderCurrencyCode() ? $order->getOrderCurrencyCode() : null;
+        // set capture = true when currency is not AUD
+        $capture = ($currency == 'AUD') ? $this->_config->isCharge() : true;
 
         $chargeReq->setAmount((float)$grand_total)
             ->setCurrency($currency)
             ->setOrder($this->getOrderDetails(new ChargeOrder))
             ->setMetadata($this->getMetadata())
-            ->setCapture($this->_config->isCharge())
+            ->setCapture($capture)
             ->setAuthority($this->getAuthority());
 
         return $chargeReq;
