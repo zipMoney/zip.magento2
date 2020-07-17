@@ -13,19 +13,25 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * @link      http://www.zipmoney.com.au/
  */
 
-class RootEl extends \Magento\Framework\View\Element\Template 
+class RootEl extends \Magento\Framework\View\Element\Template
 {
 
   /**
    * @var boolean
    */
-  protected $_render = false; 
+  protected $_render = false;
 
   /**
    * @var \Zip\ZipPayment\Model\Config
    */
-  protected $_config; 
-  
+  protected $_config;
+    /**
+     * Object Manager instance
+     *
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $_objectManager = null;
+
   /**
    * @var \Zip\ZipPayment\Helper\Logger
    */
@@ -40,18 +46,24 @@ class RootEl extends \Magento\Framework\View\Element\Template
      * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
-
+    /**
+     * Factory constructor
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     */
   public function __construct(
-    \Magento\Framework\View\Element\Template\Context $context,       
+    \Magento\Framework\View\Element\Template\Context $context,
     \Zip\ZipPayment\Model\Config $config,
     \Zip\ZipPayment\Helper\Logger $logger,
     ScopeConfigInterface $scopeConfig,
+    \Magento\Framework\ObjectManagerInterface $objectManager,
     $template,
     array $data = []
   ) {
     $this->_config = $config;
     $this->_loggger = $logger;
     $this->_scopeConfig = $scopeConfig;
+    $this->_objectManager = $objectManager;
     $this->setTemplate("Zip_ZipPayment::".$template);
 
     parent::__construct($context, $data);
@@ -85,7 +97,8 @@ class RootEl extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             self::COUNTRY_CODE_PATH,
-            ScopeInterface::SCOPE_WEBSITES
+            ScopeInterface::SCOPE_STORES,
+            $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId()
         );
     }
 }
