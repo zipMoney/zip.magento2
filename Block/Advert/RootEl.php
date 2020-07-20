@@ -16,89 +16,66 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class RootEl extends \Magento\Framework\View\Element\Template
 {
 
-  /**
-   * @var boolean
-   */
-  protected $_render = false;
-
-  /**
-   * @var \Zip\ZipPayment\Model\Config
-   */
-  protected $_config;
     /**
-     * Object Manager instance
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var boolean
      */
-    protected $_objectManager = null;
+    protected $_render = false;
 
-  /**
-   * @var \Zip\ZipPayment\Helper\Logger
-   */
-  protected $_logger;
+    /**
+     * @var \Zip\ZipPayment\Model\Config
+     */
+    protected $_config;
+
+    /**
+     * @var \Zip\ZipPayment\Helper\Logger
+     */
+    protected $_logger;
 
     /**
      * Get country path
      */
     const COUNTRY_CODE_PATH = 'general/country/default';
 
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Zip\ZipPayment\Model\Config $config,
+        \Zip\ZipPayment\Helper\Logger $logger,
+        $template,
+        array $data = []
+    ) {
+        $this->_config = $config;
+        $this->_loggger = $logger;
+        $this->setTemplate("Zip_ZipPayment::".$template);
+
+        parent::__construct($context, $data);
+    }
+
     /**
-     * @var ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-    /**
-     * Factory constructor
+     * Get merchant public key
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @return string
      */
-  public function __construct(
-    \Magento\Framework\View\Element\Template\Context $context,
-    \Zip\ZipPayment\Model\Config $config,
-    \Zip\ZipPayment\Helper\Logger $logger,
-    ScopeConfigInterface $scopeConfig,
-    \Magento\Framework\ObjectManagerInterface $objectManager,
-    $template,
-    array $data = []
-  ) {
-    $this->_config = $config;
-    $this->_loggger = $logger;
-    $this->_scopeConfig = $scopeConfig;
-    $this->_objectManager = $objectManager;
-    $this->setTemplate("Zip_ZipPayment::".$template);
-
-    parent::__construct($context, $data);
-  }
-
-  /**
-   * Get merchant public key
-   *
-   * @return string
-   */
-  public function getMerchantPublicKey()
-  {
-    return $this->_config->getMerchantPublicKey();
-  }
-
-  /**
-   * Get API environment sandbox|live
-   *
-   * @return string
-   */
-  public function getEnvironment()
-  {
-    return $this->_config->getEnvironment();
-  }
-
-    /** Get Country code by website scope
-    *
-    * @return string
-    */
-    public function getCountryByWebsite(): string
+    public function getMerchantPublicKey()
     {
-        return $this->_scopeConfig->getValue(
-            self::COUNTRY_CODE_PATH,
-            ScopeInterface::SCOPE_STORES,
-            $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId()
-        );
+        return $this->_config->getMerchantPublicKey();
+    }
+
+    /**
+     * Get API environment sandbox|live
+     *
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return $this->_config->getEnvironment();
+    }
+
+    /**
+     * get region
+     * @return string
+     */
+    public function getRegion()
+    {
+        return $this->_config->getRegion();
     }
 }
