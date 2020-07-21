@@ -430,14 +430,7 @@ class Charge extends AbstractCheckout
     // Invoice
     $invoice = $payment->getCreatedInvoice();
     
-    if ($invoice) { 
-      if ($this->_order->getCanSendNewEmailFlag()) {
-        try {
-          $this->_orderSender->send($this->_order);
-        } catch (\Exception $e) {
-          $this->_logger->critical($e);
-        }
-      }   
+    if ($invoice) {  
 
       $this->_order->addStatusHistoryComment($this->_helper->__('Notified customer about invoice #%s.', $invoice->getIncrementId()))
                    ->setIsCustomerNotified(true);
