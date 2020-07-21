@@ -29,53 +29,57 @@
                     <label>Api source</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\ApiSource</source_model>
                 </field>
-                <field id="merchant_private_key" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="widget_region" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Select Region</label>
+                    <source_model>Zip\ZipPayment\Model\Config\Source\Region</source_model>
+                </field>
+                <field id="merchant_private_key" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Private Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="merchant_public_key" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="merchant_public_key" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Public Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="payment_action" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="payment_action" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Capture Method</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\PaymentAction</source_model>
                 </field>
-                <field id="log_settings" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="log_settings" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Log Setting</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\LogSettings</source_model>
                 </field>
-                <field id="environment" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="environment" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Environment</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\Environment</source_model>
                 </field>
-<!--                <field id="incontext_checkout" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>In-Context Checkout</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>-->
-                <field id="allowspecific" translate="label" type="allowspecific" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <!--                <field id="incontext_checkout" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
+                                    <label>In-Context Checkout</label>
+                                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                </field>-->
+                <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment from Specific Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="min_order_total" translate="label" type="text" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="min_order_total" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Order Value</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
-                <field id="max_order_total" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="max_order_total" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Maximum Order Value</label>
                 </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="sort_order" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
 
                 <!--  Widgets and Banners  Settings -->
-                <group id="zip_advert" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="zip_advert" translate="label" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Marketing Banners Widgets and Banners</label>
                     <group id="homepage" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Home Page</label>
