@@ -89,7 +89,7 @@ class Configuration
                         "production" => array("host" => 'https://api.zipmoney.com.au/merchant/v1')
                     ),
         "global" => array(
-                        "sandbox" => array("host" => "https://global-api.labs.au.edge.zip.co/merchant"),
+                        "sandbox" => array("host" => "https://global-api.sand.au.edge.zip.co/merchant"),
                         "production" => array("host" => 'https://global-api.prod.au.edge.zip.co/merchant')
                     )
     );
