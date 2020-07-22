@@ -51,6 +51,13 @@ class Config implements ConfigInterface
     const PAYMENT_ZIPMONEY_API_SOURCE  = 'api_source';
 
     /**
+     * Region
+     *
+     * @const
+     */
+    const PAYMENT_ZIPMONEY_WIDGET_REGION  = 'widget_region';
+
+    /**
      * Payment Method Title
      *
      * @const
@@ -304,6 +311,16 @@ class Config implements ConfigInterface
     public function getAPiSource($storeId = null)
     {
         return $this->getConfigData(self::PAYMENT_ZIPMONEY_API_SOURCE, $storeId);
+    }
+
+    /**
+     * Returns Api Source
+     *
+     * @return string
+     */
+    public function getRegion($storeId = null)
+    {
+        return $this->getConfigData(self::PAYMENT_ZIPMONEY_WIDGET_REGION, $storeId);
     }
 
     /**
