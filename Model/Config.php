@@ -97,7 +97,14 @@ class Config implements ConfigInterface
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_MINIMUM_TOTAL  = 'min_total';
+    const PAYMENT_ZIPMONEY_MINIMUM_TOTAL  = 'min_order_total';
+
+    /**
+     * Maximum Order Total
+     *
+     * @const
+     */
+    const PAYMENT_ZIPMONEY_MAXIMUM_TOTAL  = 'max_order_total';
 
     /**
      * Incontext Checkout
@@ -333,8 +340,6 @@ class Config implements ConfigInterface
         return  self::PAYMENT_METHOD_LOGO_ZIP;
     }
 
-
-
     /**
      * Check if in-context checkout is active
      *
@@ -353,6 +358,16 @@ class Config implements ConfigInterface
     public function getOrderTotalMinimum()
     {
         return (float) $this->getConfigData(self::PAYMENT_ZIPMONEY_MINIMUM_TOTAL);
+    }
+
+    /**
+     * Returns the minimum order total
+     *
+     * @return bool
+     */
+    public function getOrderTotalMaximum()
+    {
+        return (float) $this->getConfigData(self::PAYMENT_ZIPMONEY_MAXIMUM_TOTAL);
     }
 
     /**

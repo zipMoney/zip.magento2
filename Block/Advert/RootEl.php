@@ -78,4 +78,14 @@ class RootEl extends \Magento\Framework\View\Element\Template
     {
         return $this->_config->getRegion();
     }
+
+    public function getOrderTotalMinimum()
+    {
+        return $this->_config->getOrderTotalMinimum();
+    }
+
+    public function getOrderTotalMaximum()
+    {
+        return $this->_config->getOrderTotalMaximum();
+    }
 }
