@@ -16,14 +16,14 @@ var inContextCheckoutEnabled = window.checkoutConfig.payment.zippayment.inContex
 
 define(
     [   'Magento_Checkout/js/view/payment/default',
-        'Zip_ZipPayment/js/action/place-zip-order',        
+        'Zip_ZipPayment/js/action/place-zip-order',
         'Zip_ZipPayment/js/action/set-payment-method',
         'Magento_Ui/js/model/messages',
-        'ko',        
+        'ko',
         'Magento_Checkout/js/model/quote',
-        'jquery',        
-        'Magento_Checkout/js/model/error-processor',        
-        'Magento_Checkout/js/model/full-screen-loader',          
+        'jquery',
+        'Magento_Checkout/js/model/error-processor',
+        'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/payment/additional-validators',
         'mage/storage',
         'zipMoneyCheckoutJs'
@@ -31,17 +31,17 @@ define(
     function (Component, placeZipOrderAction, setPaymentMethodAction, Messages,ko,quote,$,errorProcessor,fullScreenLoader,additionalValidators,storage) {
         'use strict';
 
-        return Component.extend({              
-            isPlaceOrderActionAllowed: ko.observable(quote.billingAddress() != null),             
-            redirectAfterPlaceOrder: true, 
+        return Component.extend({
+            isPlaceOrderActionAllowed: ko.observable(quote.billingAddress() != null),
+            redirectAfterPlaceOrder: true,
             defaults: {
                 template: 'Zip_ZipPayment/payment/zipmoney'
             },
-            initChildren: function () {         
+            initChildren: function () {
                 this.messageContainer = new Messages();
                 this.createMessagesComponent();
                 return this;
-            }, 
+            },
             continueToZipMoney: function (x,event) {
                 var self = this,
                     placeOrder;
@@ -54,7 +54,7 @@ define(
 
                     this.isPlaceOrderActionAllowed(false);
                     this.selectPaymentMethod();
-                    
+
                     setPaymentMethodAction(this.messageContainer)
                         .success(function(){
                             placeZipOrderAction(self.getData(),self.messageContainer)
@@ -112,7 +112,14 @@ define(
             },
             getTitle:function(){
                 return window.checkoutConfig.payment.zippayment.title;
-            }, 
+            },
+            isAu:function(){
+                var region = $("div[data-zm-region]").attr("data-zm-region");
+                if (region !== 'au'){
+                    return false;
+                }
+                return true;
+            },
             getContinueText:function(){
                 return "Continue";
             },
