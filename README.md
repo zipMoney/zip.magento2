@@ -43,7 +43,7 @@ Note:- This extension is not yet available in the Magento Marketplace. This sect
 choose  Payment Methods when    it  expands.
 4. On   the Payment Methods page,   click   Other   Payment Methods so  it  expands.
 
-![Alt text](https://static.zipmoney.com.au/github-images/payment-section.png "Payment Section")
+![Alt text](https://static.zipmoney.com.au/github-images/payment-section-2.jpg "Payment Section")
 
 1. Set Enable  to  Yes and a   title   for the payment method  “zipMoney   – Buy   Now Pay Later”  or  “zipPay – Buy   Now Pay Later”
 2. Enter the   Private Key and Public  Key.
