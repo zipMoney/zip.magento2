@@ -1,8 +1,6 @@
 # Magento2 zippayment
 
-## Installation
-
-Detail installation please visit <https://zip-magento2.api-docs.io/v1/integration-steps/2-download-zip-extension> for more updated information
+## Installation instructions
 
 ### Install via SFTP or file upload
 
@@ -20,14 +18,14 @@ To install the extension via [Composer](http://getcomposer.org/), run
 - `php bin/magento module:enable Zip_ZipPayment` (enabled plugin if disabled)
 - ~~`php bin/magento setup:upgrade`~~ (we have remove DB dependency so no more this steps)
 - `php bin/magento setup:di:compile`
-- `php bin/magento setup:static-content:deploy en_AU en_US` (specify your website regions, or leave it empty for all)
+- `php bin/magento setup:static-content:deploy`
 
 To upgrade Existing Modules
 
 - `composer update zip/magento2`
 - `php bin/magento setup:di:compile`
 - `php bin/magento c:c`
-- `php bin/magento setup:static-content:deploy en_AU en_US en_GB`
+- `php bin/magento setup:static-content:deploy`
 
 ### Install using Magento Component Manager
 
@@ -37,22 +35,26 @@ Note:- This extension is not yet available in the Magento Marketplace. This sect
 
 ### Payment Section
 
-1. Open the Magento Admin
-2. Click    the Stores  icon    in  the left    hand menu   and from    there   choose  Settings    >   Configuration
-3. The  configuration   page    will    open.   From  the little  menu    on  the left    hand    side    of  this    screen  you must    click   Sales  and then
+1. Contact Zip instegrations support through one of the following channels depending on your region to request your configuration credentials:
+    ### UK: integrationsuk@zip.co
+    ### NZ: integrationsnz@zip.co
+    ### AU: integrations@zip.co
+    
+2. Open the Magento Admin
+3. Click    the Stores  icon    in  the left    hand menu   and from    there   choose  Settings    >   Configuration
+4. The  configuration   page    will    open.   From  the little  menu    on  the left    hand    side    of  this    screen  you must    click   Sales  and then
 choose  Payment Methods when    it  expands.
-4. On   the Payment Methods page,   click   Other   Payment Methods so  it  expands.
+5. On   the Payment Methods page,   click   Other   Payment Methods so  it  expands.
 
 ![Alt text](https://static.zipmoney.com.au/github-images/payment-section-2.jpg "Payment Section")
 
-1. Set Enable  to  Yes and a   title   for the payment method  “zipMoney   – Buy   Now Pay Later”  or  “zipPay – Buy   Now Pay Later”
+1. Set Enable  to  Yes and a   title   for the payment method  “Zip"
 2. Enter the   Private Key and Public  Key.
-3. Select   your    product type    (zipPay or  zipMoney)
-4. Set  payment action  to  Capture, or  Authorise   if  you want    to  authorise   on  checkout    completion  and capture later
-5. Set  log settings    to  Info or Debug if you want to log all the debug information as well.
-6. Set  environment to  either  Sandbox (for    your    test    or  development site)   or  Production  (for    your    live    website)
-7. Set  In-Context  Checkout    to  Yes to enable iframe checkout
-8. Set  Sort    Order   to  0 to place the payment method on top.
+3. Set  payment action to Capture, or Authorise if you want to authorise  on checkout completion and capture later
+  ### Note: Authorise is only available for AU region only.
+4. Set  log settings    to  Info or Debug if you want to log all the debug information as well.
+5. Set  environment to  either  Sandbox (for    your    test    or  development site)   or  Production  (for    your    live    website)
+7. Set  Sort    Order   to  0 to place the payment method on top.
 
 ### Marketing Banners and Widgets Section
 
