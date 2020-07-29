@@ -1,5 +1,14 @@
 # Magento2 zippayment
 
+
+Zip gives customers the ability to shop now and pay later with no interest while you as the merchant get paid immediately. Customers select Zip at checkout and get approved instantly and shop securely. Zip is fully integrated with the store’s online checkout and can integrate seamlessly with your store directly via API or by using one of our platform plugins. 
+
+### Prerequisites
+
+- PHP 7 or above
+- Configuration credentials
+- Composer (optional)
+
 ## Installation instructions
 
 ### Install via SFTP or file upload
@@ -40,6 +49,7 @@ Note:- This extension is not yet available in the Magento Marketplace. This sect
     ### NZ: integrationsnz@zip.co
     ### AU: integrations@zip.co
     
+    
 2. Open the Magento Admin
 3. Click    the Stores  icon    in  the left    hand menu   and from    there   choose  Settings    >   Configuration
 4. The  configuration   page    will    open.   From  the little  menu    on  the left    hand    side    of  this    screen  you must    click   Sales  and then
@@ -63,3 +73,7 @@ choose  Payment Methods when    it  expands.
 1. Scroll down  and expand  Marketing   Banners and Widgets section
 2. Expand   everything  and set all options to Yes/No as per your requirement.
 3. Click    Save    Config  up  the top
+
+### Questions and feedback
+
+If you have any questions concerning this product or the implementation please contact integrations@zip.co for assistance.
