@@ -11,7 +11,6 @@ define([
                 this._super();
             },
             getTotalAmount:function(){
-                console.log(totals.totals());
                 return parseFloat(totals.totals()['grand_total']);
             },
             getCurrencyCode:function () {
