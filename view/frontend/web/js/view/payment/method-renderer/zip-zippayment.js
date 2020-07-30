@@ -113,13 +113,6 @@ define(
             getTitle:function(){
                 return window.checkoutConfig.payment.zippayment.title;
             },
-            isAu:function(){
-                var region = $("div[data-zm-region]").attr("data-zm-region");
-                if (region !== 'au'){
-                    return false;
-                }
-                return true;
-            },
             getContinueText:function(){
                 return "Continue";
             },
