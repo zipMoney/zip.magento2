@@ -18,7 +18,7 @@ class ApiSource implements \Magento\Framework\Option\ArrayInterface
    */
   public function toOptionArray() {
   
-    return [['value' => 'default', 'label' => __('Default')],['value' => 'global', 'label' => __('Global')]];
+    return [['value' => 'global', 'label' => __('Global')],['value' => 'default', 'label' => __('AU region')]];
   }
 
 }
