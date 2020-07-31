@@ -19,7 +19,7 @@
                 <active>1</active>
                 <model>ZipMoneyGatewayFacade</model>
                 <title>Zip - Own it now, pay later</title>
-                <api_source>default</api_source>
+                <api_source>global</api_source>
                 <widget_region>au</widget_region>
                 <merchant_private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <merchant_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
