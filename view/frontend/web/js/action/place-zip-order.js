@@ -56,6 +56,7 @@ define(
             });
           }).fail(function (data) {
               errorProcessor.process(data, messageContainer);
+              reject(data.responseJSON);
               fullScreenLoader.stopLoader();
           }).always(function (data) {
             fullScreenLoader.stopLoader();
