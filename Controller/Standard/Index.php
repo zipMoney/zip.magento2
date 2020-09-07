@@ -51,7 +51,7 @@ class Index extends AbstractStandard
             if ($e->getCode() == 401 || $e->getCode() == 402) {
                 $message = "Can not get the redirect url from zipMoney because of inavlid zip api key.";
             }
-            $result = ['error' => true, 'message' => $message , 'code'=> $e->getCode()];
+            $result = ['error' => true, 'message' => $message , 'error_message' => $e->getMessage(), 'code'=> $e->getCode()];
       }
       return $this->_sendResponse($result, \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR);
     }
