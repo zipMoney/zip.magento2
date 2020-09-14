@@ -22,16 +22,16 @@ Zip gives customers the ability to shop now and pay later with no interest while
 To install the extension via [Composer](http://getcomposer.org/), run
 
 - `cd <your Magento install dir>`
-- `composer require zip/magento2`
+- `composer require zip/magento2:dev-master`
 - `php bin/magento module:status` (Check if Zip_ZipPayment module is disabled)
 - `php bin/magento module:enable Zip_ZipPayment` (enabled plugin if disabled)
-- ~~`php bin/magento setup:upgrade`~~ (we have remove DB dependency so no more this steps)
+- `php bin/magento setup:upgrade`
 - `php bin/magento setup:di:compile`
 - `php bin/magento setup:static-content:deploy`
 
 To upgrade Existing Modules
 
-- `composer update zip/magento2`
+- `composer update zip/magento2:dev-master`
 - `php bin/magento setup:di:compile`
 - `php bin/magento c:c`
 - `php bin/magento setup:static-content:deploy`
