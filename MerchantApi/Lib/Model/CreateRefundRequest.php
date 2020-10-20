@@ -23,6 +23,25 @@ class CreateRefundRequest implements ArrayAccess
       */
     protected static $swaggerModelName = 'CreateRefundRequest';
 
+    const CURRENCY_AUD = 'AUD';
+    const CURRENCY_NZD = 'NZD';
+    const CURRENCY_GBP = 'GBP';
+    const CURRENCY_USD = 'USD';
+
+    /**
+     * Gets allowable values of the enum
+     * @return string[]
+     */
+    public function getCurrencyAllowableValues()
+    {
+        return array(
+            self::CURRENCY_AUD,
+            self::CURRENCY_NZD,
+            self::CURRENCY_USD,
+            self::CURRENCY_GBP,
+        );
+    }
+
     /**
       * Array of property to type mappings. Used for (de)serialization
       * @var string[]
@@ -68,9 +87,9 @@ class CreateRefundRequest implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = array('AUD', 'NZD','GBP');
+        $allowed_values = $this->getCurrencyAllowableValues();
         if ((!in_array($currency, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'currency', must be one of 'AUD', 'NZD', 'GBP'");
+            throw new \InvalidArgumentException("Invalid value for 'currency', must be one of '".implode("','",$allowed_values)."'.");
         }
         $this->container['currency'] = $currency;
 

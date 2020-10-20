@@ -103,6 +103,8 @@ class CreateChargeRequest implements ArrayAccess
 
     const CURRENCY_AUD = 'AUD';
     const CURRENCY_NZD = 'NZD';
+    const CURRENCY_GBP = 'GBP';
+    const CURRENCY_USD = 'USD';
     
 
     
@@ -115,6 +117,8 @@ class CreateChargeRequest implements ArrayAccess
         return array(
             self::CURRENCY_AUD,
             self::CURRENCY_NZD,
+            self::CURRENCY_GBP,
+            self::CURRENCY_USD,
         );
     }
     
@@ -158,9 +162,9 @@ class CreateChargeRequest implements ArrayAccess
         if ($this->container['currency'] === null) {
             $invalid_properties[] = "'currency' can't be null";
         }
-        $allowed_values = array("AUD", "NZD", "GBP");
+        $allowed_values = $this->getCurrencyAllowableValues();
         if (!in_array($this->container['currency'], $allowed_values)) {
-            $invalid_properties[] = "invalid value for 'currency', must be one of 'AUD', 'NZD', 'GBP'.";
+            $invalid_properties[] = "invalid value for 'currency', must be one of '".implode("','",$allowed_values)."'.";
         }
 
         return $invalid_properties;
@@ -184,7 +188,7 @@ class CreateChargeRequest implements ArrayAccess
         if ($this->container['currency'] === null) {
             return false;
         }
-        $allowed_values = array("AUD", "NZD");
+        $allowed_values = $this->getCurrencyAllowableValues();;
         if (!in_array($this->container['currency'], $allowed_values)) {
             return false;
         }
@@ -271,9 +275,9 @@ class CreateChargeRequest implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = array('AUD', 'NZD','GBP');
+        $allowed_values = $this->getCurrencyAllowableValues();
         if ((!in_array($currency, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'currency', must be one of 'AUD', 'NZD', 'GBP'");
+            throw new \InvalidArgumentException("Invalid value for 'currency', must be one of '".implode("','",$allowed_values)."'.");
         }
         $this->container['currency'] = $currency;
 
