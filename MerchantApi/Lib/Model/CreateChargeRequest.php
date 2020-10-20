@@ -188,7 +188,7 @@ class CreateChargeRequest implements ArrayAccess
         if ($this->container['currency'] === null) {
             return false;
         }
-        $allowed_values = $this->getCurrencyAllowableValues();;
+        $allowed_values = $this->getCurrencyAllowableValues();
         if (!in_array($this->container['currency'], $allowed_values)) {
             return false;
         }
