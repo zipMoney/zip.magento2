@@ -12,6 +12,7 @@
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
+use \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
 
 class CreateRefundRequest implements ArrayAccess
 {
@@ -68,9 +69,9 @@ class CreateRefundRequest implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = array('AUD', 'NZD','GBP');
-        if ((!in_array($currency, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'currency', must be one of 'AUD', 'NZD', 'GBP'");
+        $allowed_values = currencyUtil::isValidCurrency($currency);
+        if (!$allowed_values['valid']) {
+            throw new \InvalidArgumentException($allowed_values['message']);
         }
         $this->container['currency'] = $currency;
 
@@ -116,9 +117,9 @@ class CreateRefundRequest implements ArrayAccess
         return self::$getters;
     }
 
-    
 
-    
+
+
 
     /**
      * Associative array for storing property values
