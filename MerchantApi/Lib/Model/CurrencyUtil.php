@@ -20,7 +20,7 @@ class CurrencyUtil
      * Gets allowable values of the enum
      * @return string[]
      */
-    private function getAllowedCurrencyList()
+    private static function getAllowedCurrencyList()
     {
         return array(
             self::CURRENCY_AUD,
@@ -30,13 +30,13 @@ class CurrencyUtil
         );
     }
 
-    public function isValidCurrency($currency)
+    public static function isValidCurrency($currency)
     {
         $result = array(
             'valid' => true,
             'message' => '',
         );
-        $allowed_values = $this->getAllowedCurrencyList();
+        $allowed_values = self::getAllowedCurrencyList();
         if (!in_array($currency, $allowed_values)) {
             $result['valid'] = false;
             $result['message'] = "invalid value for 'currency', must be one of '".implode("','",$allowed_values)."'.";

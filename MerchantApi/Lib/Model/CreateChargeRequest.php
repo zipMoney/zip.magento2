@@ -147,7 +147,7 @@ class CreateChargeRequest implements ArrayAccess
         if ($this->container['currency'] === null) {
             $invalid_properties[] = "'currency' can't be null";
         }
-        $allowed_values = $this->_currencyUtil->isValidCurrency($this->container['currency']);
+        $allowed_values = $this->_currencyUtil::isValidCurrency($this->container['currency']);
         if (!$allowed_values['valid']) {
             $invalid_properties[] = $allowed_values['message'];
         }
@@ -173,7 +173,7 @@ class CreateChargeRequest implements ArrayAccess
         if ($this->container['currency'] === null) {
             return false;
         }
-        $allowed_values = $this->_currencyUtil->isValidCurrency($this->container['currency']);
+        $allowed_values = $this->_currencyUtil::isValidCurrency($this->container['currency']);
         if (!$allowed_values['valid']) {
             return false;
         }
@@ -260,7 +260,7 @@ class CreateChargeRequest implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = $this->_currencyUtil->isValidCurrency($currency);
+        $allowed_values = $this->_currencyUtil::isValidCurrency($currency);
         if (!$allowed_values['valid']) {
             throw new \InvalidArgumentException($allowed_values['message']);
         }

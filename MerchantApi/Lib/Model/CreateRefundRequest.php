@@ -74,7 +74,7 @@ class CreateRefundRequest implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = $this->_currencyUtil->isValidCurrency($currency);
+        $allowed_values = $this->_currencyUtil::isValidCurrency($currency);
         if (!$allowed_values['valid']) {
             throw new \InvalidArgumentException($allowed_values['message']);
         }
