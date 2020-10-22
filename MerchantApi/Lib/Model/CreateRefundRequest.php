@@ -23,24 +23,11 @@ class CreateRefundRequest implements ArrayAccess
       */
     protected static $swaggerModelName = 'CreateRefundRequest';
 
-    const CURRENCY_AUD = 'AUD';
-    const CURRENCY_NZD = 'NZD';
-    const CURRENCY_GBP = 'GBP';
-    const CURRENCY_USD = 'USD';
-
     /**
-     * Gets allowable values of the enum
-     * @return string[]
+     * Get all allowed currencies
+     * @var \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
      */
-    public function getCurrencyAllowableValues()
-    {
-        return array(
-            self::CURRENCY_AUD,
-            self::CURRENCY_NZD,
-            self::CURRENCY_USD,
-            self::CURRENCY_GBP,
-        );
-    }
+    protected $_currencyUtil;
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -87,9 +74,9 @@ class CreateRefundRequest implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = $this->getCurrencyAllowableValues();
-        if ((!in_array($currency, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'currency', must be one of '".implode("','",$allowed_values)."'.");
+        $allowed_values = $this->_currencyUtil->isValidCurrency($currency);
+        if (!$allowed_values['valid']) {
+            throw new \InvalidArgumentException($allowed_values['message']);
         }
         $this->container['currency'] = $currency;
 
@@ -135,9 +122,9 @@ class CreateRefundRequest implements ArrayAccess
         return self::$getters;
     }
 
-    
 
-    
+
+
 
     /**
      * Associative array for storing property values
@@ -156,6 +143,7 @@ class CreateRefundRequest implements ArrayAccess
         $this->container['amount'] = isset($data['amount']) ? $data['amount'] : null;
         $this->container['currency'] = isset($data['currency']) ? $data['currency'] : null;
         $this->container['metadata'] = isset($data['metadata']) ? $data['metadata'] : null;
+        $this->_currencyUtil = new \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
     }
 
     /**

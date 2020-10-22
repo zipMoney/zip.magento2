@@ -24,6 +24,12 @@ class CreateChargeRequest implements ArrayAccess
     protected static $swaggerModelName = 'CreateChargeRequest';
 
     /**
+     * Get all allowed currencies
+     * @var \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
+     */
+    protected $_currencyUtil;
+
+    /**
       * Array of property to type mappings. Used for (de)serialization
       * @var string[]
       */
@@ -101,28 +107,6 @@ class CreateChargeRequest implements ArrayAccess
         return self::$getters;
     }
 
-    const CURRENCY_AUD = 'AUD';
-    const CURRENCY_NZD = 'NZD';
-    const CURRENCY_GBP = 'GBP';
-    const CURRENCY_USD = 'USD';
-    
-
-    
-    /**
-     * Gets allowable values of the enum
-     * @return string[]
-     */
-    public function getCurrencyAllowableValues()
-    {
-        return array(
-            self::CURRENCY_AUD,
-            self::CURRENCY_NZD,
-            self::CURRENCY_GBP,
-            self::CURRENCY_USD,
-        );
-    }
-    
-
     /**
      * Associative array for storing property values
      * @var mixed[]
@@ -142,6 +126,7 @@ class CreateChargeRequest implements ArrayAccess
         $this->container['capture'] = isset($data['capture']) ? $data['capture'] : true;
         $this->container['order'] = isset($data['order']) ? $data['order'] : null;
         $this->container['metadata'] = isset($data['metadata']) ? $data['metadata'] : null;
+        $this->_currencyUtil = new \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
     }
 
     /**
@@ -162,9 +147,9 @@ class CreateChargeRequest implements ArrayAccess
         if ($this->container['currency'] === null) {
             $invalid_properties[] = "'currency' can't be null";
         }
-        $allowed_values = $this->getCurrencyAllowableValues();
-        if (!in_array($this->container['currency'], $allowed_values)) {
-            $invalid_properties[] = "invalid value for 'currency', must be one of '".implode("','",$allowed_values)."'.";
+        $allowed_values = $this->_currencyUtil->isValidCurrency($this->container['currency']);
+        if (!$allowed_values['valid']) {
+            $invalid_properties[] = $allowed_values['message'];
         }
 
         return $invalid_properties;
@@ -188,8 +173,8 @@ class CreateChargeRequest implements ArrayAccess
         if ($this->container['currency'] === null) {
             return false;
         }
-        $allowed_values = $this->getCurrencyAllowableValues();
-        if (!in_array($this->container['currency'], $allowed_values)) {
+        $allowed_values = $this->_currencyUtil->isValidCurrency($this->container['currency']);
+        if (!$allowed_values['valid']) {
             return false;
         }
         return true;
@@ -275,9 +260,9 @@ class CreateChargeRequest implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = $this->getCurrencyAllowableValues();
-        if ((!in_array($currency, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'currency', must be one of '".implode("','",$allowed_values)."'.");
+        $allowed_values = $this->_currencyUtil->isValidCurrency($currency);
+        if (!$allowed_values['valid']) {
+            throw new \InvalidArgumentException($allowed_values['message']);
         }
         $this->container['currency'] = $currency;
 

@@ -21,7 +21,14 @@ class ShopperStatistics implements ArrayAccess
       * The original name of the model.
       * @var string
       */
+
     protected static $swaggerModelName = 'Shopper_statistics';
+
+    /**
+     * Get all allowed currencies
+     * @var \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
+     */
+     protected $_currencyUtil;
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -117,30 +124,10 @@ class ShopperStatistics implements ArrayAccess
         return self::$getters;
     }
 
-    const CURRENCY_AUD = 'AUD';
-    const CURRENCY_NZD = 'NZD';
-    const CURRENCY_GBP = 'GBP';
-    const CURRENCY_USD = 'USD';
     const FRAUD_CHECK_RESULT_PASS = 'pass';
     const FRAUD_CHECK_RESULT_FAIL = 'fail';
     const FRAUD_CHECK_RESULT_UNKNOWN = 'unknown';
-    
 
-    
-    /**
-     * Gets allowable values of the enum
-     * @return string[]
-     */
-    public function getCurrencyAllowableValues()
-    {
-        return array(
-            self::CURRENCY_AUD,
-            self::CURRENCY_NZD,
-            self::CURRENCY_USD,
-            self::CURRENCY_GBP,
-        );
-    }
-    
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -153,7 +140,7 @@ class ShopperStatistics implements ArrayAccess
             self::FRAUD_CHECK_RESULT_UNKNOWN,
         );
     }
-    
+
 
     /**
      * Associative array for storing property values
@@ -178,6 +165,7 @@ class ShopperStatistics implements ArrayAccess
         $this->container['last_login'] = isset($data['last_login']) ? $data['last_login'] : null;
         $this->container['has_previous_purchases'] = isset($data['has_previous_purchases']) ? $data['has_previous_purchases'] : null;
         $this->container['fraud_check_result'] = isset($data['fraud_check_result']) ? $data['fraud_check_result'] : null;
+        $this->_currencyUtil = new \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
     }
 
     /**
@@ -188,10 +176,9 @@ class ShopperStatistics implements ArrayAccess
     public function listInvalidProperties()
     {
         $invalid_properties = array();
-
-        $allowed_values = $this->getCurrencyAllowableValues();
-        if (!in_array($this->container['currency'], $allowed_values)) {
-            $invalid_properties[] = "invalid value for 'currency', must be one of '".implode("','",$allowed_values)."'.";
+        $allowed_values = $this->_currencyUtil->isValidCurrency($this->container['currency']);
+        if (!$allowed_values['valid']) {
+            $invalid_properties[] = $allowed_values['message'];
         }
 
         $allowed_values = array("pass", "fail", "unknown");
@@ -211,8 +198,8 @@ class ShopperStatistics implements ArrayAccess
     public function valid()
     {
 
-        $allowed_values = $this->getCurrencyAllowableValues();
-        if (!in_array($this->container['currency'], $allowed_values)) {
+        $allowed_values = $this->_currencyUtil->isValidCurrency($this->container['currency']);
+        if (!$allowed_values['valid']) {
             return false;
         }
         $allowed_values = array("pass", "fail", "unknown");
@@ -386,9 +373,9 @@ class ShopperStatistics implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = $this->getCurrencyAllowableValues();
-        if (!is_null($currency) && (!in_array($currency, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'currency', must be one of '".implode("','",$allowed_values)."'.");
+        $allowed_values = $this->_currencyUtil->isValidCurrency($currency);
+        if (!is_null($currency) && (!$allowed_values['valid'])) {
+            throw new \InvalidArgumentException($allowed_values['message']);
         }
         $this->container['currency'] = $currency;
 
