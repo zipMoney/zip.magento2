@@ -12,6 +12,7 @@
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
+use \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
 
 class ShopperStatistics implements ArrayAccess
 {
@@ -23,12 +24,6 @@ class ShopperStatistics implements ArrayAccess
       */
 
     protected static $swaggerModelName = 'Shopper_statistics';
-
-    /**
-     * Get all allowed currencies
-     * @var \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
-     */
-     protected $_currencyUtil;
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -165,7 +160,6 @@ class ShopperStatistics implements ArrayAccess
         $this->container['last_login'] = isset($data['last_login']) ? $data['last_login'] : null;
         $this->container['has_previous_purchases'] = isset($data['has_previous_purchases']) ? $data['has_previous_purchases'] : null;
         $this->container['fraud_check_result'] = isset($data['fraud_check_result']) ? $data['fraud_check_result'] : null;
-        $this->_currencyUtil = new \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
     }
 
     /**
@@ -176,7 +170,7 @@ class ShopperStatistics implements ArrayAccess
     public function listInvalidProperties()
     {
         $invalid_properties = array();
-        $allowed_values = $this->_currencyUtil::isValidCurrency($this->container['currency']);
+        $allowed_values = currencyUtil::isValidCurrency($this->container['currency']);
         if (!$allowed_values['valid']) {
             $invalid_properties[] = $allowed_values['message'];
         }
@@ -198,7 +192,7 @@ class ShopperStatistics implements ArrayAccess
     public function valid()
     {
 
-        $allowed_values = $this->_currencyUtil::isValidCurrency($this->container['currency']);
+        $allowed_values = currencyUtil::isValidCurrency($this->container['currency']);
         if (!$allowed_values['valid']) {
             return false;
         }
@@ -373,7 +367,7 @@ class ShopperStatistics implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = $this->_currencyUtil::isValidCurrency($currency);
+        $allowed_values = currencyUtil::isValidCurrency($currency);
         if (!is_null($currency) && (!$allowed_values['valid'])) {
             throw new \InvalidArgumentException($allowed_values['message']);
         }

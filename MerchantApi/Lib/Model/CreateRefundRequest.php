@@ -12,6 +12,7 @@
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
+use \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
 
 class CreateRefundRequest implements ArrayAccess
 {
@@ -22,12 +23,6 @@ class CreateRefundRequest implements ArrayAccess
       * @var string
       */
     protected static $swaggerModelName = 'CreateRefundRequest';
-
-    /**
-     * Get all allowed currencies
-     * @var \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
-     */
-    protected $_currencyUtil;
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -74,7 +69,7 @@ class CreateRefundRequest implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = $this->_currencyUtil::isValidCurrency($currency);
+        $allowed_values = currencyUtil::isValidCurrency($currency);
         if (!$allowed_values['valid']) {
             throw new \InvalidArgumentException($allowed_values['message']);
         }
@@ -143,7 +138,6 @@ class CreateRefundRequest implements ArrayAccess
         $this->container['amount'] = isset($data['amount']) ? $data['amount'] : null;
         $this->container['currency'] = isset($data['currency']) ? $data['currency'] : null;
         $this->container['metadata'] = isset($data['metadata']) ? $data['metadata'] : null;
-        $this->_currencyUtil = new \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
     }
 
     /**
