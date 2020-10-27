@@ -104,8 +104,8 @@ class HealthCheck
 
 
         $curlEnabled = function_exists('curl_version');
-        $publicKey = $this->_config->getMerchantPrivateKey();
-        $privateKey = $this->_config->getMerchantPublicKey();
+        $publicKey = $this->_config->getMerchantPublicKey();
+        $privateKey = $this->_config->getMerchantPrivateKey();
 
         // check if private key is empty
         if (empty($privateKey)) {
@@ -117,11 +117,6 @@ class HealthCheck
             $this->appendItem(self::STATUS_ERROR, self::API_PUBLIC_KEY_INVALID_MESSAGE);
         }
 
-        // check if current merchant country been supported
-        /*if ($this->_config->isMerchantCountrySupported()) {
-            $this->appendItem(self::STATUS_ERROR, self::MERCHANT_COUNTRY_NOT_SUPPORTED_MESSAGE);
-        }*/
-
         // check whether SSL is enabled
         $this->checkStoreSSLSettings();
 
@@ -132,8 +127,6 @@ class HealthCheck
             $curlObject->setConfig(
                 array(
                     'timeout' => 10,
-                    'verifypeer' => false,
-                    'verifyhost' => 0,
                 )
             );
 
@@ -149,16 +142,20 @@ class HealthCheck
                     'Content-Type: application/json',
                     'Idempotency-Key: ' .uniqid()
                 );
-                $this->_logger->debug('header:'.json_encode($headers));
-                $checkoutId = 'au-co_PxSeQfLlpaYn6bLMZSMv13';
-                $url = $apiConfig->getHost().'/checkouts/'.$checkoutId;
-                $this->_logger->debug('url:'.$url);
+                $url = $apiConfig->getHost().'/me';
+                $isAuEndpoint = false;
+
+                // check api key length if it is more than or equal 50 then call SMI merchant info endpoint
+                // otherwise call checkout get api endpoint only for Australia
+                if (strlen($privateKey) <= 50) {
+                    $checkoutId = 'au-co_PxSeQfLlpaYn6bLMZSMv13';
+                    $url = $apiConfig->getHost().'/checkouts/'.$checkoutId;
+                    $isAuEndpoint = true;
+                }
                 $curlObject->write(\Zend_Http_Client::GET, $url, '1.1', $headers);
                 $response = $curlObject->read();
                 $sslVerified = $curlObject->getInfo(CURLINFO_SSL_VERIFYRESULT) == 0;
                 $httpCode = $curlObject->getInfo(CURLINFO_HTTP_CODE);
-                $this->_logger->debug('$httpCode:'.$httpCode);
-                $this->_logger->debug('Response:'.json_encode($response));
                 // if API certification invalid
                 if (!$sslVerified) {
                     $this->appendItem(self::STATUS_WARNING, self::API_CERTIFICATE_INVALID_MESSAGE);
@@ -169,11 +166,9 @@ class HealthCheck
                     $this->appendItem(self::STATUS_ERROR, self::API_CREDENTIAL_INVALID_MESSAGE);
                 }
                 if ($httpCode == '200') {
-                    $json = '{
-                        "name":"Online shop",
-                        "regions": ["au", "nz", "uk", "za", "us"]
-                        }';
-                    $data = json_decode($json);
+                    $result = preg_split('/^\r?$/m', $response, 2);
+                    $result = trim($result[1]);
+                    $data = json_decode($result);
                     $this->appendItem( self::STATUS_OK, "Api key is valid for ".$data->name);
                     $regions = $data->regions;
                     if ($regions) {
@@ -184,9 +179,13 @@ class HealthCheck
                         $this->appendItem(self::STATUS_OK, $regionList);
                     }
                 }
+
+                if ((int)$httpCode > 400 && $isAuEndpoint == true){
+                    $this->appendItem( self::STATUS_OK, "Api key is valid for Australia region.");
+                }
             }
             catch(\Exception $e) {
-                $this->appendItem(self::STATUS_ERROR, "There is process error. Please try later");
+                $this->appendItem(self::STATUS_ERROR, "Error occurred, Please try again.");
             }
 
             $curlObject->close();
