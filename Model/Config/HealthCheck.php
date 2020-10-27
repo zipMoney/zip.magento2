@@ -165,7 +165,7 @@ class HealthCheck
                 if ($httpCode == '401') {
                     $this->appendItem(self::STATUS_ERROR, self::API_CREDENTIAL_INVALID_MESSAGE);
                 }
-                if ($httpCode == '200') {
+                if ($httpCode == '200' && $isAuEndpoint == false) {
                     $result = preg_split('/^\r?$/m', $response, 2);
                     $result = trim($result[1]);
                     $data = json_decode($result);
@@ -180,7 +180,7 @@ class HealthCheck
                     }
                 }
 
-                if ((int)$httpCode > 400 && $isAuEndpoint == true){
+                if ($httpCode == '404' || $httpCode =='200' && $isAuEndpoint == true){
                     $this->appendItem( self::STATUS_OK, "Api key is valid for Australia region.");
                 }
             }
