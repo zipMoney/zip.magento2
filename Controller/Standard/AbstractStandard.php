@@ -339,10 +339,10 @@ abstract class AbstractStandard extends Action
             return false;
         }
 
-      $orderId = $checkout->getOrder()->getReference();
+      $quoteId = $checkout->getOrder()->getCartReference();
       $this->_quote = $this->_quoteCollectionFactory
           ->create()
-          ->addFieldToFilter("reserved_order_id", $orderId)
+          ->addFieldToFilter("entity_id", $quoteId)
           ->getFirstItem();
       return $this->_quote;
   }
