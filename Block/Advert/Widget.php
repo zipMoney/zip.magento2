@@ -51,16 +51,4 @@ class Widget extends  AbstractAdvert implements CatalogBlock\ShortcutInterface
   {
     return $this->_alias;
   }
-
-  /**
-   * display product widget in line
-   */
-    public function isDisplayWidgetInsideIframe() {
-        $region = $this->_config->getRegion();
-        $displayIframe = "true";
-        if ($region == 'nz' || $region == 'uk'){
-            $displayIframe = "false";
-        }
-        return $displayIframe;
-    }
 }

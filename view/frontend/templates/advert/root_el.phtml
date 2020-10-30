@@ -3,4 +3,4 @@
         "zipMoneyWidgetJs"
     ]);
 </script>
-<div data-zm-merchant="<?php  echo $this->getMerchantPublicKey();?>" data-env="<?php  echo $this->getEnvironment();?>" data-zm-region="<?php  echo strtolower($this->getRegion());?>" data-require-checkout="false" data-zm-price-max="<?php  echo $this->getOrderTotalMaximum();?>" data-zm-price-min="<?php  echo $this->getOrderTotalMinimum();?>"></div>
+<div data-zm-merchant="<?php  echo $this->getMerchantPublicKey();?>" data-env="<?php  echo $this->getEnvironment();?>" data-zm-region="<?php  echo strtolower($this->getRegion());?>" data-require-checkout="false" data-zm-price-max="<?php  echo $this->getOrderTotalMaximum();?>" data-zm-price-min="<?php  echo $this->getOrderTotalMinimum();?>" data-zm-display-inline="<?php  echo $this->isDisplayInlineWidget();?>"></div>
