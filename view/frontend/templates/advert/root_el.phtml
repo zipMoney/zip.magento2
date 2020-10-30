@@ -2,5 +2,16 @@
     require([
         "zipMoneyWidgetJs"
     ]);
+    // merchant Id
+    zip_widget_merchantId = '<?php  echo $this->getMerchantPublicKey();?>';
+    // Environment like sandbox or production
+    zip_widget_env = '<?php  echo $this->getEnvironment();?>';
+    // region like au/nz/uk/us/za
+    zip_widget_region = '<?php  echo strtolower($this->getRegion());?>';
+    // max price to show the zip cart or product widget
+    zip_widget_max_price = '<?php  echo $this->getOrderTotalMaximum();?>';
+    // min price to show the zip cart or product widget
+    zip_widget_min_price = '<?php  echo $this->getOrderTotalMinimum();?>';
+    // widget display inline if this value is true otherwise it will display iframe
+    zip_widget_display_inline = '<?php  echo $this->isDisplayInlineWidget();?>';
 </script>
-<div data-zm-merchant="<?php  echo $this->getMerchantPublicKey();?>" data-env="<?php  echo $this->getEnvironment();?>" data-zm-region="<?php  echo strtolower($this->getRegion());?>" data-require-checkout="false" data-zm-price-max="<?php  echo $this->getOrderTotalMaximum();?>" data-zm-price-min="<?php  echo $this->getOrderTotalMinimum();?>" data-zm-display-inline="<?php  echo $this->isDisplayInlineWidget();?>"></div>
