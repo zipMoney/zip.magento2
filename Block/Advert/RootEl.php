@@ -88,4 +88,16 @@ class RootEl extends \Magento\Framework\View\Element\Template
     {
         return $this->_config->getOrderTotalMaximum();
     }
+
+    /**
+     * display product widget in line
+     */
+    public function isDisplayInlineWidget() {
+        $region = $this->_config->getRegion();
+        $displayInline = "false";
+        if ($region == 'nz' || $region == 'uk'){
+            $displayInline = "true";
+        }
+        return $displayInline;
+    }
 }
