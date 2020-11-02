@@ -18,7 +18,7 @@
                 <attribute type="expanded">1</attribute>
                 <fieldset_css>zipmoney-section</fieldset_css>
                 <!--  Basic Settings -->
-                <field id="check_validity" translate="label" type="button" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="check_validity" translate="label" type="button" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Check Api Key Validity</label>
                     <frontend_model>Zip\ZipPayment\Block\System\Config\HealthCheck</frontend_model>
                 </field>
