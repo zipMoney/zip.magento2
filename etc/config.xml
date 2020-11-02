@@ -25,7 +25,7 @@
                 <merchant_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <order_status>new</order_status>
                 <min_order_total>1</min_order_total>
-                <max_order_total>1000</max_order_total>
+                <max_order_total>1500</max_order_total>
                 <order_status>pending_payment</order_status>
                 <payment_action>capture</payment_action>
                 <can_initialize>1</can_initialize>
