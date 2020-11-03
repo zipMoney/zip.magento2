@@ -13,7 +13,7 @@ class Widget extends  AbstractAdvert implements CatalogBlock\ShortcutInterface
    * @const string
    */
   const ADVERT_TYPE = "widget";
-  
+
   /**
    * Render the block if needed
    *
@@ -51,5 +51,4 @@ class Widget extends  AbstractAdvert implements CatalogBlock\ShortcutInterface
   {
     return $this->_alias;
   }
-
 }

@@ -2,7 +2,7 @@
 namespace Zip\ZipPayment\Controller\Standard;
 
 use \Magento\Framework\App\Action\Action;
-use \Magento\Checkout\Controller\Express\RedirectLoginInterface;
+use \Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi;
 
 /**
  * @category  Zipmoney
@@ -146,6 +146,8 @@ abstract class AbstractStandard extends Action
    */
   protected $_pageFactory;
 
+  const CHECKOUT_ID_KEY = 'id';
+
   /**
    * Common Route
    *
@@ -211,6 +213,7 @@ abstract class AbstractStandard extends Action
    */
   protected function _initCheckout()
   {
+
     $quote = $this->_getQuote();
 
     if(!$quote->getId()){
@@ -290,26 +293,36 @@ abstract class AbstractStandard extends Action
     return $this;
   }
 
-  /**
-   * Return checkout quote object from database
-   *
-   * @return \Zip\ZipPayment\Controller\Standard\AsbtractStandard
-   */
-  protected function _getDbQuote($zip_checkout_id)
+    /**
+     * @param $zip_checkout_id
+     * @return \Magento\Framework\DataObject|\Magento\Quote\Model\Quote
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException
+     *
+     * Retrieve quote details by using zip checkout get api call
+     */
+  protected function _getQuoteByUsingCheckoutApi($zip_checkout_id)
   {
-    // when magento receive response from zip checkout api 
-    //we store zipmoney checkout id to quote_payment addtional_data 
-    if ($zip_checkout_id) {
-          $quotePayment = $this->_quotePaymentCollectionFactory
-              ->create()
-              ->addFieldToFilter("additional_data", $zip_checkout_id)
-              ->getFirstItem();
-          $this->_quote = $this->_quoteCollectionFactory
-              ->create()
-              ->addFieldToFilter("entity_id", $quotePayment['quote_id'])
-              ->getFirstItem();
+      // Configure API Credentials
+      $apiConfig = \Zip\ZipPayment\MerchantApi\Lib\Configuration::getDefaultConfiguration();
+
+      $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey())
+          ->setApiKeyPrefix('Authorization', 'Bearer')
+          ->setEnvironment($this->_config->getEnvironment(),$this->_config->getAPiSource())
+          ->setPlatform("Magento/".$this->_helper->getMagentoVersion()."Zip_ZipPayment/".$this->_helper->getExtensionVersion());
+
+      $checkoutApi = new CheckoutsApi();
+      $checkout = $checkoutApi->checkoutsGet($zip_checkout_id);
+        if (!isset($checkout[self::CHECKOUT_ID_KEY])) {
+            return false;
+        }
+
+      $quoteId = $checkout->getOrder()->getCartReference();
+      $this->_quote = $this->_quoteCollectionFactory
+          ->create()
+          ->addFieldToFilter("entity_id", $quoteId)
+          ->getFirstItem();
       return $this->_quote;
-    }
   }
 
   /**
@@ -380,40 +393,30 @@ abstract class AbstractStandard extends Action
   {
     $sessionQuote = $this->_getCheckoutSession()->getQuote();
     $zipMoneyCheckoutId  = $this->getRequest()->getParam('checkoutId');
-    $use_db_quote = false;
+    $use_checkout_api_quote = false;
     $addtionalPaymentInfo = $sessionQuote->getPayment()->getAdditionalInformation();
     $checkout_id = $addtionalPaymentInfo['zip_checkout_id'];
-    $checkout_id = strstr($checkout_id, 'co_');
-      $quotePayment = $this->_quotePaymentCollectionFactory
-          ->create()
-          ->addFieldToFilter("additional_data",  array('like' => '%'.$zipMoneyCheckoutId.'%'))
-          ->getFirstItem();
-      $quote = $this->_quoteCollectionFactory
-          ->create()
-          ->addFieldToFilter("entity_id", $quotePayment['quote_id'])
-          ->getFirstItem();
-      $this->_logger->info(__("Reserved Order Id:".$quote['reserved_order_id']));
     // Return Session Quote
     if(!$sessionQuote){
       $this->_logger->error(__("Session Quote doesnot exist."));
-      $use_db_quote = true;
+        $use_checkout_api_quote = true;
     } else if($checkout_id != $zipMoneyCheckoutId){
       $this->_logger->error(__("Checkout Id doesnot match with the session quote."));
-      $use_db_quote = true;
+        $use_checkout_api_quote = true;
     } else {
       return $sessionQuote;
     }
 
     //Retrurn DB Quote
-    if($use_db_quote){
-      $dbQuote = $this->_getDbQuote($zipMoneyCheckoutId);
-      if(!$dbQuote){
+    if($use_checkout_api_quote){
+      $checkoutApiQuote = $this->_getQuoteByUsingCheckoutApi($zipMoneyCheckoutId);
+      if(!$checkoutApiQuote){
         $this->_logger->warn(__("Quote doesnot exist for the given checkout_id."));
         return false;
       } else {
-        $this->_logger->info(__("Loading DB Quote"));
+        $this->_logger->info(__("Loading Quote by using zip checkout get api"));
       }
-      return $dbQuote;
+      return $checkoutApiQuote;
     }
   }
 
