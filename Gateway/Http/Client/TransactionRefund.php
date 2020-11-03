@@ -17,9 +17,9 @@ use Magento\Payment\Gateway\Http\ClientException;
  * Class TransactionCapture
  */
 class TransactionRefund extends AbstractTransaction implements ClientInterface
-{   
+{
     protected $_service = null;
-    
+
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
@@ -48,7 +48,7 @@ class TransactionRefund extends AbstractTransaction implements ClientInterface
         $apiConfig = new \Zip\ZipPayment\MerchantApi\Lib\Configuration();
         $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey($storeId))
             ->setApiKeyPrefix('Authorization', 'Bearer')
-            ->setEnvironment($this->_config->getEnvironment($storeId),$this->_config->getAPiSource($storeId))
+            ->setEnvironment($this->_config->getEnvironment($storeId))
             ->setPlatform(
                 "Magento/"
                 . $this->_helper->getMagentoVersion()

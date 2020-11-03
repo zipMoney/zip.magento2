@@ -63,7 +63,7 @@ class HealthCheck
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
-    
+
     /**
      * HealthCheck constructor.
      * @param \Zip\ZipPayment\Helper\Logger $logger
@@ -101,7 +101,7 @@ class HealthCheck
         $storeId  = $storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
         $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey($storeId))
             ->setApiKeyPrefix('Authorization', 'Bearer')
-            ->setEnvironment($this->_config->getEnvironment(),$this->_config->getAPiSource($storeId))
+            ->setEnvironment($this->_config->getEnvironment())
             ->setPlatform("Magento/".$this->_helper->getMagentoVersion()."Zip_ZipPayment/".$this->_helper->getExtensionVersion());
 
 
@@ -167,7 +167,7 @@ class HealthCheck
                 if ($httpCode == 401) {
                     $this->appendItem(self::STATUS_ERROR, self::API_CREDENTIAL_INVALID_MESSAGE);
                 }
-                if ($httpCode == 200 && $isAuEndpoint == false) {
+                if (($httpCode >=200 || $httpCode <= 299) && $isAuEndpoint == false) {
                     $result = preg_split('/^\r?$/m', $response, 2);
                     $result = trim($result[1]);
                     $data = json_decode($result);

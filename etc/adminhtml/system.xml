@@ -18,10 +18,6 @@
                 <attribute type="expanded">1</attribute>
                 <fieldset_css>zipmoney-section</fieldset_css>
                 <!--  Basic Settings -->
-                <field id="check_validity" translate="label" type="button" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Check Api Key Validity</label>
-                    <frontend_model>Zip\ZipPayment\Block\System\Config\HealthCheck</frontend_model>
-                </field>
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -29,17 +25,16 @@
                 <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Title</label>
                 </field>
-                <field id="api_source" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Api source</label>
-                    <source_model>Zip\ZipPayment\Model\Config\Source\ApiSource</source_model>
-                </field>
-                <field id="widget_region" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="widget_region" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Select Region</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\Region</source_model>
                 </field>
-                <field id="merchant_private_key" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="merchant_private_key" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Private Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="check_validity" translate="label" type="button" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <frontend_model>Zip\ZipPayment\Block\System\Config\HealthCheck</frontend_model>
                 </field>
                 <field id="merchant_public_key" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Public Key</label>
@@ -57,10 +52,6 @@
                     <label>Environment</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\Environment</source_model>
                 </field>
-                <!--                <field id="incontext_checkout" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
-                                    <label>In-Context Checkout</label>
-                                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                                </field>-->
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>

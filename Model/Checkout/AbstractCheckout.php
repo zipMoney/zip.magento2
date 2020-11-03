@@ -14,11 +14,11 @@ use \Zip\ZipPayment\Model\Config;
  */
 
 abstract class AbstractCheckout
-{ 
+{
   /**
    * @var \Magento\Quote\Api\CartRepositoryInterface
    */
-  protected $_quoteRepository;  
+  protected $_quoteRepository;
   /**
    * @var \Magento\Quote\Model\Quote
    */
@@ -38,7 +38,7 @@ abstract class AbstractCheckout
    * @var \Zip\ZipPayment\Helper\Payload
    */
   protected $_payloadHelper;
-  
+
   /**
    * @var \Zip\ZipPayment\Helper\Logger
    */
@@ -47,7 +47,7 @@ abstract class AbstractCheckout
   /**
    * @var \Zip\ZipPayment\Model\Config
    */
-  protected $_config; 
+  protected $_config;
   /**
    * @var \Zip\ZipPayment\Helper\Data
    */
@@ -56,7 +56,7 @@ abstract class AbstractCheckout
   /**
    * @var \Magento\Customer\Model\Session
    */
-  protected $_customerSession;  
+  protected $_customerSession;
 
   /**
    * @var \Magento\Checkout\Model\Session
@@ -69,19 +69,19 @@ abstract class AbstractCheckout
   protected $_customerFactory;
 
   /**
-   * @const 
+   * @const
    */
   const STATUS_MAGENTO_AUTHORIZED = "zip_authorised";
 
-  public function __construct(    
+  public function __construct(
     \Magento\Customer\Model\Session $customerSession,
     \Magento\Checkout\Model\Session $checkoutSession,
-    \Magento\Customer\Model\CustomerFactory $customerFactory,    
+    \Magento\Customer\Model\CustomerFactory $customerFactory,
     \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
     \Zip\ZipPayment\Helper\Payload $payloadHelper,
-    \Zip\ZipPayment\Helper\Logger $logger,   
+    \Zip\ZipPayment\Helper\Logger $logger,
     \Zip\ZipPayment\Helper\Data $helper,
-    \Zip\ZipPayment\Model\Config $config        
+    \Zip\ZipPayment\Model\Config $config
   )
   {
     $this->_customerSession = $customerSession;
@@ -95,10 +95,10 @@ abstract class AbstractCheckout
 
     // Configure API Credentials
     $apiConfig = \Zip\ZipPayment\MerchantApi\Lib\Configuration::getDefaultConfiguration();
-    
+
     $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey())
               ->setApiKeyPrefix('Authorization', 'Bearer')
-              ->setEnvironment($this->_config->getEnvironment(),$this->_config->getAPiSource())
+              ->setEnvironment($this->_config->getEnvironment())
               ->setPlatform("Magento/".$this->_helper->getMagentoVersion()."Zip_ZipPayment/".$this->_helper->getExtensionVersion());
   }
 
@@ -187,7 +187,7 @@ abstract class AbstractCheckout
   /**
    * Returns quote object
    *
-   * @return \Magento\Quote\Model\Quote 
+   * @return \Magento\Quote\Model\Quote
    */
   public function getQuote()
   {
@@ -230,7 +230,7 @@ abstract class AbstractCheckout
       $this->_order = $order;
     }
     return $this;
-  } 
+  }
 
   /**
    * Generates uniq id
@@ -242,5 +242,5 @@ abstract class AbstractCheckout
     return uniqid();
   }
 
-  
+
 }

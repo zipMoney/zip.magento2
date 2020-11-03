@@ -19,7 +19,7 @@ class AbstractTransaction
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Zip\ZipPayment\Helper\Payload $payloadHelper,
-        \Zip\ZipPayment\Helper\Logger $logger,   
+        \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
         array $data = []
@@ -29,13 +29,13 @@ class AbstractTransaction
         $this->_logger = $logger;
         $this->_helper = $helper;
         $this->_config = $config;
-    
+
         // Configure API Credentials
         $apiConfig = Configuration::getDefaultConfiguration();
-    
+
         $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey())
               ->setApiKeyPrefix('Authorization', 'Bearer')
-              ->setEnvironment($this->_config->getEnvironment(),$this->_config->getAPiSource())
+              ->setEnvironment($this->_config->getEnvironment())
               ->setPlatform("Magento/".$this->_helper->getMagentoVersion()."Zip_ZipPayment/".$this->_helper->getExtensionVersion());
     }
 }

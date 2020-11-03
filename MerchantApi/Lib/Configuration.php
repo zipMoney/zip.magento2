@@ -84,15 +84,9 @@ class Configuration
      * @var array
      */
     protected $supportedEnvironments = array(
-        "default" => array(
-                        "sandbox" => array("host" => "https://api.sandbox.zipmoney.com.au/merchant/v1"),
-                        "production" => array("host" => 'https://api.zipmoney.com.au/merchant/v1')
-                    ),
-        "global" => array(
                         "sandbox" => array("host" => "https://global-api.sand.au.edge.zip.co/merchant"),
                         "production" => array("host" => 'https://global-api.prod.au.edge.zip.co/merchant')
-                    )
-    );
+                    );
 
     /**
      * The default enviornment to be used
@@ -107,16 +101,16 @@ class Configuration
      * @var string
      */
     protected $curlTimeout = 0;
-    
+
     /**
-     * Number of retries allowed if the first one fails. 
+     * Number of retries allowed if the first one fails.
      *
      * @var string
      */
     protected $curlNumRetries = 3;
 
     /**
-     * Number of retries allowed if the first one fails. 
+     * Number of retries allowed if the first one fails.
      *
      * @var string
      */
@@ -141,7 +135,7 @@ class Configuration
      *
      * @var bool
      */
-    protected $debug = false; 
+    protected $debug = false;
 
     /**
      * Debug file location (log to STDOUT by default)
@@ -516,7 +510,7 @@ class Configuration
         $this->retryInterval = $retryInterval;
         return $this;
     }
-    
+
     /**
      * Gets the Retry Interval Value
      *
@@ -670,18 +664,18 @@ class Configuration
     /**
      * Sets the environment
      *
-     * @param bool $environment 
+     * @param bool $environment
      *
      * @return Configuration
      */
-    public function setEnvironment($environment, $apiSource = 'default')
-    {   
+    public function setEnvironment($environment)
+    {
         $this->environment = $environment;
-    
-        $host = $this->supportedEnvironments[$apiSource]['production']['host'];
 
-        if(in_array($environment,array_keys($this->supportedEnvironments[$apiSource]))){
-            $host = $this->supportedEnvironments[$apiSource][$environment]['host'];
+        $host = $this->supportedEnvironments['production']['host'];
+
+        if(in_array($environment,array_keys($this->supportedEnvironments))){
+            $host = $this->supportedEnvironments[$environment]['host'];
         }
 
         $this->setHost($host);
@@ -849,7 +843,7 @@ class Configuration
     public function setDefaultHeaders()
     {
         $user_agent_array = array();
-        
+
 
         if( $platform = $this->getPlatform() ){
           $user_agent_array[] = $platform;
