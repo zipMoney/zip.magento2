@@ -68,7 +68,7 @@ class ChargesApi
      * @param string $id The id of the authorised charge (required)
      * @param string $idempotency_key The unique idempotency key. (optional)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Charge
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function chargesCancel($id, $idempotency_key = null)
     {
@@ -84,7 +84,7 @@ class ChargesApi
      * @param string $id The id of the authorised charge (required)
      * @param string $idempotency_key The unique idempotency key. (optional)
      * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Charge, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function chargesCancelWithHttpInfo($id, $idempotency_key = null)
     {
@@ -119,7 +119,7 @@ class ChargesApi
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
 
-        
+
         // for model (json/xml)
         if (isset($_tempBody)) {
             $httpBody = $_tempBody; // $_tempBody is the method argument, if present
@@ -178,10 +178,10 @@ class ChargesApi
      * Capture a charge
      *
      * @param string $id The id of the authorised charge (required)
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CaptureChargeRequest $body  (optional)
+     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CaptureChargeRequest $body (optional)
      * @param string $idempotency_key The unique idempotency key. (optional)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Charge
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function chargesCapture($id, $body = null, $idempotency_key = null)
     {
@@ -195,10 +195,10 @@ class ChargesApi
      * Capture a charge
      *
      * @param string $id The id of the authorised charge (required)
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CaptureChargeRequest $body  (optional)
+     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CaptureChargeRequest $body (optional)
      * @param string $idempotency_key The unique idempotency key. (optional)
      * @return array of \\Zip\ZipPayment\MerchantApi\Lib\Model\Charge, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function chargesCaptureWithHttpInfo($id, $body = null, $idempotency_key = null)
     {
@@ -296,10 +296,10 @@ class ChargesApi
      *
      * Create a charge
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateChargeRequest $body  (optional)
+     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateChargeRequest $body (optional)
      * @param string $idempotency_key The unique idempotency key. (optional)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Charge
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function chargesCreate($body = null, $idempotency_key = null)
     {
@@ -312,10 +312,10 @@ class ChargesApi
      *
      * Create a charge
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateChargeRequest $body  (optional)
+     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateChargeRequest $body (optional)
      * @param string $idempotency_key The unique idempotency key. (optional)
      * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Charge, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function chargesCreateWithHttpInfo($body = null, $idempotency_key = null)
     {
@@ -410,7 +410,7 @@ class ChargesApi
      * @param int $limit Number of items to retrieve when paging (optional, default to 100)
      * @param string $expand Allows expanding related entities in the response. Only valid entry is &#39;customer&#39; (optional)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeCollection
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function chargesList($state = null, $skip = null, $limit = null, $expand = null)
     {
@@ -428,7 +428,7 @@ class ChargesApi
      * @param int $limit Number of items to retrieve when paging (optional, default to 100)
      * @param string $expand Allows expanding related entities in the response. Only valid entry is &#39;customer&#39; (optional)
      * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeCollection, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function chargesListWithHttpInfo($state = null, $skip = null, $limit = null, $expand = null)
     {
@@ -463,7 +463,7 @@ class ChargesApi
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
 
-        
+
         // for model (json/xml)
         if (isset($_tempBody)) {
             $httpBody = $_tempBody; // $_tempBody is the method argument, if present
@@ -508,7 +508,7 @@ class ChargesApi
      * @param string $id The id of the charge (required)
      * @param string $expand Allows expanding related entities in the response. Only valid entry is &#39;customer&#39; (optional)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Charge
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function chargesRetrieve($id, $expand = null)
     {
@@ -524,7 +524,7 @@ class ChargesApi
      * @param string $id The id of the charge (required)
      * @param string $expand Allows expanding related entities in the response. Only valid entry is &#39;customer&#39; (optional)
      * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Charge, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function chargesRetrieveWithHttpInfo($id, $expand = null)
     {
@@ -559,7 +559,7 @@ class ChargesApi
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
 
-        
+
         // for model (json/xml)
         if (isset($_tempBody)) {
             $httpBody = $_tempBody; // $_tempBody is the method argument, if present

@@ -18,15 +18,15 @@ class CheckoutOrder implements ArrayAccess
     const DISCRIMINATOR = 'subclass';
 
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'CheckoutOrder';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'reference' => 'string',
         'amount' => 'float',
@@ -35,12 +35,6 @@ class CheckoutOrder implements ArrayAccess
         'items' => '\Zip\ZipPayment\MerchantApi\Lib\Model\OrderItem[]',
         'cart_reference' => 'string'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -53,8 +47,6 @@ class CheckoutOrder implements ArrayAccess
         'items' => 'items',
         'cart_reference' => 'cart_reference'
     );
-
-
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
@@ -67,8 +59,6 @@ class CheckoutOrder implements ArrayAccess
         'items' => 'setItems',
         'cart_reference' => 'setCartReference'
     );
-
-
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
@@ -81,26 +71,6 @@ class CheckoutOrder implements ArrayAccess
         'items' => 'getItems',
         'cart_reference' => 'getCartReference'
     );
-
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
-
-    public static function setters()
-    {
-        return self::$setters;
-    }
-
-    public static function getters()
-    {
-        return self::$getters;
-    }
-
-    
-
-    
-
     /**
      * Associative array for storing property values
      * @var mixed[]
@@ -119,6 +89,26 @@ class CheckoutOrder implements ArrayAccess
         $this->container['shipping'] = isset($data['shipping']) ? $data['shipping'] : null;
         $this->container['items'] = isset($data['items']) ? $data['items'] : null;
         $this->container['cart_reference'] = isset($data['cart_reference']) ? $data['cart_reference'] : null;
+    }
+
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
+
+    public static function attributeMap()
+    {
+        return self::$attributeMap;
+    }
+
+    public static function setters()
+    {
+        return self::$setters;
+    }
+
+    public static function getters()
+    {
+        return self::$getters;
     }
 
     /**
@@ -323,9 +313,10 @@ class CheckoutOrder implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -335,7 +326,7 @@ class CheckoutOrder implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -345,8 +336,8 @@ class CheckoutOrder implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -360,7 +351,7 @@ class CheckoutOrder implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -381,5 +372,3 @@ class CheckoutOrder implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

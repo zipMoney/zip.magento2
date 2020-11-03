@@ -18,24 +18,18 @@ class ChargeCollection implements ArrayAccess
     const DISCRIMINATOR = 'subclass';
 
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'ChargeCollection';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'items' => '\Zip\ZipPayment\MerchantApi\Lib\Model\Charge[]'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -43,8 +37,6 @@ class ChargeCollection implements ArrayAccess
     protected static $attributeMap = array(
         'items' => 'items'
     );
-
-
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
@@ -52,8 +44,6 @@ class ChargeCollection implements ArrayAccess
     protected static $setters = array(
         'items' => 'setItems'
     );
-
-
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
@@ -61,6 +51,25 @@ class ChargeCollection implements ArrayAccess
     protected static $getters = array(
         'items' => 'getItems'
     );
+    /**
+     * Associative array for storing property values
+     * @var mixed[]
+     */
+    protected $container = array();
+
+    /**
+     * Constructor
+     * @param mixed[] $data Associated array of property values initializing the model
+     */
+    public function __construct(array $data = null)
+    {
+        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
+    }
+
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
 
     public static function attributeMap()
     {
@@ -75,25 +84,6 @@ class ChargeCollection implements ArrayAccess
     public static function getters()
     {
         return self::$getters;
-    }
-
-    
-
-    
-
-    /**
-     * Associative array for storing property values
-     * @var mixed[]
-     */
-    protected $container = array();
-
-    /**
-     * Constructor
-     * @param mixed[] $data Associated array of property values initializing the model
-     */
-    public function __construct(array $data = null)
-    {
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
     }
 
     /**
@@ -147,9 +137,10 @@ class ChargeCollection implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -159,7 +150,7 @@ class ChargeCollection implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -169,8 +160,8 @@ class ChargeCollection implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -184,7 +175,7 @@ class ChargeCollection implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -205,5 +196,3 @@ class ChargeCollection implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

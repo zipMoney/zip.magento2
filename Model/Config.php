@@ -1,4 +1,5 @@
 <?php
+
 namespace Zip\ZipPayment\Model;
 
 use Magento\Payment\Model\Method\ConfigInterface;
@@ -27,56 +28,50 @@ class Config implements ConfigInterface
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_PRIVATE_KEY  = 'merchant_private_key';
+    const PAYMENT_ZIPMONEY_PRIVATE_KEY = 'merchant_private_key';
 
     /**
      * Public Key
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_PUBLIC_KEY   = 'merchant_public_key';
+    const PAYMENT_ZIPMONEY_PUBLIC_KEY = 'merchant_public_key';
 
     /**
      * API Envronment
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_ENVIRONMENT  = 'environment';
+    const PAYMENT_ZIPMONEY_ENVIRONMENT = 'environment';
 
-    /**
-     * API Source
-     *
-     * @const
-     */
-    const PAYMENT_ZIPMONEY_API_SOURCE  = 'api_source';
 
     /**
      * Region
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_WIDGET_REGION  = 'widget_region';
+    const PAYMENT_ZIPMONEY_WIDGET_REGION = 'widget_region';
 
     /**
      * Payment Method Title
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_TITLE  = 'title';
+    const PAYMENT_ZIPMONEY_TITLE = 'title';
 
     /**
      * Product Type
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_PRODUCT  = 'product';
+    const PAYMENT_ZIPMONEY_PRODUCT = 'product';
 
     /**
      * Log Setting
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_LOG_SETTINGS  = 'log_settings';
+    const PAYMENT_ZIPMONEY_LOG_SETTINGS = 'log_settings';
 
     /**
      * Payment Action
@@ -97,14 +92,14 @@ class Config implements ConfigInterface
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_MINIMUM_TOTAL  = 'min_order_total';
+    const PAYMENT_ZIPMONEY_MINIMUM_TOTAL = 'min_order_total';
 
     /**
      * Maximum Order Total
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_MAXIMUM_TOTAL  = 'max_order_total';
+    const PAYMENT_ZIPMONEY_MAXIMUM_TOTAL = 'max_order_total';
 
     /**
      * Incontext Checkout
@@ -160,7 +155,7 @@ class Config implements ConfigInterface
      *
      * @const
      */
-    const ADVERTS_CART_TAGLINE_ACTIVE    = 'zip_advert/cartpage/tagline';
+    const ADVERTS_CART_TAGLINE_ACTIVE = 'zip_advert/cartpage/tagline';
 
     /**
      * Payment Method Logo Url
@@ -236,16 +231,29 @@ class Config implements ConfigInterface
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Zip\ZipPayment\Helper\Logger $logger
-    ) {
-        $this->_scopeConfig  = $scopeConfig;
+    )
+    {
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_logger = $logger;
         $this->_resourceConfig = $resourceConfig;
         $this->_cacheTypeList = $cacheTypeList;
         $this->_messageManager = $messageManager;
-        $this->_urlBuilder     = $urlBuilder;
+        $this->_urlBuilder = $urlBuilder;
 
         $this->setStoreId($this->_storeManager->getStore()->getId());
+    }
+
+    /**
+     * Store ID setter
+     *
+     * @param int $storeId
+     * @return \Zip\ZipPayment\Model
+     */
+    public function setStoreId($storeId)
+    {
+        $this->_storeId = (int)$storeId;
+        return $this;
     }
 
     /**
@@ -267,7 +275,7 @@ class Config implements ConfigInterface
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
-        return  $isEnabled;
+        return $isEnabled;
     }
 
     /**
@@ -278,6 +286,54 @@ class Config implements ConfigInterface
     public function getTitle()
     {
         return $this->getConfigData(self::PAYMENT_ZIPMONEY_TITLE);
+    }
+
+    /**
+     * Retrieve information from payment configuration
+     *
+     * @param string $field
+     * @param int|string|null|\Magento\Store\Model\Store $storeId
+     *
+     * @return mixed
+     */
+    public function getConfigData($field, $storeId = null)
+    {
+
+        if ('order_place_redirect_url' === $field) {
+            return $this->getOrderPlaceRedirectUrl();
+        }
+
+        if (!$storeId) {
+            $storeId = $this->_storeId;
+        }
+
+        return $this->getValue($field, $storeId);
+    }
+
+    /**
+     * Returns payment configuration value
+     *
+     * @param string $key
+     * @param null $storeId
+     * @return null|string
+     */
+    public function getValue($key, $storeId = null)
+    {
+        if (!$storeId) {
+            $storeId = $this->_storeId;
+        }
+
+        $underscored = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $key));
+
+        $path = "payment/" . self::METHOD_CODE . "/" . $underscored;
+
+        $value = $this->_scopeConfig->getValue(
+            $path,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        return $value;
     }
 
     /**
@@ -311,13 +367,52 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Returns Api Source
+     * Returns Default Merchant Private Key
+     *
+     * @return int
+     */
+    public function getDefaultMerchantPrivateKey()
+    {
+        return $this->getDefaultConfig(self::PAYMENT_ZIPMONEY_PRIVATE_KEY);
+    }
+
+    /**
+     * Returns the default config
+     *
+     * @param $path
+     * @return mixed
+     */
+    public function getDefaultConfig($key)
+    {
+        $underscored = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $key));
+
+        $path = "payment/" . self::METHOD_CODE . "/" . $underscored;
+
+        $value = $this->_scopeConfig->getValue(
+            $path
+        );
+
+        return $value;
+    }
+
+    /**
+     * Returns Default Merchant Public key
      *
      * @return string
      */
-    public function getAPiSource($storeId = null)
+    public function getDefaultMerchantPublicKey()
     {
-        return $this->getConfigData(self::PAYMENT_ZIPMONEY_API_SOURCE, $storeId);
+        return $this->getDefaultConfig(self::PAYMENT_ZIPMONEY_PUBLIC_KEY);
+    }
+
+    /**
+     * Returns Default Api Environment
+     *
+     * @return string
+     */
+    public function getDefaultEnvironment()
+    {
+        return $this->getDefaultConfig(self::PAYMENT_ZIPMONEY_ENVIRONMENT);
     }
 
     /**
@@ -337,7 +432,7 @@ class Config implements ConfigInterface
      */
     public function getMethodLogo()
     {
-        return  self::PAYMENT_METHOD_LOGO_ZIP;
+        return self::PAYMENT_METHOD_LOGO_ZIP;
     }
 
     /**
@@ -357,7 +452,7 @@ class Config implements ConfigInterface
      */
     public function getOrderTotalMinimum()
     {
-        return (float) $this->getConfigData(self::PAYMENT_ZIPMONEY_MINIMUM_TOTAL);
+        return (float)$this->getConfigData(self::PAYMENT_ZIPMONEY_MINIMUM_TOTAL);
     }
 
     /**
@@ -367,7 +462,7 @@ class Config implements ConfigInterface
      */
     public function getOrderTotalMaximum()
     {
-        return (float) $this->getConfigData(self::PAYMENT_ZIPMONEY_MAXIMUM_TOTAL);
+        return (float)$this->getConfigData(self::PAYMENT_ZIPMONEY_MAXIMUM_TOTAL);
     }
 
     /**
@@ -404,55 +499,6 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Retrieve information from payment configuration
-     *
-     * @param string $field
-     * @param int|string|null|\Magento\Store\Model\Store $storeId
-     *
-     * @return mixed
-     */
-    public function getConfigData($field, $storeId = null)
-    {
-
-        if ('order_place_redirect_url' === $field) {
-            return $this->getOrderPlaceRedirectUrl();
-        }
-
-        if (!$storeId) {
-            $storeId = $this->_storeId;
-        }
-
-        return $this->getValue($field, $storeId);
-    }
-
-
-    /**
-     * Returns payment configuration value
-     *
-     * @param string $key
-     * @param null $storeId
-     * @return null|string
-     */
-    public function getValue($key, $storeId = null)
-    {
-        if (!$storeId) {
-            $storeId = $this->_storeId;
-        }
-
-        $underscored = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $key));
-
-        $path = "payment/" . self::METHOD_CODE . "/" . $underscored;
-
-        $value = $this->_scopeConfig->getValue(
-            $path,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-
-        return $value;
-    }
-
-    /**
      * Sets method instance used for retrieving method specific data
      *
      * @param MethodInterface $method
@@ -462,17 +508,6 @@ class Config implements ConfigInterface
     {
         $this->_methodInstance = $methodInstance;
         return $this;
-    }
-
-    /**
-     * Sets method code
-     *
-     * @param string $methodCode
-     * @return void
-     */
-    public function setMethodCode($methodCode)
-    {
-        $this->_methodCode = $methodCode;
     }
 
     /**
@@ -489,6 +524,17 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Sets method code
+     *
+     * @param string $methodCode
+     * @return void
+     */
+    public function setMethodCode($methodCode)
+    {
+        $this->_methodCode = $methodCode;
+    }
+
+    /**
      * Sets path pattern
      *
      * @param string $pathPattern
@@ -497,18 +543,6 @@ class Config implements ConfigInterface
     public function setPathPattern($pathPattern)
     {
         $this->pathPattern = $pathPattern;
-    }
-
-    /**
-     * Store ID setter
-     *
-     * @param int $storeId
-     * @return \Zip\ZipPayment\Model
-     */
-    public function setStoreId($storeId)
-    {
-        $this->_storeId = (int) $storeId;
-        return $this;
     }
 
     /**
@@ -566,6 +600,6 @@ class Config implements ConfigInterface
             $storeId
         );
 
-        return  $value;
+        return $value;
     }
 }

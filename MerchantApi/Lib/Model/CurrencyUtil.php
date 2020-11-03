@@ -16,6 +16,20 @@ class CurrencyUtil
     const CURRENCY_GBP = 'GBP';
     const CURRENCY_USD = 'USD';
 
+    public static function isValidCurrency($currency)
+    {
+        $result = array(
+            'valid' => true,
+            'message' => '',
+        );
+        $allowed_values = self::getAllowedCurrencyList();
+        if (!in_array($currency, $allowed_values)) {
+            $result['valid'] = false;
+            $result['message'] = "invalid value for 'currency', must be one of '" . implode("','", $allowed_values) . "'.";
+        }
+        return $result;
+    }
+
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -28,19 +42,5 @@ class CurrencyUtil
             self::CURRENCY_USD,
             self::CURRENCY_GBP,
         );
-    }
-
-    public static function isValidCurrency($currency)
-    {
-        $result = array(
-            'valid' => true,
-            'message' => '',
-        );
-        $allowed_values = self::getAllowedCurrencyList();
-        if (!in_array($currency, $allowed_values)) {
-            $result['valid'] = false;
-            $result['message'] = "invalid value for 'currency', must be one of '".implode("','",$allowed_values)."'.";
-        }
-        return $result;
     }
 }

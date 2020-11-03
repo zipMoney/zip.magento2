@@ -3,6 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Zip\ZipPayment\Gateway\Request;
 
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
@@ -16,7 +17,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
  */
-
 class RefundDataBuilder extends AbstractDataBuilder
 {
     /**
@@ -30,7 +30,7 @@ class RefundDataBuilder extends AbstractDataBuilder
         //$response = \Magento\Payment\Gateway\Helper\SubjectReader::readResponse($buildSubject);
 
         $amount = \Magento\Payment\Gateway\Helper\SubjectReader::readAmount($buildSubject);
-        
+
         if (!isset($buildSubject['payment'])
             || !$buildSubject['payment'] instanceof PaymentDataObjectInterface
         ) {
@@ -42,7 +42,7 @@ class RefundDataBuilder extends AbstractDataBuilder
         $payment = $paymentDO->getPayment();
         $refundAmount = $this->getMultiCurrencyAmount($payment, $amount);
         $order = $payment->getOrder();
-        $payload = $this->_payloadHelper->getRefundPayload($order, $refundAmount, $order->getIncrementId().strtotime("now"));
+        $payload = $this->_payloadHelper->getRefundPayload($order, $refundAmount, $order->getIncrementId() . strtotime("now"));
         $this->_logger->debug(
             "Refund Request:- "
             . $this->_helper->json_encode($payload)

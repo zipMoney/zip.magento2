@@ -4,13 +4,13 @@ namespace Zip\ZipPayment\Model\Config;
 
 use Magento\Framework\HTTP\Adapter\Curl;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
+
 /**
  * Admin Model of health check
  *
  * @package Zip_Payment
  * @author  Zip Co - Plugin Team
  **/
-
 class HealthCheck
 {
 
@@ -53,23 +53,21 @@ class HealthCheck
      * @var \Zip\ZipPayment\Helper\Data
      */
     protected $_helper;
-
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
     /**
      * @var CurlFactory
      */
     private $_curlFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * HealthCheck constructor.
      * @param \Zip\ZipPayment\Helper\Logger $logger
      * @param \Zip\ZipPayment\Helper\Data $helper
      * @param \Zip\ZipPayment\Model\Config $config
-     * @param CurlFactory $curlFactory,
+     * @param CurlFactory $curlFactory ,
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -80,9 +78,9 @@ class HealthCheck
         \Magento\Store\Model\StoreManagerInterface $storeManager
     )
     {
-        $this->_logger  = $logger;
-        $this->_helper  = $helper;
-        $this->_config  = $config;
+        $this->_logger = $logger;
+        $this->_helper = $helper;
+        $this->_config = $config;
         $this->_curlFactory = $curlFactory;
         $this->_storeManager = $storeManager;
     }
@@ -98,16 +96,23 @@ class HealthCheck
         $apiConfig = \Zip\ZipPayment\MerchantApi\Lib\Configuration::getDefaultConfiguration();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $storeManager = $objectManager->create('\Magento\Store\Model\StoreManagerInterface');
-        $storeId  = $storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
-        $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey($storeId))
+
+        $storeId = $storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
+        $publicKey = $this->_config->getMerchantPublicKey($storeId);
+        $privateKey = $this->_config->getMerchantPrivateKey($storeId);
+        $environment = $this->_config->getEnvironment($storeId);
+        if (empty($websiteId)) {
+            $publicKey = $this->_config->getDefaultMerchantPublicKey();
+            $privateKey = $this->_config->getDefaultMerchantPrivateKey();
+            $environment = $this->_config->getDefaultEnvironment();
+        }
+        $apiConfig->setApiKey('Authorization', $privateKey)
             ->setApiKeyPrefix('Authorization', 'Bearer')
-            ->setEnvironment($this->_config->getEnvironment())
-            ->setPlatform("Magento/".$this->_helper->getMagentoVersion()."Zip_ZipPayment/".$this->_helper->getExtensionVersion());
+            ->setEnvironment($environment)
+            ->setPlatform("Magento/" . $this->_helper->getMagentoVersion() . "Zip_ZipPayment/" . $this->_helper->getExtensionVersion());
 
 
         $curlEnabled = function_exists('curl_version');
-        $publicKey = $this->_config->getMerchantPublicKey($storeId);
-        $privateKey = $this->_config->getMerchantPrivateKey($storeId);
 
         // check if private key is empty
         if (empty($privateKey)) {
@@ -142,16 +147,16 @@ class HealthCheck
                     'Accept : application/json',
                     'Zip-Version: 2017-03-01',
                     'Content-Type: application/json',
-                    'Idempotency-Key: ' .uniqid()
+                    'Idempotency-Key: ' . uniqid()
                 );
-                $url = $apiConfig->getHost().'/me';
+                $url = $apiConfig->getHost() . '/me';
                 $isAuEndpoint = false;
 
                 // check api key length if it is more than or equal 50 then call SMI merchant info endpoint
                 // otherwise call checkout get api endpoint only for Australia
                 if (strlen($privateKey) <= 50) {
                     $checkoutId = 'au-co_PxSeQfLlpaYn6bLMZSMv13';
-                    $url = $apiConfig->getHost().'/checkouts/'.$checkoutId;
+                    $url = $apiConfig->getHost() . '/checkouts/' . $checkoutId;
                     $isAuEndpoint = true;
                 }
                 $curlObject->write(\Zend_Http_Client::GET, $url, '1.1', $headers);
@@ -167,26 +172,26 @@ class HealthCheck
                 if ($httpCode == 401) {
                     $this->appendItem(self::STATUS_ERROR, self::API_CREDENTIAL_INVALID_MESSAGE);
                 }
-                if (($httpCode >=200 || $httpCode <= 299) && $isAuEndpoint == false) {
+                if (($httpCode >= 200 && $httpCode <= 299) && $isAuEndpoint == false) {
                     $result = preg_split('/^\r?$/m', $response, 2);
                     $result = trim($result[1]);
                     $data = json_decode($result);
-                    $this->appendItem( self::STATUS_OK, "Api key is valid for ".$data->name);
+                    $this->appendItem(self::STATUS_OK, "Api key is valid for " . $data->name);
                     $regions = $data->regions;
                     if ($regions) {
                         $regionList = 'Api is valid for below regions:<br>';
                         foreach ($regions as $region) {
-                            $regionList .= $this->_region[$region].'<br>';
+                            $regionList .= $this->_region[$region] . '<br>';
                         }
                         $this->appendItem(self::STATUS_OK, $regionList);
                     }
                 }
 
-                if (($httpCode == 404 || ($httpCode >=200 || $httpCode <= 299)) && $isAuEndpoint == true){
-                    $this->appendItem( self::STATUS_OK, "Api key is valid for Australia region.");
+                if (($httpCode == 404 || ($httpCode >= 200 && $httpCode <= 299)) && $isAuEndpoint == true) {
+                    $this->appendItem(self::STATUS_OK, "Api key is valid for Australia region.");
                 }
-            }
-            catch(\Exception $e) {
+            } catch (\Exception $e) {
+                $this->_logger->error($e->getMessage());
                 $this->appendItem(self::STATUS_ERROR, "Error occurred, Please try again.");
             }
 
@@ -203,36 +208,6 @@ class HealthCheck
 
     }
 
-    protected function checkStoreSSLSettings()
-    {
-        $groups = $this->_storeManager->getWebsite()->getGroups();
-        foreach ($groups as $key => $group) {
-            $stores = $group->getStores();
-            foreach ($stores as $store) {
-                if ($store->getIsActive() !== '1'
-                    || $this->_config->isMethodActive($store->getStoreId()) !== true
-                ) {
-                    continue;
-                }
-
-                $storeSecureUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB,true);
-                $url = parse_url($storeSecureUrl);
-
-                if ($url['scheme'] !== 'https') {
-                    $message = self::SSL_DISABLED_MESSAGE;
-                    $message = str_replace('{store_name}', $store->getName(), $message);
-                    $message = str_replace('{store_url}', $storeSecureUrl, $message);
-
-                    $this->appendItem(
-                        self::STATUS_WARNING,
-                        $message
-                    );
-                }
-            }
-        }
-    }
-
-
     /**
      * append success and failed item into health result
      */
@@ -247,6 +222,35 @@ class HealthCheck
             "label" => $label
         );
 
+    }
+
+    protected function checkStoreSSLSettings()
+    {
+        $groups = $this->_storeManager->getWebsite()->getGroups();
+        foreach ($groups as $key => $group) {
+            $stores = $group->getStores();
+            foreach ($stores as $store) {
+                if ($store->getIsActive() !== '1'
+                    || $this->_config->isMethodActive($store->getStoreId()) !== true
+                ) {
+                    continue;
+                }
+
+                $storeSecureUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, true);
+                $url = parse_url($storeSecureUrl);
+
+                if ($url['scheme'] !== 'https') {
+                    $message = self::SSL_DISABLED_MESSAGE;
+                    $message = str_replace('{store_name}', $store->getName(), $message);
+                    $message = str_replace('{store_url}', $storeSecureUrl, $message);
+
+                    $this->appendItem(
+                        self::STATUS_WARNING,
+                        $message
+                    );
+                }
+            }
+        }
     }
 
 }

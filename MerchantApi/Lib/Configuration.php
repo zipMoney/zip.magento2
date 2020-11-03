@@ -84,9 +84,9 @@ class Configuration
      * @var array
      */
     protected $supportedEnvironments = array(
-                        "sandbox" => array("host" => "https://global-api.sand.au.edge.zip.co/merchant"),
-                        "production" => array("host" => 'https://global-api.prod.au.edge.zip.co/merchant')
-                    );
+        "sandbox" => array("host" => "https://global-api.sand.au.edge.zip.co/merchant"),
+        "production" => array("host" => 'https://global-api.prod.au.edge.zip.co/merchant')
+    );
 
     /**
      * The default enviornment to be used
@@ -158,7 +158,7 @@ class Configuration
      *
      * @var boolean True if the certificate should be validated, false otherwise.
      */
-    protected $sslVerification = true;
+    protected $sslVerification = false;
 
     /**
      * Curl proxy host
@@ -206,10 +206,75 @@ class Configuration
     }
 
     /**
+     * Gets the essential information for debugging
+     *
+     * @return string The report for debugging
+     */
+    public static function toDebugReport()
+    {
+        $report = 'PHP SDK (zipMoney) Debug Report:' . PHP_EOL;
+        $report .= '    OS: ' . php_uname() . PHP_EOL;
+        $report .= '    PHP Version: ' . phpversion() . PHP_EOL;
+        $report .= '    OpenAPI Spec Version: 2017-03-01' . PHP_EOL;
+        $report .= '    Temp Folder Path: ' . self::getDefaultConfiguration()->getTempFolderPath() . PHP_EOL;
+
+        return $report;
+    }
+
+    /**
+     * Gets the temp folder path
+     *
+     * @return string Temp folder path
+     */
+    public function getTempFolderPath()
+    {
+        return $this->tempFolderPath;
+    }
+
+    /**
+     * Sets the temp folder path
+     *
+     * @param string $tempFolderPath Temp folder path
+     *
+     * @return Configuration
+     */
+    public function setTempFolderPath($tempFolderPath)
+    {
+        $this->tempFolderPath = $tempFolderPath;
+        return $this;
+    }
+
+    /**
+     * Gets the default configuration instance
+     *
+     * @return Configuration
+     */
+    public static function getDefaultConfiguration()
+    {
+        if (self::$defaultConfiguration === null) {
+            self::$defaultConfiguration = new Configuration();
+        }
+
+        return self::$defaultConfiguration;
+    }
+
+    /**
+     * Sets the detault configuration instance
+     *
+     * @param Configuration $config An instance of the Configuration Object
+     *
+     * @return void
+     */
+    public static function setDefaultConfiguration(Configuration $config)
+    {
+        self::$defaultConfiguration = $config;
+    }
+
+    /**
      * Sets API key
      *
      * @param string $apiKeyIdentifier API key identifier (authentication scheme)
-     * @param string $key              API key or token
+     * @param string $key API key or token
      *
      * @return Configuration
      */
@@ -235,7 +300,7 @@ class Configuration
      * Sets the prefix for API key (e.g. Bearer)
      *
      * @param string $apiKeyIdentifier API key identifier (authentication scheme)
-     * @param string $prefix           API key prefix, e.g. Bearer
+     * @param string $prefix API key prefix, e.g. Bearer
      *
      * @return Configuration
      */
@@ -258,6 +323,16 @@ class Configuration
     }
 
     /**
+     * Gets the access token for OAuth
+     *
+     * @return string Access token for OAuth
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
      * Sets the access token for OAuth
      *
      * @param string $accessToken Token for OAuth
@@ -271,13 +346,13 @@ class Configuration
     }
 
     /**
-     * Gets the access token for OAuth
+     * Gets the username for HTTP basic authentication
      *
-     * @return string Access token for OAuth
+     * @return string Username for HTTP basic authentication
      */
-    public function getAccessToken()
+    public function getUsername()
     {
-        return $this->accessToken;
+        return $this->username;
     }
 
     /**
@@ -294,13 +369,13 @@ class Configuration
     }
 
     /**
-     * Gets the username for HTTP basic authentication
+     * Gets the password for HTTP basic authentication
      *
-     * @return string Username for HTTP basic authentication
+     * @return string Password for HTTP basic authentication
      */
-    public function getUsername()
+    public function getPassword()
     {
-        return $this->username;
+        return $this->password;
     }
 
     /**
@@ -317,19 +392,9 @@ class Configuration
     }
 
     /**
-     * Gets the password for HTTP basic authentication
-     *
-     * @return string Password for HTTP basic authentication
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
      * Adds a default header
      *
-     * @param string $headerName  header name (e.g. Token)
+     * @param string $headerName header name (e.g. Token)
      * @param string $headerValue header value (e.g. 1z8wp3)
      *
      * @return Configuration
@@ -340,7 +405,7 @@ class Configuration
             throw new \InvalidArgumentException('Header name must be a string.');
         }
 
-        $this->defaultHeaders[$headerName] =  $headerValue;
+        $this->defaultHeaders[$headerName] = $headerValue;
         return $this;
     }
 
@@ -354,6 +419,57 @@ class Configuration
         return $this->defaultHeaders;
     }
 
+    public function setDefaultHeaders()
+    {
+        $user_agent_array = array();
+
+
+        if ($platform = $this->getPlatform()) {
+            $user_agent_array[] = $platform;
+        }
+
+        $default_user_agent = "merchantapi-php";
+
+        $this->setUserAgent($default_user_agent);
+        $this->setApiVersion($this->api_version);
+
+    }
+
+    /**
+     * Gets the platform
+     *
+     * @return string
+     */
+    public function getPlatform()
+    {
+        return $this->platform;
+    }
+
+    /**
+     * Sets the platform the library is being used
+     *
+     * @param string $platform
+     *
+     * @return ApiClient
+     */
+    public function setPlatform($platform)
+    {
+        $this->platform = $platform;
+        return $this;
+    }
+
+    /**
+     * Add the api version
+     *
+     * @return Configuration
+     */
+    public function setApiVersion($version)
+    {
+        $this->defaultHeaders["Zip-Version"] = $version;
+
+        return $this;
+    }
+
     /**
      * Deletes a default header
      *
@@ -364,6 +480,16 @@ class Configuration
     public function deleteDefaultHeader($headerName)
     {
         unset($this->defaultHeaders[$headerName]);
+    }
+
+    /**
+     * Gets the host
+     *
+     * @return string Host
+     */
+    public function getHost()
+    {
+        return $this->host;
     }
 
     /**
@@ -380,13 +506,13 @@ class Configuration
     }
 
     /**
-     * Gets the host
+     * Gets the user agent of the api client
      *
-     * @return string Host
+     * @return string user agent
      */
-    public function getHost()
+    public function getUserAgent()
     {
-        return $this->host;
+        return $this->userAgent;
     }
 
     /**
@@ -407,13 +533,13 @@ class Configuration
     }
 
     /**
-     * Gets the user agent of the api client
+     * Gets the HTTP timeout value
      *
-     * @return string user agent
+     * @return string HTTP timeout value
      */
-    public function getUserAgent()
+    public function getCurlTimeout()
     {
-        return $this->userAgent;
+        return $this->curlTimeout;
     }
 
     /**
@@ -434,13 +560,13 @@ class Configuration
     }
 
     /**
-     * Gets the HTTP timeout value
+     * Gets the retry value
      *
      * @return string HTTP timeout value
      */
-    public function getCurlTimeout()
+    public function getCurlNumRetries()
     {
-        return $this->curlTimeout;
+        return $this->curlNumRetries;
     }
 
     /**
@@ -461,13 +587,13 @@ class Configuration
     }
 
     /**
-     * Gets the retry value
+     * Gets the HTTP connect timeout value
      *
-     * @return string HTTP timeout value
+     * @return string HTTP connect timeout value
      */
-    public function getCurlNumRetries()
+    public function getCurlConnectTimeout()
     {
-        return $this->curlNumRetries;
+        return $this->curlConnectTimeout;
     }
 
     /**
@@ -488,15 +614,14 @@ class Configuration
     }
 
     /**
-     * Gets the HTTP connect timeout value
+     * Gets the Retry Interval Value
      *
-     * @return string HTTP connect timeout value
+     * @param integer Retry Interval Value
      */
-    public function getCurlConnectTimeout()
+    public function getRetryInterval()
     {
-        return $this->curlConnectTimeout;
+        return $this->retryInterval;
     }
-
 
     /**
      * Sets the Retry Interval Value
@@ -512,16 +637,6 @@ class Configuration
     }
 
     /**
-     * Gets the Retry Interval Value
-     *
-     * @param integer Retry Interval Value
-     */
-    public function getRetryInterval()
-    {
-        return $this->retryInterval;
-    }
-
-    /**
      * Sets the HTTP Proxy Host
      *
      * @param string $proxyHost HTTP Proxy URL
@@ -533,8 +648,6 @@ class Configuration
         $this->proxyHost = $proxyHost;
         return $this;
     }
-
-
 
     /**
      * Gets the HTTP Proxy Host
@@ -639,19 +752,6 @@ class Configuration
     }
 
     /**
-     * Sets debug flag
-     *
-     * @param bool $debug Debug flag
-     *
-     * @return Configuration
-     */
-    public function setDebug($debug)
-    {
-        $this->debug = $debug;
-        return $this;
-    }
-
-    /**
      * Gets the environment
      *
      * @return bool
@@ -674,7 +774,7 @@ class Configuration
 
         $host = $this->supportedEnvironments['production']['host'];
 
-        if(in_array($environment,array_keys($this->supportedEnvironments))){
+        if (in_array($environment, array_keys($this->supportedEnvironments))) {
             $host = $this->supportedEnvironments[$environment]['host'];
         }
 
@@ -694,15 +794,15 @@ class Configuration
     }
 
     /**
-     * Sets the debug file
+     * Sets debug flag
      *
-     * @param string $debugFile Debug file
+     * @param bool $debug Debug flag
      *
      * @return Configuration
      */
-    public function setDebugFile($debugFile)
+    public function setDebug($debug)
     {
-        $this->debugFile = $debugFile;
+        $this->debug = $debug;
         return $this;
     }
 
@@ -717,38 +817,15 @@ class Configuration
     }
 
     /**
-     * Sets the temp folder path
+     * Sets the debug file
      *
-     * @param string $tempFolderPath Temp folder path
-     *
-     * @return Configuration
-     */
-    public function setTempFolderPath($tempFolderPath)
-    {
-        $this->tempFolderPath = $tempFolderPath;
-        return $this;
-    }
-
-    /**
-     * Gets the temp folder path
-     *
-     * @return string Temp folder path
-     */
-    public function getTempFolderPath()
-    {
-        return $this->tempFolderPath;
-    }
-
-    /**
-     * Sets if SSL verification should be enabled or disabled
-     *
-     * @param boolean $sslVerification True if the certificate should be validated, false otherwise
+     * @param string $debugFile Debug file
      *
      * @return Configuration
      */
-    public function setSSLVerification($sslVerification)
+    public function setDebugFile($debugFile)
     {
-        $this->sslVerification = $sslVerification;
+        $this->debugFile = $debugFile;
         return $this;
     }
 
@@ -763,96 +840,15 @@ class Configuration
     }
 
     /**
-     * Gets the default configuration instance
+     * Sets if SSL verification should be enabled or disabled
+     *
+     * @param boolean $sslVerification True if the certificate should be validated, false otherwise
      *
      * @return Configuration
      */
-    public static function getDefaultConfiguration()
+    public function setSSLVerification($sslVerification)
     {
-        if (self::$defaultConfiguration === null) {
-            self::$defaultConfiguration = new Configuration();
-        }
-
-        return self::$defaultConfiguration;
-    }
-
-    /**
-     * Sets the detault configuration instance
-     *
-     * @param Configuration $config An instance of the Configuration Object
-     *
-     * @return void
-     */
-    public static function setDefaultConfiguration(Configuration $config)
-    {
-        self::$defaultConfiguration = $config;
-    }
-
-    /**
-     * Gets the essential information for debugging
-     *
-     * @return string The report for debugging
-     */
-    public static function toDebugReport()
-    {
-        $report  = 'PHP SDK (zipMoney) Debug Report:' . PHP_EOL;
-        $report .= '    OS: ' . php_uname() . PHP_EOL;
-        $report .= '    PHP Version: ' . phpversion() . PHP_EOL;
-        $report .= '    OpenAPI Spec Version: 2017-03-01' . PHP_EOL;
-        $report .= '    Temp Folder Path: ' . self::getDefaultConfiguration()->getTempFolderPath() . PHP_EOL;
-
-        return $report;
-    }
-
-
-      /**
-     * Sets the platform the library is being used
-     *
-     * @param string $platform
-     *
-     * @return ApiClient
-     */
-    public function setPlatform($platform)
-    {
-        $this->platform = $platform;
+        $this->sslVerification = $sslVerification;
         return $this;
-    }
-
-    /**
-     * Gets the platform
-     *
-     * @return string
-     */
-    public function getPlatform()
-    {
-        return $this->platform;
-    }
-
-    /**
-     * Add the api version
-     *
-     * @return Configuration
-     */
-    public function setApiVersion($version)
-    {
-        $this->defaultHeaders["Zip-Version"] =  $version;
-
-        return $this;
-    }
-
-    public function setDefaultHeaders()
-    {
-        $user_agent_array = array();
-
-
-        if( $platform = $this->getPlatform() ){
-          $user_agent_array[] = $platform;
-        }
-
-        $default_user_agent = "merchantapi-php";
-
-        $this->setUserAgent($default_user_agent);
-        $this->setApiVersion($this->api_version);
-
     }
 }

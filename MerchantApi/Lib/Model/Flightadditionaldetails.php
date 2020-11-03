@@ -18,15 +18,15 @@ class Flightadditionaldetails implements ArrayAccess
     const DISCRIMINATOR = 'subclass';
 
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'flightadditionaldetails';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'departure_date' => '\DateTime',
         'flight_number' => 'string',
@@ -38,12 +38,6 @@ class Flightadditionaldetails implements ArrayAccess
         'passengers' => '\Zip\ZipPayment\MerchantApi\Lib\Model\FlightadditionaldetailsPassengers[]',
         'stopovers' => 'string[]'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -59,8 +53,6 @@ class Flightadditionaldetails implements ArrayAccess
         'passengers' => 'passengers',
         'stopovers' => 'stopovers'
     );
-
-
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
@@ -76,8 +68,6 @@ class Flightadditionaldetails implements ArrayAccess
         'passengers' => 'setPassengers',
         'stopovers' => 'setStopovers'
     );
-
-
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
@@ -93,26 +83,6 @@ class Flightadditionaldetails implements ArrayAccess
         'passengers' => 'getPassengers',
         'stopovers' => 'getStopovers'
     );
-
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
-
-    public static function setters()
-    {
-        return self::$setters;
-    }
-
-    public static function getters()
-    {
-        return self::$getters;
-    }
-
-    
-
-    
-
     /**
      * Associative array for storing property values
      * @var mixed[]
@@ -134,6 +104,26 @@ class Flightadditionaldetails implements ArrayAccess
         $this->container['duration'] = isset($data['duration']) ? $data['duration'] : null;
         $this->container['passengers'] = isset($data['passengers']) ? $data['passengers'] : null;
         $this->container['stopovers'] = isset($data['stopovers']) ? $data['stopovers'] : null;
+    }
+
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
+
+    public static function attributeMap()
+    {
+        return self::$attributeMap;
+    }
+
+    public static function setters()
+    {
+        return self::$setters;
+    }
+
+    public static function getters()
+    {
+        return self::$getters;
     }
 
     /**
@@ -355,9 +345,10 @@ class Flightadditionaldetails implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -367,7 +358,7 @@ class Flightadditionaldetails implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -377,8 +368,8 @@ class Flightadditionaldetails implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -392,7 +383,7 @@ class Flightadditionaldetails implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -413,5 +404,3 @@ class Flightadditionaldetails implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

@@ -1,4 +1,5 @@
 <?php
+
 namespace Zip\ZipPayment\Gateway\Http\Client;
 
 use Magento\Payment\Gateway\Http\ClientInterface;
@@ -17,9 +18,9 @@ use Magento\Payment\Gateway\Http\ClientException;
  * Class TransactionCapture
  */
 class TransactionCancel extends AbstractTransaction implements ClientInterface
-{   
+{
     protected $_service = null;
-    
+
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
@@ -29,11 +30,12 @@ class TransactionCancel extends AbstractTransaction implements ClientInterface
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi $chargesApi,
         array $data = []
-    ) {
-       
-       parent::__construct($context,$encryptor,$payloadHelper,$logger,$helper,$config);
+    )
+    {
 
-       $this->_service = $chargesApi;
+        parent::__construct($context, $encryptor, $payloadHelper, $logger, $helper, $config);
+
+        $this->_service = $chargesApi;
 
     }
 
@@ -46,24 +48,23 @@ class TransactionCancel extends AbstractTransaction implements ClientInterface
     {
         $request = $transferObject->getBody();
         $zip_charge_id = $request['zip_charge_id'];
-        
+
         $response = null;
 
         try {
             $cancel = $this->_service->chargesCancel($zip_charge_id, $this->_helper->generateIdempotencyKey());
-            $response =  ["api_response" => $cancel];
-            $this->_logger->debug("Cancel Response:- ".$this->_helper->json_encode($cancel));
+            $response = ["api_response" => $cancel];
+            $this->_logger->debug("Cancel Response:- " . $this->_helper->json_encode($cancel));
 
-        } catch(\Zip\ZipPayment\MerchantApi\Lib\ApiException $e){
-            list($apiError, $message, $logMessage) = $this->_helper->handleException($e);  
+        } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
+            list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
 
             $response['message'] = $message;
-        }   finally {
+        } finally {
             $log['response'] = $response;
         }
 
         return $response;
     }
-
 
 }

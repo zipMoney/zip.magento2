@@ -3,6 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Zip\ZipPayment\Gateway\Request;
 
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
@@ -16,7 +17,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
  */
-
 class CancelDataBuilder extends AbstractDataBuilder
 {
 
@@ -27,7 +27,7 @@ class CancelDataBuilder extends AbstractDataBuilder
      * @return array
      */
     public function build(array $buildSubject)
-    {           
+    {
         if (!isset($buildSubject['payment'])
             || !$buildSubject['payment'] instanceof PaymentDataObjectInterface
         ) {
@@ -40,14 +40,14 @@ class CancelDataBuilder extends AbstractDataBuilder
         $order = $paymentDO->getOrder();
 
         $payment = $paymentDO->getPayment();
-    
+
         $this->_logger->debug("Cancel Request");
 
         if (!$payment instanceof OrderPaymentInterface) {
             throw new \LogicException('Order payment should be provided.');
         }
-    
-        $return['txn_id'] = $payment->getLastTransId();           
+
+        $return['txn_id'] = $payment->getLastTransId();
         $return['zip_charge_id'] = $payment->getAdditionalInformation('zip_charge_id');
 
         return $return;

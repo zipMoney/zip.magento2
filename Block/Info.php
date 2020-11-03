@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Zip\ZipPayment\Block;
 
 use Magento\Framework\Phrase;
 use Magento\Payment\Block\ConfigurableInfo;
+
 /**
  * Class Info
  */
@@ -20,14 +22,11 @@ class Info extends ConfigurableInfo
      */
     protected function getLabel($field)
     {
-        if($field == "receipt_number"){
+        if ($field == "receipt_number") {
             return "Receipt Number";
         }
 
         return __($field);
     }
-
-
-
 
 }

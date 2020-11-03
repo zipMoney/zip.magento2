@@ -16,17 +16,23 @@ use \ArrayAccess;
 class Checkout implements ArrayAccess
 {
     const DISCRIMINATOR = 'subclass';
-
+    const TYPE_STANDARD = 'standard';
+    const TYPE_EXPRESS = 'express';
+    const STATE_CREATED = 'created';
+    const STATE_EXPIRED = 'expired';
+    const STATE_APPROVED = 'approved';
+    const STATE_COMPLETED = 'completed';
+    const STATE_CANCELLED = 'cancelled';
+    const STATE_DECLINED = 'declined';
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'Checkout';
-
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'id' => 'string',
         'uri' => 'string',
@@ -40,12 +46,6 @@ class Checkout implements ArrayAccess
         'customer_id' => 'string',
         'metadata' => '\Zip\ZipPayment\MerchantApi\Lib\Model\Metadata'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -63,8 +63,6 @@ class Checkout implements ArrayAccess
         'customer_id' => 'customer_id',
         'metadata' => 'metadata'
     );
-
-
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
@@ -82,8 +80,6 @@ class Checkout implements ArrayAccess
         'customer_id' => 'setCustomerId',
         'metadata' => 'setMetadata'
     );
-
-
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
@@ -101,62 +97,6 @@ class Checkout implements ArrayAccess
         'customer_id' => 'getCustomerId',
         'metadata' => 'getMetadata'
     );
-
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
-
-    public static function setters()
-    {
-        return self::$setters;
-    }
-
-    public static function getters()
-    {
-        return self::$getters;
-    }
-
-    const TYPE_STANDARD = 'standard';
-    const TYPE_EXPRESS = 'express';
-    const STATE_CREATED = 'created';
-    const STATE_EXPIRED = 'expired';
-    const STATE_APPROVED = 'approved';
-    const STATE_COMPLETED = 'completed';
-    const STATE_CANCELLED = 'cancelled';
-    const STATE_DECLINED = 'declined';
-
-
-    
-    /**
-     * Gets allowable values of the enum
-     * @return string[]
-     */
-    public function getTypeAllowableValues()
-    {
-        return array(
-            self::TYPE_STANDARD,
-            self::TYPE_EXPRESS,
-        );
-    }
-    
-    /**
-     * Gets allowable values of the enum
-     * @return string[]
-     */
-    public function getStateAllowableValues()
-    {
-        return array(
-            self::STATE_CREATED,
-            self::STATE_EXPIRED,
-            self::STATE_APPROVED,
-            self::STATE_COMPLETED,
-            self::STATE_CANCELLED,
-            self::STATE_DECLINED,
-        );
-    }
-    
-
     /**
      * Associative array for storing property values
      * @var mixed[]
@@ -180,6 +120,54 @@ class Checkout implements ArrayAccess
         $this->container['state'] = isset($data['state']) ? $data['state'] : null;
         $this->container['customer_id'] = isset($data['customer_id']) ? $data['customer_id'] : null;
         $this->container['metadata'] = isset($data['metadata']) ? $data['metadata'] : null;
+    }
+
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
+
+    public static function attributeMap()
+    {
+        return self::$attributeMap;
+    }
+
+    public static function setters()
+    {
+        return self::$setters;
+    }
+
+    public static function getters()
+    {
+        return self::$getters;
+    }
+
+    /**
+     * Gets allowable values of the enum
+     * @return string[]
+     */
+    public function getTypeAllowableValues()
+    {
+        return array(
+            self::TYPE_STANDARD,
+            self::TYPE_EXPRESS,
+        );
+    }
+
+    /**
+     * Gets allowable values of the enum
+     * @return string[]
+     */
+    public function getStateAllowableValues()
+    {
+        return array(
+            self::STATE_CREATED,
+            self::STATE_EXPIRED,
+            self::STATE_APPROVED,
+            self::STATE_COMPLETED,
+            self::STATE_CANCELLED,
+            self::STATE_DECLINED,
+        );
     }
 
     /**
@@ -487,9 +475,10 @@ class Checkout implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -499,7 +488,7 @@ class Checkout implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -509,8 +498,8 @@ class Checkout implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -524,7 +513,7 @@ class Checkout implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -545,5 +534,3 @@ class Checkout implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

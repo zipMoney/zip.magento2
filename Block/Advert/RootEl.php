@@ -1,4 +1,5 @@
 <?php
+
 namespace Zip\ZipPayment\Block\Advert;
 
 use Magento\Store\Model\ScopeInterface;
@@ -12,29 +13,25 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
  */
-
 class RootEl extends \Magento\Framework\View\Element\Template
 {
-
-    /**
-     * @var boolean
-     */
-    protected $_render = false;
-
-    /**
-     * @var \Zip\ZipPayment\Model\Config
-     */
-    protected $_config;
-
-    /**
-     * @var \Zip\ZipPayment\Helper\Logger
-     */
-    protected $_logger;
 
     /**
      * Get country path
      */
     const COUNTRY_CODE_PATH = 'general/country/default';
+    /**
+     * @var boolean
+     */
+    protected $_render = false;
+    /**
+     * @var \Zip\ZipPayment\Model\Config
+     */
+    protected $_config;
+    /**
+     * @var \Zip\ZipPayment\Helper\Logger
+     */
+    protected $_logger;
 
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -42,10 +39,11 @@ class RootEl extends \Magento\Framework\View\Element\Template
         \Zip\ZipPayment\Helper\Logger $logger,
         $template,
         array $data = []
-    ) {
+    )
+    {
         $this->_config = $config;
         $this->_loggger = $logger;
-        $this->setTemplate("Zip_ZipPayment::".$template);
+        $this->setTemplate("Zip_ZipPayment::" . $template);
 
         parent::__construct($context, $data);
     }
@@ -92,10 +90,11 @@ class RootEl extends \Magento\Framework\View\Element\Template
     /**
      * display product widget in line
      */
-    public function isDisplayInlineWidget() {
+    public function isDisplayInlineWidget()
+    {
         $region = $this->_config->getRegion();
         $displayInline = "false";
-        if ($region == 'nz' || $region == 'uk'){
+        if ($region == 'nz' || $region == 'uk') {
             $displayInline = "true";
         }
         return $displayInline;

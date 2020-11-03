@@ -65,9 +65,9 @@ class CheckoutsApi
      *
      * Create a checkout
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequest $body  (optional)
+     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequest $body (optional)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function checkoutsCreate($body = null)
     {
@@ -80,9 +80,9 @@ class CheckoutsApi
      *
      * Create a checkout
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequest $body  (optional)
+     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequest $body (optional)
      * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function checkoutsCreateWithHttpInfo($body = null)
     {
@@ -168,9 +168,9 @@ class CheckoutsApi
      *
      * Retrieve a checkout
      *
-     * @param string $id  (required)
+     * @param string $id (required)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function checkoutsGet($id)
     {
@@ -183,9 +183,9 @@ class CheckoutsApi
      *
      * Retrieve a checkout
      *
-     * @param string $id  (required)
+     * @param string $id (required)
      * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function checkoutsGetWithHttpInfo($id)
     {
@@ -216,7 +216,7 @@ class CheckoutsApi
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
 
-        
+
         // for model (json/xml)
         if (isset($_tempBody)) {
             $httpBody = $_tempBody; // $_tempBody is the method argument, if present

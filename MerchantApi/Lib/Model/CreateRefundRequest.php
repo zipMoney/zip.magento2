@@ -19,15 +19,15 @@ class CreateRefundRequest implements ArrayAccess
     const DISCRIMINATOR = 'subclass';
 
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'CreateRefundRequest';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'charge_id' => 'string',
         'reason' => 'string',
@@ -35,12 +35,6 @@ class CreateRefundRequest implements ArrayAccess
         'currency' => 'string',
         'metadata' => 'object'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -52,6 +46,66 @@ class CreateRefundRequest implements ArrayAccess
         'currency' => 'currency',
         'metadata' => 'metadata'
     );
+    /**
+     * Array of attributes to setter functions (for deserialization of responses)
+     * @var string[]
+     */
+    protected static $setters = array(
+        'charge_id' => 'setChargeId',
+        'reason' => 'setReason',
+        'amount' => 'setAmount',
+        'currency' => 'setCurrency',
+        'metadata' => 'setMetadata'
+    );
+    /**
+     * Array of attributes to getter functions (for serialization of requests)
+     * @var string[]
+     */
+    protected static $getters = array(
+        'charge_id' => 'getChargeId',
+        'reason' => 'getReason',
+        'amount' => 'getAmount',
+        'currency' => 'getCurrency',
+        'metadata' => 'getMetadata'
+    );
+    /**
+     * Associative array for storing property values
+     * @var mixed[]
+     */
+    protected $container = array();
+
+    /**
+     * Constructor
+     * @param mixed[] $data Associated array of property values initializing the model
+     */
+    public function __construct(array $data = null)
+    {
+        $this->container['charge_id'] = isset($data['charge_id']) ? $data['charge_id'] : null;
+        $this->container['reason'] = isset($data['reason']) ? $data['reason'] : null;
+        $this->container['amount'] = isset($data['amount']) ? $data['amount'] : null;
+        $this->container['currency'] = isset($data['currency']) ? $data['currency'] : null;
+        $this->container['metadata'] = isset($data['metadata']) ? $data['metadata'] : null;
+    }
+
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
+
+    public static function attributeMap()
+    {
+        return self::$attributeMap;
+    }
+
+    public static function setters()
+    {
+        return self::$setters;
+    }
+
+    public static function getters()
+    {
+        return self::$getters;
+    }
 
     /**
      * Gets currency
@@ -76,68 +130,6 @@ class CreateRefundRequest implements ArrayAccess
         $this->container['currency'] = $currency;
 
         return $this;
-    }
-    /**
-     * Array of attributes to setter functions (for deserialization of responses)
-     * @var string[]
-     */
-    protected static $setters = array(
-        'charge_id' => 'setChargeId',
-        'reason' => 'setReason',
-        'amount' => 'setAmount',
-        'currency' => 'setCurrency',
-        'metadata' => 'setMetadata'
-    );
-
-
-    /**
-     * Array of attributes to getter functions (for serialization of requests)
-     * @var string[]
-     */
-    protected static $getters = array(
-        'charge_id' => 'getChargeId',
-        'reason' => 'getReason',
-        'amount' => 'getAmount',
-        'currency' => 'getCurrency',
-        'metadata' => 'getMetadata'
-    );
-
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
-
-    public static function setters()
-    {
-        return self::$setters;
-    }
-
-    public static function getters()
-    {
-        return self::$getters;
-    }
-
-
-
-
-
-    /**
-     * Associative array for storing property values
-     * @var mixed[]
-     */
-    protected $container = array();
-
-    /**
-     * Constructor
-     * @param mixed[] $data Associated array of property values initializing the model
-     */
-    public function __construct(array $data = null)
-    {
-        $this->container['charge_id'] = isset($data['charge_id']) ? $data['charge_id'] : null;
-        $this->container['reason'] = isset($data['reason']) ? $data['reason'] : null;
-        $this->container['amount'] = isset($data['amount']) ? $data['amount'] : null;
-        $this->container['currency'] = isset($data['currency']) ? $data['currency'] : null;
-        $this->container['metadata'] = isset($data['metadata']) ? $data['metadata'] : null;
     }
 
     /**
@@ -284,9 +276,10 @@ class CreateRefundRequest implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -296,7 +289,7 @@ class CreateRefundRequest implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -306,8 +299,8 @@ class CreateRefundRequest implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -321,7 +314,7 @@ class CreateRefundRequest implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -342,5 +335,3 @@ class CreateRefundRequest implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

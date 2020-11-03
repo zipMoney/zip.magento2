@@ -10,10 +10,10 @@ define([
             initialize: function () {
                 this._super();
             },
-            getTotalAmount:function(){
+            getTotalAmount: function () {
                 return parseFloat(totals.totals()['grand_total']);
             },
-            getCurrencyCode:function () {
+            getCurrencyCode: function () {
                 return totals.totals()['quote_currency_code'];
             }
         });

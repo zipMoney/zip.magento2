@@ -65,10 +65,10 @@ class RefundsApi
      *
      * Create a refund
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateRefundRequest $body  (optional)
+     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateRefundRequest $body (optional)
      * @param string $idempotency_key The unique idempotency key. (optional)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Refund
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function refundsCreate($body = null, $idempotency_key = null)
     {
@@ -81,10 +81,10 @@ class RefundsApi
      *
      * Create a refund
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateRefundRequest $body  (optional)
+     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateRefundRequest $body (optional)
      * @param string $idempotency_key The unique idempotency key. (optional)
      * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Refund, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function refundsCreateWithHttpInfo($body = null, $idempotency_key = null)
     {
@@ -166,11 +166,11 @@ class RefundsApi
      *
      * List refunds
      *
-     * @param string $charge_id  (optional)
+     * @param string $charge_id (optional)
      * @param int $skip Number of items to skip when paging (optional, default to 0)
      * @param int $limit Number of items to retrieve when paging (optional, default to 100)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\InlineResponse200[]
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function refundsList($charge_id = null, $skip = null, $limit = null)
     {
@@ -183,11 +183,11 @@ class RefundsApi
      *
      * List refunds
      *
-     * @param string $charge_id  (optional)
+     * @param string $charge_id (optional)
      * @param int $skip Number of items to skip when paging (optional, default to 0)
      * @param int $limit Number of items to retrieve when paging (optional, default to 100)
      * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\InlineResponse200[], HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function refundsListWithHttpInfo($charge_id = null, $skip = null, $limit = null)
     {
@@ -218,7 +218,7 @@ class RefundsApi
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
 
-        
+
         // for model (json/xml)
         if (isset($_tempBody)) {
             $httpBody = $_tempBody; // $_tempBody is the method argument, if present
@@ -261,7 +261,7 @@ class RefundsApi
      *
      * @param string $id The id of the refund (required)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Refund
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function refundsRetrieve($id)
     {
@@ -276,7 +276,7 @@ class RefundsApi
      *
      * @param string $id The id of the refund (required)
      * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Refund, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function refundsRetrieveWithHttpInfo($id)
     {
@@ -307,7 +307,7 @@ class RefundsApi
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
 
-        
+
         // for model (json/xml)
         if (isset($_tempBody)) {
             $httpBody = $_tempBody; // $_tempBody is the method argument, if present

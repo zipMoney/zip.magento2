@@ -5,26 +5,26 @@ namespace Zip\ZipPayment\Block\System\Config;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+
 /**
  * Block class of Admin health check field
  *
  * @package Zip_Payment
  * @author  Zip Co - Plugin Team
  **/
-
-
 class HealthCheck extends Field
 {
+    const HEALTH_CHECK_CACHE_ID = 'zip_payment_health_check';
     /**
      * @var string
      */
     protected $_template = 'Zip_ZipPayment::system/config/check_credential_button.phtml';
-    const HEALTH_CHECK_CACHE_ID = 'zip_payment_health_check';
 
     public function __construct(
         Context $context,
         array $data = []
-    ) {
+    )
+    {
         parent::__construct($context, $data);
     }
 
@@ -32,10 +32,6 @@ class HealthCheck extends Field
     {
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
         return parent::render($element);
-    }
-    protected function _getElementHtml(AbstractElement $element)
-    {
-        return $this->_toHtml();
     }
 
     public function getStatusLabel($statusLevel = null)
@@ -57,8 +53,12 @@ class HealthCheck extends Field
      */
     public function getAjaxHealthCheckUrl()
     {
-        return $this->getUrl('zippayment/healthcheck', array('_current'=>true));;
+        return $this->getUrl('zippayment/healthcheck', array('_current' => true));;
     }
 
+    protected function _getElementHtml(AbstractElement $element)
+    {
+        return $this->_toHtml();
+    }
 
 }

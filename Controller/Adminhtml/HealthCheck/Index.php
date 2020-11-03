@@ -18,7 +18,7 @@ class Index extends \Magento\Backend\App\Action
      * Index constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-    //* @param \Zip\ZipPayment\Model\Config\HealthCheck $healthCheck
+     * //* @param \Zip\ZipPayment\Model\Config\HealthCheck $healthCheck
      */
 
     public function __construct(
@@ -40,7 +40,7 @@ class Index extends \Magento\Backend\App\Action
     public function execute()
     {
         $params = $this->getRequest()->getParams();
-        $websiteId = (int) $this->getRequest()->getParam('website', 0);
+        $websiteId = (int)$this->getRequest()->getParam('website', 0);
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create();
         try {
@@ -53,4 +53,5 @@ class Index extends \Magento\Backend\App\Action
         $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
         return $resultJson->setData($response);
     }
+
 }

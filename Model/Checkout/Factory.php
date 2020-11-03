@@ -1,4 +1,5 @@
 <?php
+
 namespace Zip\ZipPayment\Model\Checkout;
 
 /**

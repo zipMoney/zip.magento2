@@ -75,7 +75,7 @@ class ApiClient
     /**
      * Get API key (with prefix if set)
      *
-     * @param  string $apiKeyIdentifier name of apikey
+     * @param string $apiKeyIdentifier name of apikey
      *
      * @return string API key with the prefix
      */
@@ -89,7 +89,7 @@ class ApiClient
         }
 
         if (isset($prefix)) {
-            $keyWithPrefix = $prefix." ".$apiKey;
+            $keyWithPrefix = $prefix . " " . $apiKey;
         } else {
             $keyWithPrefix = $apiKey;
         }
@@ -101,15 +101,15 @@ class ApiClient
      * Make the HTTP call (Sync)
      *
      * @param string $resourcePath path to method endpoint
-     * @param string $method       method to call
-     * @param array  $queryParams  parameters to be place in query URL
-     * @param array  $postData     parameters to be placed in POST body
-     * @param array  $headerParams parameters to be place in request header
+     * @param string $method method to call
+     * @param array $queryParams parameters to be place in query URL
+     * @param array $postData parameters to be placed in POST body
+     * @param array $headerParams parameters to be place in request header
      * @param string $responseType expected response type of the endpoint
      * @param string $endpointPath path to method endpoint before expanding parameters
      *
      * @return mixed
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on a non 2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on a non 2xx response
      */
     public function callApi($resourcePath, $method, $queryParams, $postData, $headerParams, $responseType = null, $endpointPath = null)
     {
@@ -168,7 +168,7 @@ class ApiClient
         }
 
         if ($this->config->getCurlProxyUser()) {
-            curl_setopt($curl, CURLOPT_PROXYUSERPWD, $this->config->getCurlProxyUser() . ':' .$this->config->getCurlProxyPassword());
+            curl_setopt($curl, CURLOPT_PROXYUSERPWD, $this->config->getCurlProxyUser() . ':' . $this->config->getCurlProxyPassword());
         }
 
         if (!empty($queryParams)) {
@@ -211,7 +211,7 @@ class ApiClient
 
         do {
 
-            if($count > 0 && $this->config->getRetryInterval() > 0){
+            if ($count > 0 && $this->config->getRetryInterval() > 0) {
                 sleep($this->config->getRetryInterval());
             }
 
@@ -225,8 +225,8 @@ class ApiClient
             $msg = curl_error($curl);
 
         } while (($count <= $num_retries) &&
-                  ( $response_info['http_code'] === 0 && empty($msg) ) &&
-                  !empty($headerParams['Idempotency-Key']));
+        ($response_info['http_code'] === 0 && empty($msg)) &&
+        !empty($headerParams['Idempotency-Key']));
 
 
         // Handle the response
@@ -261,7 +261,7 @@ class ApiClient
             }
 
             throw new ApiException(
-                "[".$response_info['http_code']."] Error connecting to the API ($url)",
+                "[" . $response_info['http_code'] . "] Error connecting to the API ($url)",
                 $response_info['http_code'],
                 $http_header,
                 $data
@@ -269,6 +269,45 @@ class ApiClient
         }
 
         return array($data, $response_info['http_code'], $http_header);
+    }
+
+    /**
+     * Return an array of HTTP response headers
+     *
+     * @param string $raw_headers A string of raw HTTP response headers
+     *
+     * @return string[] Array of HTTP response heaers
+     */
+    protected function httpParseHeaders($raw_headers)
+    {
+        // ref/credit: http://php.net/manual/en/function.http-parse-headers.php#112986
+        $headers = array();
+        $key = '';
+
+        foreach (explode("\n", $raw_headers) as $h) {
+            $h = explode(':', $h, 2);
+
+            if (isset($h[1])) {
+                if (!isset($headers[$h[0]])) {
+                    $headers[$h[0]] = trim($h[1]);
+                } elseif (is_array($headers[$h[0]])) {
+                    $headers[$h[0]] = array_merge($headers[$h[0]], array(trim($h[1])));
+                } else {
+                    $headers[$h[0]] = array_merge(array($headers[$h[0]]), array(trim($h[1])));
+                }
+
+                $key = $h[0];
+            } else {
+                if (substr($h[0], 0, 1) === "\t") {
+                    $headers[$key] .= "\r\n\t" . trim($h[0]);
+                } elseif (!$key) {
+                    $headers[0] = trim($h[0]);
+                }
+                trim($h[0]);
+            }
+        }
+
+        return $headers;
     }
 
     /**
@@ -305,44 +344,5 @@ class ApiClient
         } else {
             return implode(',', $content_type);
         }
-    }
-
-   /**
-    * Return an array of HTTP response headers
-    *
-    * @param string $raw_headers A string of raw HTTP response headers
-    *
-    * @return string[] Array of HTTP response heaers
-    */
-    protected function httpParseHeaders($raw_headers)
-    {
-        // ref/credit: http://php.net/manual/en/function.http-parse-headers.php#112986
-        $headers = array();
-        $key = '';
-
-        foreach (explode("\n", $raw_headers) as $h) {
-            $h = explode(':', $h, 2);
-
-            if (isset($h[1])) {
-                if (!isset($headers[$h[0]])) {
-                    $headers[$h[0]] = trim($h[1]);
-                } elseif (is_array($headers[$h[0]])) {
-                    $headers[$h[0]] = array_merge($headers[$h[0]], array(trim($h[1])));
-                } else {
-                    $headers[$h[0]] = array_merge(array($headers[$h[0]]), array(trim($h[1])));
-                }
-
-                $key = $h[0];
-            } else {
-                if (substr($h[0], 0, 1) === "\t") {
-                    $headers[$key] .= "\r\n\t".trim($h[0]);
-                } elseif (!$key) {
-                    $headers[0] = trim($h[0]);
-                }
-                trim($h[0]);
-            }
-        }
-
-        return $headers;
     }
 }

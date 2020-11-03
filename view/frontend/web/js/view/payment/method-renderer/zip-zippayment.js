@@ -1,21 +1,21 @@
 /**
-* Zip_ZipPayment JS Component
-*
-* @category    Zip
-* @package     Zip_ZipPayment
-* @author    Zip Plugin Team <integration@zip.co>
-* @copyright   Zip (https://zip.co)
-* @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*/
+ * Zip_ZipPayment JS Component
+ *
+ * @category    Zip
+ * @package     Zip_ZipPayment
+ * @author    Zip Plugin Team <integration@zip.co>
+ * @copyright   Zip (https://zip.co)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
 
 /*browser:true*/
 /*global define*/
 
-var isLive = (window.checkoutConfig.payment.zippayment.environment == "production" );
+var isLive = (window.checkoutConfig.payment.zippayment.environment == "production");
 var inContextCheckoutEnabled = window.checkoutConfig.payment.zippayment.inContextCheckoutEnabled;
 
 define(
-    [   'Magento_Checkout/js/view/payment/default',
+    ['Magento_Checkout/js/view/payment/default',
         'Zip_ZipPayment/js/action/place-zip-order',
         'Zip_ZipPayment/js/action/set-payment-method',
         'Magento_Ui/js/model/messages',
@@ -28,7 +28,7 @@ define(
         'mage/storage',
         'zipMoneyCheckoutJs'
     ],
-    function (Component, placeZipOrderAction, setPaymentMethodAction, Messages,ko,quote,$,errorProcessor,fullScreenLoader,additionalValidators,storage) {
+    function (Component, placeZipOrderAction, setPaymentMethodAction, Messages, ko, quote, $, errorProcessor, fullScreenLoader, additionalValidators, storage) {
         'use strict';
 
         return Component.extend({
@@ -42,7 +42,7 @@ define(
                 this.createMessagesComponent();
                 return this;
             },
-            continueToZipMoney: function (x,event) {
+            continueToZipMoney: function (x, event) {
                 var self = this,
                     placeOrder;
 
@@ -56,14 +56,14 @@ define(
                     this.selectPaymentMethod();
 
                     setPaymentMethodAction(this.messageContainer)
-                        .success(function(){
-                            placeZipOrderAction(self.getData(),self.messageContainer)
+                        .success(function () {
+                            placeZipOrderAction(self.getData(), self.messageContainer)
                         });
                     return true;
                 }
                 return false;
             },
-            placeOrder: function (x,event) {
+            placeOrder: function (x, event) {
                 var self = this,
                     placeOrder;
 
@@ -77,8 +77,8 @@ define(
                     this.selectPaymentMethod();
 
                     setPaymentMethodAction(this.messageContainer)
-                        .success(function(){
-                            placeZipOrderAction(self.getData(),self.messageContainer)
+                        .success(function () {
+                            placeZipOrderAction(self.getData(), self.messageContainer)
                         });
                     return true;
                 }
@@ -107,19 +107,19 @@ define(
 
                 return data;
             },
-            getPaymentAcceptanceMarkSrc: function() {
+            getPaymentAcceptanceMarkSrc: function () {
                 return window.checkoutConfig.payment.zippayment.paymentAcceptanceMarkSrc;
             },
-            getTitle:function(){
+            getTitle: function () {
                 return window.checkoutConfig.payment.zippayment.title;
             },
-            getContinueText:function(){
+            getContinueText: function () {
                 return "Continue";
             },
-            getCode: function() {
+            getCode: function () {
                 return window.checkoutConfig.payment.zippayment.code;
             },
-            isActive: function() {
+            isActive: function () {
                 return true;
             }
         });

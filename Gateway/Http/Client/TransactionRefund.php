@@ -1,4 +1,5 @@
 <?php
+
 namespace Zip\ZipPayment\Gateway\Http\Client;
 
 use Magento\Payment\Gateway\Http\ClientInterface;
@@ -29,9 +30,10 @@ class TransactionRefund extends AbstractTransaction implements ClientInterface
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\RefundsApi $refundsApi,
         array $data = []
-    ) {
-       parent::__construct($context, $encryptor, $payloadHelper, $logger, $helper, $config);
-       $this->_service = $refundsApi;
+    )
+    {
+        parent::__construct($context, $encryptor, $payloadHelper, $logger, $helper, $config);
+        $this->_service = $refundsApi;
     }
 
     /**
@@ -61,12 +63,12 @@ class TransactionRefund extends AbstractTransaction implements ClientInterface
 
         try {
             $refund = $this->_service->refundsCreate($payload, $this->_helper->generateIdempotencyKey());
-            $response =  ["api_response" => $refund];
-            $this->_logger->debug("Refund Response:- ".$this->_helper->json_encode($refund));
-        } catch(\Zip\ZipPayment\MerchantApi\Lib\ApiException $e){
+            $response = ["api_response" => $refund];
+            $this->_logger->debug("Refund Response:- " . $this->_helper->json_encode($refund));
+        } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
             $response['message'] = $message;
-        }   finally {
+        } finally {
             $log['response'] = $response;
         }
 

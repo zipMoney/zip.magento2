@@ -1,4 +1,5 @@
 <?php
+
 namespace Zip\ZipPayment\Model\Config\Source;
 
 /**
@@ -9,17 +10,17 @@ namespace Zip\ZipPayment\Model\Config\Source;
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
  */
-
-class Environment implements \Magento\Framework\Option\ArrayInterface 
+class Environment implements \Magento\Framework\Option\ArrayInterface
 {
-    
-  /**
-   * Options getter
-   *
-   * @return array
-   */
-  public function toOptionArray() {
-    return [['value' => 'sandbox', 'label' => __('Sandbox')], ['value' => 'production', 'label' => __('Production')]];
-  }
+
+    /**
+     * Options getter
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        return [['value' => 'sandbox', 'label' => __('Sandbox')], ['value' => 'production', 'label' => __('Production')]];
+    }
 
 }

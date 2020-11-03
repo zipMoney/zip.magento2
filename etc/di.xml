@@ -10,8 +10,9 @@
 * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
     <!-- DI Config For external zipMoney Merchant API -->
     <virtualType name="ZipMoneyGatewayFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
@@ -44,7 +45,7 @@
         </arguments>
     </type>
 
-     <type name="Zip\ZipPayment\Gateway\Http\Client\TransactionCapture">
+    <type name="Zip\ZipPayment\Gateway\Http\Client\TransactionCapture">
         <arguments>
             <argument name="chargesApi" xsi:type="object">chargesApi</argument>
         </arguments>
@@ -56,7 +57,7 @@
         </arguments>
     </type>
 
-     <type name="Zip\ZipPayment\Gateway\Http\Client\TransactionRefund">
+    <type name="Zip\ZipPayment\Gateway\Http\Client\TransactionRefund">
         <arguments>
             <argument name="refundsApi" xsi:type="object">refundsApi</argument>
         </arguments>
@@ -68,11 +69,11 @@
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
-    
+
     <type name="Zip\ZipPayment\Logger\Logger">
         <arguments>
             <argument name="name" xsi:type="string">zipMoneyLog</argument>
-            <argument name="handlers"  xsi:type="array">
+            <argument name="handlers" xsi:type="array">
                 <item name="system" xsi:type="object">\Zip\ZipPayment\Logger\Handler</item>
             </argument>
         </arguments>
@@ -115,14 +116,14 @@
     </virtualType>
 
     <virtualType name="ZipMoneyGatewayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
-        <arguments>            
+        <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="default" xsi:type="string">ZipMoneyGatewayConfigValueHandler</item>
             </argument>
         </arguments>
     </virtualType>
 
-     <virtualType name="ZipMoneyGatewayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+    <virtualType name="ZipMoneyGatewayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
         <arguments>
             <argument name="configInterface" xsi:type="object">ZipMoneyGatewayConfig</argument>
         </arguments>
@@ -136,14 +137,15 @@
     <virtualType name="ZipMoneyGatewayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
-              <item name="initialize" xsi:type="string">\Zip\ZipPayment\Gateway\Command\InitializeStrategyCommand</item>
-              <item name="capture" xsi:type="string">ZipMoneyGatewayCaptureCommand</item>
-              <item name="refund" xsi:type="string">ZipMoneyGatewayRefundCommand</item>
-              <item name="cancel" xsi:type="string">ZipMoneyGatewayCancelCommand</item>
+                <item name="initialize" xsi:type="string">\Zip\ZipPayment\Gateway\Command\InitializeStrategyCommand
+                </item>
+                <item name="capture" xsi:type="string">ZipMoneyGatewayCaptureCommand</item>
+                <item name="refund" xsi:type="string">ZipMoneyGatewayRefundCommand</item>
+                <item name="cancel" xsi:type="string">ZipMoneyGatewayCancelCommand</item>
             </argument>
         </arguments>
     </virtualType>
-    
+
 
     <!-- Capture Request -->
     <virtualType name="ZipMoneyGatewayCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
@@ -151,7 +153,8 @@
             <argument name="requestBuilder" xsi:type="object">ZipMoneyCaptureRequest</argument>
             <argument name="handler" xsi:type="object">\Zip\ZipPayment\Gateway\Response\CaptureHandler</argument>
             <argument name="transferFactory" xsi:type="object">\Zip\ZipPayment\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">\Zip\ZipPayment\Gateway\Validator\CaptureResponseValidator</argument>
+            <argument name="validator" xsi:type="object">\Zip\ZipPayment\Gateway\Validator\CaptureResponseValidator
+            </argument>
             <argument name="client" xsi:type="object">\Zip\ZipPayment\Gateway\Http\Client\TransactionCapture</argument>
         </arguments>
     </virtualType>
@@ -161,7 +164,8 @@
             <argument name="requestBuilder" xsi:type="object">ZipMoneyRefundRequest</argument>
             <argument name="handler" xsi:type="object">\Zip\ZipPayment\Gateway\Response\RefundHandler</argument>
             <argument name="transferFactory" xsi:type="object">\Zip\ZipPayment\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">\Zip\ZipPayment\Gateway\Validator\RefundResponseValidator</argument>
+            <argument name="validator" xsi:type="object">\Zip\ZipPayment\Gateway\Validator\RefundResponseValidator
+            </argument>
             <argument name="client" xsi:type="object">\Zip\ZipPayment\Gateway\Http\Client\TransactionRefund</argument>
         </arguments>
     </virtualType>
@@ -171,7 +175,8 @@
             <argument name="requestBuilder" xsi:type="object">ZipMoneyCancelRequest</argument>
             <argument name="handler" xsi:type="object">\Zip\ZipPayment\Gateway\Response\CancelHandler</argument>
             <argument name="transferFactory" xsi:type="object">\Zip\ZipPayment\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">\Zip\ZipPayment\Gateway\Validator\CancelResponseValidator</argument>
+            <argument name="validator" xsi:type="object">\Zip\ZipPayment\Gateway\Validator\CancelResponseValidator
+            </argument>
             <argument name="client" xsi:type="object">\Zip\ZipPayment\Gateway\Http\Client\TransactionCancel</argument>
         </arguments>
     </virtualType>
