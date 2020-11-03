@@ -310,19 +310,24 @@ abstract class AbstractStandard extends Action
           ->setApiKeyPrefix('Authorization', 'Bearer')
           ->setEnvironment($this->_config->getEnvironment(),$this->_config->getAPiSource())
           ->setPlatform("Magento/".$this->_helper->getMagentoVersion()."Zip_ZipPayment/".$this->_helper->getExtensionVersion());
+      try {
+          $checkoutApi = new CheckoutsApi();
+          $checkout = $checkoutApi->checkoutsGet($zip_checkout_id);
+          if (!isset($checkout[self::CHECKOUT_ID_KEY])) {
+              return false;
+          }
 
-      $checkoutApi = new CheckoutsApi();
-      $checkout = $checkoutApi->checkoutsGet($zip_checkout_id);
-        if (!isset($checkout[self::CHECKOUT_ID_KEY])) {
-            return false;
-        }
-
-      $quoteId = $checkout->getOrder()->getCartReference();
-      $this->_quote = $this->_quoteCollectionFactory
-          ->create()
-          ->addFieldToFilter("entity_id", $quoteId)
-          ->getFirstItem();
-      return $this->_quote;
+          $quoteId = $checkout->getOrder()->getCartReference();
+          $this->_quote = $this->_quoteCollectionFactory
+              ->create()
+              ->addFieldToFilter("entity_id", $quoteId)
+              ->getFirstItem();
+          return $this->_quote;
+      }
+      catch (\Magento\Framework\Exception\LocalizedException $e){
+          $this->_logger->error($e->getMessage());
+          return false;
+      }
   }
 
   /**
