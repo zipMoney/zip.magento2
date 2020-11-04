@@ -12,7 +12,7 @@
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
+use \Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 class ShopperStatistics implements ArrayAccess
 {
@@ -160,7 +160,7 @@ class ShopperStatistics implements ArrayAccess
     public function listInvalidProperties()
     {
         $invalid_properties = array();
-        $allowed_values = currencyUtil::isValidCurrency($this->container['currency']);
+        $allowed_values = CommonUtil::isValidCurrency($this->container['currency']);
         if (!$allowed_values['valid']) {
             $invalid_properties[] = $allowed_values['message'];
         }
@@ -182,7 +182,7 @@ class ShopperStatistics implements ArrayAccess
     public function valid()
     {
 
-        $allowed_values = currencyUtil::isValidCurrency($this->container['currency']);
+        $allowed_values = CommonUtil::isValidCurrency($this->container['currency']);
         if (!$allowed_values['valid']) {
             return false;
         }
@@ -357,7 +357,7 @@ class ShopperStatistics implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = currencyUtil::isValidCurrency($currency);
+        $allowed_values = CommonUtil::isValidCurrency($currency);
         if (!is_null($currency) && (!$allowed_values['valid'])) {
             throw new \InvalidArgumentException($allowed_values['message']);
         }

@@ -1,6 +1,9 @@
 <?php
 
 namespace Zip\ZipPayment\Model\Config\Source;
+
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+
 /**
  * @category  Zipmoney
  * @package   Zipmoney_ZipPayment
@@ -10,6 +13,7 @@ namespace Zip\ZipPayment\Model\Config\Source;
  */
 class Region implements \Magento\Framework\Option\ArrayInterface
 {
+
     /**
      * Options getter
      *
@@ -18,7 +22,7 @@ class Region implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
 
-        return [['value' => 'au', 'label' => __('Australia')], ['value' => 'nz', 'label' => __('New Zealand')], ['value' => 'gb', 'label' => __('United Kingdom')]];
+        return CommonUtil::getAvailableRegionList();
     }
 
 }

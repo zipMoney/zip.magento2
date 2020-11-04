@@ -4,6 +4,7 @@ namespace Zip\ZipPayment\Block\Advert;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 /**
  * @category  Zipmoney
@@ -92,9 +93,9 @@ class RootEl extends \Magento\Framework\View\Element\Template
      */
     public function isDisplayInlineWidget()
     {
-        $region = $this->_config->getRegion();
+        $displayMode = $this->_config->getWidgetDisplayMode();
         $displayInline = "false";
-        if ($region == 'nz' || $region == 'uk') {
+        if ($displayMode == CommonUtil::INLINE) {
             $displayInline = "true";
         }
         return $displayInline;

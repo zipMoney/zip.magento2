@@ -12,7 +12,7 @@
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
+use \Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 class CreateRefundRequest implements ArrayAccess
 {
@@ -123,7 +123,7 @@ class CreateRefundRequest implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = currencyUtil::isValidCurrency($currency);
+        $allowed_values = CommonUtil::isValidCurrency($currency);
         if (!$allowed_values['valid']) {
             throw new \InvalidArgumentException($allowed_values['message']);
         }

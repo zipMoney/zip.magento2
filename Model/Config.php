@@ -52,6 +52,8 @@ class Config implements ConfigInterface
      */
     const PAYMENT_ZIPMONEY_WIDGET_REGION = 'widget_region';
 
+    const PAYMENT_ZIPMONEY_WIDGET_DISPLAY_MODE = 'display_widget_mode';
+
     /**
      * Payment Method Title
      *
@@ -416,13 +418,23 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Returns Api Source
+     * Returns Region
      *
      * @return string
      */
     public function getRegion($storeId = null)
     {
         return $this->getConfigData(self::PAYMENT_ZIPMONEY_WIDGET_REGION, $storeId);
+    }
+
+    /**
+     * Returns Widget Display mode
+     * @param null $storeId
+     * @return mixed|string|null
+     */
+    public function getWidgetDisplayMode($storeId = null)
+    {
+        return $this->getConfigData(self::PAYMENT_ZIPMONEY_WIDGET_DISPLAY_MODE, $storeId);
     }
 
     /**
