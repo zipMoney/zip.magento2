@@ -88,7 +88,7 @@ class HealthCheck
     /**
      * check multiple items and get health result
      */
-    public function getHealthResult($websiteId)
+    public function getHealthResult($websiteId, $apiKey = null)
     {
         /** @var Curl $curlObject */
         $curlObject = $this->_curlFactory->create();
@@ -99,18 +99,12 @@ class HealthCheck
 
         $storeId = $storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
         $publicKey = $this->_config->getMerchantPublicKey($storeId);
-        $privateKey = $this->_config->getMerchantPrivateKey($storeId);
+        $privateKey = $apiKey ?? $this->_config->getMerchantPrivateKey($storeId);
         $environment = $this->_config->getEnvironment($storeId);
-        if (empty($websiteId)) {
-            $publicKey = $this->_config->getDefaultMerchantPublicKey();
-            $privateKey = $this->_config->getDefaultMerchantPrivateKey();
-            $environment = $this->_config->getDefaultEnvironment();
-        }
         $apiConfig->setApiKey('Authorization', $privateKey)
             ->setApiKeyPrefix('Authorization', 'Bearer')
             ->setEnvironment($environment)
             ->setPlatform("Magento/" . $this->_helper->getMagentoVersion() . "Zip_ZipPayment/" . $this->_helper->getExtensionVersion());
-
 
         $curlEnabled = function_exists('curl_version');
 

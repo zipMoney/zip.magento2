@@ -3,10 +3,6 @@
 namespace Zip\ZipPayment\Block\Advert;
 
 use Magento\Catalog\Block as CatalogBlock;
-use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
-
-use \Zip\ZipPayment\Model\Config;
-
 
 class Widget extends AbstractAdvert implements CatalogBlock\ShortcutInterface
 {

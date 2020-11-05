@@ -55,7 +55,7 @@ class Index extends AbstractStandard
 
             $this->_logger->debug($e->getMessage());
 
-            $this->_messageManager->addError(__('Unable to complete the checkout.'));
+            $this->_messageManager->addErrorMessage(__('Unable to complete the checkout.'));
             $this->_redirectToCartOrError();
             return;
         }
@@ -86,7 +86,7 @@ class Index extends AbstractStandard
                     // Redirect to success page
                     return $this->getResponse()->setRedirect($this->getSuccessUrl());
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    $this->_messageManager->addError($e->getMessage());
+                    $this->_messageManager->addErrorMessage($e->getMessage());
                     $this->_logger->debug($e->getMessage());
                 }
                 $this->_redirectToCartOrError();

@@ -18,15 +18,13 @@ class Index extends \Magento\Backend\App\Action
      * Index constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * //* @param \Zip\ZipPayment\Model\Config\HealthCheck $healthCheck
+     * @param \Zip\ZipPayment\Model\Config\HealthCheck $healthCheck
      */
-
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Zip\ZipPayment\Model\Config\HealthCheck $healthCheck
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->resultFactory = $resultJsonFactory;
         $this->_healthCheck = $healthCheck;
@@ -39,12 +37,15 @@ class Index extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $params = $this->getRequest()->getParams();
+        $apiKey = $this->getRequest()->getParam('apikey');
+        if (preg_match('/^[\*]+$/m', $apiKey)) {
+            $apiKey = null;
+        }
         $websiteId = (int)$this->getRequest()->getParam('website', 0);
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create();
         try {
-            $healthCheck = $this->_healthCheck->getHealthResult($websiteId);
+            $healthCheck = $this->_healthCheck->getHealthResult($websiteId, $apiKey);
             $response = $healthCheck;
         } catch (\Exception $e) {
             $response = ['error' => 'true', 'message' => $e->getMessage()];
