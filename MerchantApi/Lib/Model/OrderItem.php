@@ -16,17 +16,20 @@ use \ArrayAccess;
 class OrderItem implements ArrayAccess
 {
     const DISCRIMINATOR = 'subclass';
-
+    const TYPE_SKU = 'sku';
+    const TYPE_TAX = 'tax';
+    const TYPE_SHIPPING = 'shipping';
+    const TYPE_DISCOUNT = 'discount';
+    const TYPE_STORE_CREDIT = 'store_credit';
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'OrderItem';
-
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'name' => 'string',
         'amount' => 'float',
@@ -39,12 +42,6 @@ class OrderItem implements ArrayAccess
         'product_code' => 'string',
         'additional_details' => '\Zip\ZipPayment\MerchantApi\Lib\Model\OrderItemAdditionalDetails[]'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -61,8 +58,6 @@ class OrderItem implements ArrayAccess
         'product_code' => 'product_code',
         'additional_details' => 'additional_details'
     );
-
-
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
@@ -79,8 +74,6 @@ class OrderItem implements ArrayAccess
         'product_code' => 'setProductCode',
         'additional_details' => 'setAdditionalDetails'
     );
-
-
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
@@ -97,46 +90,6 @@ class OrderItem implements ArrayAccess
         'product_code' => 'getProductCode',
         'additional_details' => 'getAdditionalDetails'
     );
-
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
-
-    public static function setters()
-    {
-        return self::$setters;
-    }
-
-    public static function getters()
-    {
-        return self::$getters;
-    }
-
-    const TYPE_SKU = 'sku';
-    const TYPE_TAX = 'tax';
-    const TYPE_SHIPPING = 'shipping';
-    const TYPE_DISCOUNT = 'discount';
-    const TYPE_STORE_CREDIT = 'store_credit';
-    
-
-    
-    /**
-     * Gets allowable values of the enum
-     * @return string[]
-     */
-    public function getTypeAllowableValues()
-    {
-        return array(
-            self::TYPE_SKU,
-            self::TYPE_TAX,
-            self::TYPE_SHIPPING,
-            self::TYPE_DISCOUNT,
-            self::TYPE_STORE_CREDIT,
-        );
-    }
-    
-
     /**
      * Associative array for storing property values
      * @var mixed[]
@@ -159,6 +112,41 @@ class OrderItem implements ArrayAccess
         $this->container['item_uri'] = isset($data['item_uri']) ? $data['item_uri'] : null;
         $this->container['product_code'] = isset($data['product_code']) ? $data['product_code'] : null;
         $this->container['additional_details'] = isset($data['additional_details']) ? $data['additional_details'] : null;
+    }
+
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
+
+    public static function attributeMap()
+    {
+        return self::$attributeMap;
+    }
+
+    public static function setters()
+    {
+        return self::$setters;
+    }
+
+    public static function getters()
+    {
+        return self::$getters;
+    }
+
+    /**
+     * Gets allowable values of the enum
+     * @return string[]
+     */
+    public function getTypeAllowableValues()
+    {
+        return array(
+            self::TYPE_SKU,
+            self::TYPE_TAX,
+            self::TYPE_SHIPPING,
+            self::TYPE_DISCOUNT,
+            self::TYPE_STORE_CREDIT,
+        );
     }
 
     /**
@@ -449,9 +437,10 @@ class OrderItem implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -461,7 +450,7 @@ class OrderItem implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -471,8 +460,8 @@ class OrderItem implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -486,7 +475,7 @@ class OrderItem implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -507,5 +496,3 @@ class OrderItem implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

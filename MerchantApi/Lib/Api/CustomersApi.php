@@ -65,9 +65,9 @@ class CustomersApi
      *
      * Retrieve customer
      *
-     * @param string $id  (required)
+     * @param string $id (required)
      * @return void
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function customersGet($id)
     {
@@ -80,9 +80,9 @@ class CustomersApi
      *
      * Retrieve customer
      *
-     * @param string $id  (required)
+     * @param string $id (required)
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function customersGetWithHttpInfo($id)
     {
@@ -113,7 +113,7 @@ class CustomersApi
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
 
-        
+
         // for model (json/xml)
         if (isset($_tempBody)) {
             $httpBody = $_tempBody; // $_tempBody is the method argument, if present
@@ -147,7 +147,7 @@ class CustomersApi
      * List customers
      *
      * @return void
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function customersList()
     {
@@ -161,7 +161,7 @@ class CustomersApi
      * List customers
      *
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function customersListWithHttpInfo()
     {
@@ -180,7 +180,7 @@ class CustomersApi
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
 
-        
+
         // for model (json/xml)
         if (isset($_tempBody)) {
             $httpBody = $_tempBody; // $_tempBody is the method argument, if present

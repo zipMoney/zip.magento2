@@ -11,13 +11,14 @@
 */
 -->
 
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <css  src="Zip_ZipPayment::css/zipmoney.css" />
+        <css src="Zip_ZipPayment::css/zipmoney.css"/>
     </head>
     <body>
         <referenceBlock name="head.components">
-            <block class="Zip\ZipPayment\Block\Advert\RootEl" name="zipmoney.checkout.rootel" />
+            <block class="Zip\ZipPayment\Block\Advert\RootEl" name="zipmoney.checkout.rootel"/>
         </referenceBlock>
 
         <referenceBlock name="checkout.root">
@@ -37,10 +38,14 @@
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
                                                                 <item name="zip_zippayment-payments" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Zip_ZipPayment/js/view/payment/zipmoney</item>
+                                                                    <item name="component" xsi:type="string">
+                                                                        Zip_ZipPayment/js/view/payment/zipmoney
+                                                                    </item>
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="zippayment" xsi:type="array">
-                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                            <item name="isBillingAddressRequired"
+                                                                                  xsi:type="boolean">true
+                                                                            </item>
                                                                         </item>
                                                                     </item>
                                                                 </item>
@@ -71,9 +76,13 @@
                                                 <item name="totals" xsi:type="array">
                                                     <item name="children" xsi:type="array">
                                                         <item name="zip_total" xsi:type="array">
-                                                            <item name="component"  xsi:type="string">Zip_ZipPayment/js/view/payment/total-amount</item>
+                                                            <item name="component" xsi:type="string">
+                                                                Zip_ZipPayment/js/view/payment/total-amount
+                                                            </item>
                                                             <item name="config" xsi:type="array">
-                                                                <item name="template" xsi:type="string">Zip_ZipPayment/payment/total-amount</item>
+                                                                <item name="template" xsi:type="string">
+                                                                    Zip_ZipPayment/payment/total-amount
+                                                                </item>
                                                             </item>
                                                         </item>
 

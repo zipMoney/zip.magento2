@@ -18,49 +18,50 @@ class Metadata implements ArrayAccess
     const DISCRIMINATOR = 'subclass';
 
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'metadata';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
-    protected static $zipTypes = array(
-        
-    );
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
+    protected static $zipTypes = array();
+    /**
+     * Array of attributes where the key is the local name, and the value is the original name
+     * @var string[]
+     */
+    protected static $attributeMap = array();
+    /**
+     * Array of attributes to setter functions (for deserialization of responses)
+     * @var string[]
+     */
+    protected static $setters = array();
+    /**
+     * Array of attributes to getter functions (for serialization of requests)
+     * @var string[]
+     */
+    protected static $getters = array();
+    /**
+     * Associative array for storing property values
+     * @var mixed[]
+     */
+    protected $container = array();
+
+    /**
+     * Constructor
+     * @param mixed[] $data Associated array of property values initializing the model
+     */
+    public function __construct(array $data = null)
+    {
+        $this->container = $data;
+    }
 
     public static function zipTypes()
     {
         return self::$zipTypes;
     }
-
-    /**
-     * Array of attributes where the key is the local name, and the value is the original name
-     * @var string[]
-     */
-    protected static $attributeMap = array(
-        
-    );
-
-
-    /**
-     * Array of attributes to setter functions (for deserialization of responses)
-     * @var string[]
-     */
-    protected static $setters = array(
-        
-    );
-
-
-    /**
-     * Array of attributes to getter functions (for serialization of requests)
-     * @var string[]
-     */
-    protected static $getters = array(
-        
-    );
 
     public static function attributeMap()
     {
@@ -75,25 +76,6 @@ class Metadata implements ArrayAccess
     public static function getters()
     {
         return self::$getters;
-    }
-
-    
-
-    
-
-    /**
-     * Associative array for storing property values
-     * @var mixed[]
-     */
-    protected $container = array();
-
-    /**
-     * Constructor
-     * @param mixed[] $data Associated array of property values initializing the model
-     */
-    public function __construct(array $data = null)
-    {
-        $this->container = $data;
     }
 
     /**
@@ -122,7 +104,7 @@ class Metadata implements ArrayAccess
 
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -132,7 +114,7 @@ class Metadata implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -142,8 +124,8 @@ class Metadata implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -157,7 +139,7 @@ class Metadata implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -178,5 +160,3 @@ class Metadata implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

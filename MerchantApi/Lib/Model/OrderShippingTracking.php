@@ -18,26 +18,20 @@ class OrderShippingTracking implements ArrayAccess
     const DISCRIMINATOR = 'subclass';
 
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'OrderShipping_tracking';
 
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'uri' => 'string',
         'number' => 'string',
         'carrier' => 'string'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -47,8 +41,6 @@ class OrderShippingTracking implements ArrayAccess
         'number' => 'number',
         'carrier' => 'carrier'
     );
-
-
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
@@ -58,8 +50,6 @@ class OrderShippingTracking implements ArrayAccess
         'number' => 'setNumber',
         'carrier' => 'setCarrier'
     );
-
-
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
@@ -69,26 +59,6 @@ class OrderShippingTracking implements ArrayAccess
         'number' => 'getNumber',
         'carrier' => 'getCarrier'
     );
-
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
-
-    public static function setters()
-    {
-        return self::$setters;
-    }
-
-    public static function getters()
-    {
-        return self::$getters;
-    }
-
-    
-
-    
-
     /**
      * Associative array for storing property values
      * @var mixed[]
@@ -104,6 +74,26 @@ class OrderShippingTracking implements ArrayAccess
         $this->container['uri'] = isset($data['uri']) ? $data['uri'] : null;
         $this->container['number'] = isset($data['number']) ? $data['number'] : null;
         $this->container['carrier'] = isset($data['carrier']) ? $data['carrier'] : null;
+    }
+
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
+
+    public static function attributeMap()
+    {
+        return self::$attributeMap;
+    }
+
+    public static function setters()
+    {
+        return self::$setters;
+    }
+
+    public static function getters()
+    {
+        return self::$getters;
     }
 
     /**
@@ -226,9 +216,10 @@ class OrderShippingTracking implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -238,7 +229,7 @@ class OrderShippingTracking implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -248,8 +239,8 @@ class OrderShippingTracking implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -263,7 +254,7 @@ class OrderShippingTracking implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -284,5 +275,3 @@ class OrderShippingTracking implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

@@ -16,27 +16,22 @@ use \ArrayAccess;
 class Authority implements ArrayAccess
 {
     const DISCRIMINATOR = 'subclass';
-
+    const TYPE_CHECKOUT_ID = 'checkout_id';
+    const TYPE_STORE_CODE = 'store_code';
+    const TYPE_ACCOUNT_TOKEN = 'account_token';
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'authority';
-
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'type' => 'string',
         'value' => 'string'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -45,8 +40,6 @@ class Authority implements ArrayAccess
         'type' => 'type',
         'value' => 'value'
     );
-
-
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
@@ -55,8 +48,6 @@ class Authority implements ArrayAccess
         'type' => 'setType',
         'value' => 'setValue'
     );
-
-
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
@@ -65,6 +56,26 @@ class Authority implements ArrayAccess
         'type' => 'getType',
         'value' => 'getValue'
     );
+    /**
+     * Associative array for storing property values
+     * @var mixed[]
+     */
+    protected $container = array();
+
+    /**
+     * Constructor
+     * @param mixed[] $data Associated array of property values initializing the model
+     */
+    public function __construct(array $data = null)
+    {
+        $this->container['type'] = isset($data['type']) ? $data['type'] : null;
+        $this->container['value'] = isset($data['value']) ? $data['value'] : null;
+    }
+
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
 
     public static function attributeMap()
     {
@@ -81,12 +92,6 @@ class Authority implements ArrayAccess
         return self::$getters;
     }
 
-    const TYPE_CHECKOUT_ID = 'checkout_id';
-    const TYPE_STORE_CODE = 'store_code';
-    const TYPE_ACCOUNT_TOKEN = 'account_token';
-    
-
-    
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -98,23 +103,6 @@ class Authority implements ArrayAccess
             self::TYPE_STORE_CODE,
             self::TYPE_ACCOUNT_TOKEN,
         );
-    }
-    
-
-    /**
-     * Associative array for storing property values
-     * @var mixed[]
-     */
-    protected $container = array();
-
-    /**
-     * Constructor
-     * @param mixed[] $data Associated array of property values initializing the model
-     */
-    public function __construct(array $data = null)
-    {
-        $this->container['type'] = isset($data['type']) ? $data['type'] : null;
-        $this->container['value'] = isset($data['value']) ? $data['value'] : null;
     }
 
     /**
@@ -208,9 +196,10 @@ class Authority implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -220,7 +209,7 @@ class Authority implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -230,8 +219,8 @@ class Authority implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -245,7 +234,7 @@ class Authority implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -266,5 +255,3 @@ class Authority implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

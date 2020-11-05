@@ -1,4 +1,5 @@
 <?php
+
 namespace Zip\ZipPayment\Helper;
 
 use \Magento\Framework\App\Helper\AbstractHelper;
@@ -114,7 +115,7 @@ class Payload extends AbstractHelper
     /**
      * @var bool
      */
-    protected $_isVirtual  = true;
+    protected $_isVirtual = true;
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -132,7 +133,8 @@ class Payload extends AbstractHelper
         \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection $transactionCollection,
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper
-    ) {
+    )
+    {
         parent::__construct($context);
 
         $this->_customerFactory = $customerFactory;
@@ -153,63 +155,6 @@ class Payload extends AbstractHelper
     }
 
     /**
-     * Sets checkout quote object
-     *
-     * @param \Magento\Quote\Model\Quote $quote
-     * @return \Zip\ZipPayment\Helper\Payload
-     */
-    public function setQuote($quote)
-    {
-        if ($quote) {
-            $this->_quote = $quote;
-        }
-        return $this;
-    }
-
-    /**
-     * Sets checkout quote object
-     *
-     * @return \Magento\Quote\Model\Quote $quote
-     */
-    public function getQuote()
-    {
-        if ($this->_quote) {
-            $this->_order = null;
-            return $this->_quote;
-        }
-
-        return $this->_quote;
-    }
-
-    /**
-     * Sets checkout quote object
-     *
-     * @param \Magento\Sales\Model\Order $order
-     * @return \Zip\ZipPayment\Helper\Payload
-     */
-    public function setOrder($order)
-    {
-        if ($order) {
-            $this->_quote = null;
-            $this->_order = $order;
-        }
-        return $this;
-    }
-
-    /**
-     * Sets checkout quote object
-     *
-     * @return \Magento\Sales\Model\Order $order
-     */
-    public function getOrder()
-    {
-        if ($this->_order) {
-            return $this->_order;
-        }
-        return null;
-    }
-
-    /**
      * Prepares the checkout payload
      *
      * @param \Magento\Quote\Model\Quote $quote
@@ -227,84 +172,6 @@ class Payload extends AbstractHelper
             ->setMetadata($this->getMetadata())
             ->setConfig($this->getCheckoutConfiguration());
         return $checkoutReq;
-    }
-
-    /**
-     * Prepares the charge payload
-     *
-     * @param \Magento\Sales\Model\Order $order
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateChargeRequest
-     */
-    public function getChargePayload($order)
-    {
-        $chargeReq = new ChargeRequest();
-
-        $this->setOrder($order);
-
-        $order = $this->getOrder();
-
-        $grand_total = $order->getGrandTotal() ? $order->getGrandTotal() : 0;
-        $currency = $order->getOrderCurrencyCode() ? $order->getOrderCurrencyCode() : null;
-        // set capture = true when currency is not AUD
-        $capture = ($currency == 'AUD') ? $this->_config->isCharge() : true;
-
-        $chargeReq->setAmount((float)$grand_total)
-            ->setCurrency($currency)
-            ->setOrder($this->getOrderDetails(new ChargeOrder))
-            ->setMetadata($this->getMetadata())
-            ->setCapture($capture)
-            ->setAuthority($this->getAuthority());
-
-        return $chargeReq;
-    }
-
-    /**
-     * Prepares the refund payload
-     *
-     * @param \Magento\Sales\Model\Order $order
-     * @param float $amount
-     * @param string $reason
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateRefundRequest
-     */
-    public function getRefundPayload($order, $amount, $reason)
-    {
-        $chargeReq = new RefundRequest();
-
-        $this->setOrder($order);
-
-        $currency = $order->getOrderCurrencyCode() ? $order->getOrderCurrencyCode() : null;
-        $chargeId = $order->getPayment()->getZipmoneyChargeId();
-        if (!$chargeId) {
-            $additionalPaymentInfo = $order->getPayment()->getAdditionalInformation();
-            $chargeId = $additionalPaymentInfo['zip_charge_id'] ;
-        }
-        $chargeReq->setAmount((float)$amount)
-            ->setReason($reason)
-            ->setCurrency($currency)
-            ->setChargeId($chargeId)
-            ->setMetadata($this->getMetadata());
-
-        return $chargeReq;
-    }
-
-    /**
-     * Prepares the capture charge payload
-     *
-     * @param \Magento\Sales\Model\Order $order
-     * @param float $amount
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CaptureChargeRequest
-     */
-    public function getCapturePayload($order, $amount)
-    {
-        $captureChargeReq = new CaptureChargeRequest();
-
-        $this->setOrder($order);
-
-        $order = $this->getOrder();
-
-        $captureChargeReq->setAmount((float)$amount);
-
-        return $captureChargeReq;
     }
 
     /**
@@ -350,257 +217,32 @@ class Payload extends AbstractHelper
     }
 
     /**
-     * Prepares the shipping details
+     * Sets checkout quote object
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\OrderShipping
+     * @return \Magento\Quote\Model\Quote $quote
      */
-    public function getShippingDetails()
+    public function getQuote()
     {
-        $shipping = new OrderShipping;
-
-        if ($this->_isVirtual) {
-            $shipping->setPickup(true);
-            return $shipping;
+        if ($this->_quote) {
+            $this->_order = null;
+            return $this->_quote;
         }
 
-        if ($this->getQuote()) {
-            $shipping_address = $this->getQuote()->getShippingAddress();
-        } elseif ($this->getOrder()) {
-            $shipping_address = $this->getOrder()->getShippingAddress();
-
-            if ($shipping_address) {
-                if ($shipping_method = $shipping_address->getShippingMethod()) {
-                    $tracking = new OrderShippingTracking;
-                    $tracking->setNumber($this->getTrackingNumbers())
-                        ->setCarrier($shipping_method);
-
-                    $shipping->setTracking($tracking);
-                }
-            }
-        }
-
-        if ($shipping_address) {
-            if ($address = $this->_getAddress($shipping_address)) {
-                $shipping->setPickup(false)
-                    ->setAddress($address);
-            }
-        }
-
-        return $shipping;
+        return $this->_quote;
     }
 
     /**
-     * Prepares the Order details
+     * Sets checkout quote object
      *
-     * @param mixed \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder $reqOrder | \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder $reqOrder
-     * @return mixed \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder | \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder
+     * @param \Magento\Quote\Model\Quote $quote
+     * @return \Zip\ZipPayment\Helper\Payload
      */
-    public function getOrderDetails($reqOrder)
+    public function setQuote($quote)
     {
-        $reference = 0;
-        $cart_reference = 0;
-        $orderItems = $this->getOrderItems();
-        $totalItemPrice = 0.0;
-        foreach ($orderItems as $item) {
-            $totalItemPrice += $item->getAmount() * $item->getQuantity();
+        if ($quote) {
+            $this->_quote = $quote;
         }
-        if ($quote = $this->getQuote()) {
-            $address = $quote->getShippingAddress();
-            //If cart has only virtual items
-            if ($quote->getIsVirtual()) {
-                $address = $quote->getBillingAddress();
-            }
-            $reference = $quote->getReservedOrderId() ? $quote->getReservedOrderId() : 'unknown';
-            $cart_reference = $quote->getId();
-            $shipping_amount = $address ? $address->getShippingInclTax() : 0.0;
-            $discount_amount = $address ? $address->getDiscountAmount() : 0.0;
-            $tax_amount = $address ? $address->getTaxAmount() : 0.0;
-            $grand_total = $quote->getGrandTotal() ?: 0.0;
-            $currency = $quote->getQuoteCurrencyCode() ?: null;
-            $gift_cards_amount = $quote->getGiftCardsAmount() ?: 0.0;
-        } elseif ($order = $this->getOrder()) {
-            $reference = $order->getIncrementId() ?: 'unknown';
-            $shipping_amount = $order->getShippingInclTax() ?: 0.0;
-            $discount_amount = $order->getDiscountAmount() ?: 0.0;
-            $tax_amount = $order->getTaxAmount() ?: 0.0;
-            $gift_cards_amount = $order->getGiftCardsAmount() ?: 0.0;
-            $grand_total = $order->getGrandTotal() ?: 0.0;
-        }
-
-        $this->_logger->debug("Gift Card Amount:- " . $gift_cards_amount);
-
-        if ($gift_cards_amount) {
-            $discount_amount -= $gift_cards_amount;
-        }
-
-        // Discount Item
-        if ($discount_amount <  0) {
-            $discountItem = new OrderItem;
-            $discountItem->setName("Discount");
-            $discountItem->setAmount((float)$discount_amount);
-            $discountItem->setReference("Discount");
-            $discountItem->setQuantity(1);
-            $discountItem->setType("discount");
-            $orderItems[] = $discountItem;
-        }
-
-        // Shipping Item
-        if ($shipping_amount > 0) {
-            $shippingItem = new OrderItem;
-            $shippingItem->setName("Shipping");
-            $shippingItem->setAmount((float)$shipping_amount);
-            $shippingItem->setReference("Shipping");
-            $shippingItem->setType("shipping");
-            $shippingItem->setQuantity(1);
-            $orderItems[] = $shippingItem;
-        }
-
-        //re-calculated and support all kind of discounts or surcharges
-        $this->_logger->debug($grand_total . '-' . $discount_amount . '-' . $shipping_amount . '-' . $totalItemPrice);
-        $balance = round($grand_total - $discount_amount - $shipping_amount - $totalItemPrice, 2);
-        if ($balance >= 0.01) {
-            $fee = new OrderItem;
-            $fee->setName("Fee");
-            $fee->setAmount($balance);
-            $fee->setType("shipping");
-            $fee->setReference("shipping");
-            $fee->setQuantity(1);
-            $orderItems[] = $fee;
-        } elseif ($balance <= -0.01) {
-            $other = new OrderItem;
-            $other->setName("other discount");
-            $other->setAmount($balance);
-            $other->setReference("discount");
-            $other->setType("discount");
-            $other->setQuantity(1);
-            $orderItems[] = $other;
-        }
-
-        if (isset($grand_total) && $quote) {
-            $reqOrder->setAmount($grand_total);
-        }
-
-        if (isset($currency) && $quote) {
-            $reqOrder->setCurrency($currency);
-        }
-
-        if ($cart_reference) {
-            $reqOrder->setCartReference((string)$cart_reference);
-        }
-
-        $reqOrder->setReference($reference)
-            ->setShipping($this->getShippingDetails())
-            ->setItems($orderItems);
-
-        return $reqOrder;
-    }
-
-    /**
-     * Prepares the Order items
-     *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\OrderItem[]
-     */
-    public function getOrderItems()
-    {
-        if ($quote = $this->getQuote()) {
-            $items = $quote->getAllItems();
-            $storeId   = $quote->getStoreId();
-        } elseif ($order = $this->getOrder()) {
-            $items = $order->getAllItems();
-            $storeId = $order->getStoreId();
-        }
-
-        $itemsArray = array();
-
-        // @var Mage_Sales_Model_Order_Item $oItem
-        foreach ($items as $item) {
-            if (!$item->getProduct()->getIsVirtual()) {
-                $this->_isVirtual = false;
-            }
-
-            if ($item->getParentItemId()) {
-                continue;   // Only sends parent items to zipMoney
-            }
-
-            $orderItem = new OrderItem;
-
-            $description = $item->getDescription();
-
-            if (!isset($description) || empty($description)) {
-                // Check product description
-                $description = $this->_getDescription($item, $storeId);
-            }
-
-            if ($quote) {
-                $qty = $item->getQty();
-            } elseif ($order) {
-                $qty = $item->getQtyOrdered();
-            }
-            //API do not handle long SKU exception so we have to handle in plugin
-            $sku = (strlen($item->getSku())) > 49 ? substr($item->getSku(), 0, 49) : $item->getSku();
-
-            $orderItem->setName($item->getName())
-                ->setAmount($item->getPriceInclTax() ? (float)$item->getPriceInclTax() : 0.00)
-                ->setReference((string)$item->getId())
-                ->setDescription($description)
-                ->setQuantity(round($qty))
-                ->setType("sku")
-                ->setImageUri($this->_getProductImage($item))
-                ->setItemUri($item->getProduct()->getProductUrl())
-                ->setProductCode($sku);
-            $itemsArray[] = $orderItem;
-        }
-
-        $this->_logger->debug(sprintf("Shipping Required:- %s", !$this->_isVirtual ? "Yes" : "No"));
-
-        return $itemsArray;
-    }
-
-    /**
-     * Returns the metadata
-     *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Metadata
-     */
-    public function getMetadata()
-    {
-        $metadata = new Metadata;
-
-        return $metadata;
-    }
-
-    /**
-     * Returns the authority
-     *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Authority
-     */
-    public function getAuthority()
-    {
-        $quoteId = $this->getOrder()->getQuoteId();
-
-        $quote = $this->_quoteFactory->create()->load($quoteId);
-        $addtionalPaymentInfo = $quote->getPayment()->getAdditionalInformation();
-        $checkout_id = $addtionalPaymentInfo['zip_checkout_id'];
-        //$checkout_id = $quote->getZipmoneyCheckoutId();
-        $authority = new Authority;
-        $authority->setType('checkout_id')
-            ->setValue($checkout_id);
-
-        return $authority;
-    }
-
-    /**
-     * Returns the checkoutconfiguration
-     *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration
-     */
-    public function getCheckoutConfiguration()
-    {
-        $checkout_config = new CheckoutConfiguration();
-        $redirect_url = $this->_urlBuilder->getUrl('zippayment/complete', array('_secure' => true));
-
-        $checkout_config->setRedirectUri($redirect_url);
-
-        return $checkout_config;
+        return $this;
     }
 
     /**
@@ -636,6 +278,34 @@ class Payload extends AbstractHelper
     }
 
     /**
+     * Sets checkout quote object
+     *
+     * @return \Magento\Sales\Model\Order $order
+     */
+    public function getOrder()
+    {
+        if ($this->_order) {
+            return $this->_order;
+        }
+        return null;
+    }
+
+    /**
+     * Sets checkout quote object
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return \Zip\ZipPayment\Helper\Payload
+     */
+    public function setOrder($order)
+    {
+        if ($order) {
+            $this->_quote = null;
+            $this->_order = $order;
+        }
+        return $this;
+    }
+
+    /**
      * Get data for customer data
      *
      * @param \Zip\ZipPayment\MerchantApi\Lib\Model\Shopper $shopper
@@ -659,13 +329,13 @@ class Payload extends AbstractHelper
                     ]
                 );
 
-            $lifetimeSalesAmount           = 0;        // total amount of complete orders
-            $maximumSaleValue              = 0;        // Maximum single order amount among complete orders
-            $lifetimeSalesRefundedAmount   = 0;        // Total refunded amount (of closed orders)
-            $averageSaleValue              = 0;        // Average order amount
-            $orderNum                      = 0;        // Total number of orders
-            $declinedBefore                = false;    // the number of declined payments
-            $chargeBackBefore              = false;    // any payments that have been charged back.
+            $lifetimeSalesAmount = 0;        // total amount of complete orders
+            $maximumSaleValue = 0;        // Maximum single order amount among complete orders
+            $lifetimeSalesRefundedAmount = 0;        // Total refunded amount (of closed orders)
+            $averageSaleValue = 0;        // Average order amount
+            $orderNum = 0;        // Total number of orders
+            $declinedBefore = false;    // the number of declined payments
+            $chargeBackBefore = false;    // any payments that have been charged back.
             //A charge back is when a customer has said they did not make the payment,
             //and the bank forces a refund of the amount
             foreach ($orderCollection as $order) {
@@ -735,6 +405,21 @@ class Payload extends AbstractHelper
     /**
      * Gets customer address
      *
+     * @param string $gender
+     * @return string $genderText
+     */
+    protected function _getGenderText($gender)
+    {
+        $genderText = $this->_customerFactory->create()
+            ->getAttribute('gender')
+            ->getSource()
+            ->getOptionText($gender);
+        return $genderText;
+    }
+
+    /**
+     * Gets customer address
+     *
      * @param \Magento\Sales\Model\Order\Address $address
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Address
      */
@@ -771,9 +456,9 @@ class Payload extends AbstractHelper
             $reqAddress->setCity($address->getCity());
 
             /**
-       * If region_id is null, the state is saved in region directly, so the state can be retrieved from region.
-       * If region_id is a valid id, the state should be retrieved by getRegionCode.
-       */
+             * If region_id is null, the state is saved in region directly, so the state can be retrieved from region.
+             * If region_id is a valid id, the state should be retrieved by getRegionCode.
+             */
             if ($address->getRegionId()) {
                 $reqAddress->setState($address->getRegionCode());
             } else {
@@ -787,53 +472,170 @@ class Payload extends AbstractHelper
     }
 
     /**
-     * Gets customer address
+     * Prepares the Order details
      *
-     * @param string $gender
-     * @return string $genderText
+     * @param mixed \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder $reqOrder | \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder $reqOrder
+     * @return mixed \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder | \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder
      */
-    protected function _getGenderText($gender)
+    public function getOrderDetails($reqOrder)
     {
-        $genderText = $this->_customerFactory->create()
-            ->getAttribute('gender')
-            ->getSource()
-            ->getOptionText($gender);
-        return $genderText;
+        $reference = 0;
+        $cart_reference = 0;
+        $orderItems = $this->getOrderItems();
+        $totalItemPrice = 0.0;
+        foreach ($orderItems as $item) {
+            $totalItemPrice += $item->getAmount() * $item->getQuantity();
+        }
+        if ($quote = $this->getQuote()) {
+            $address = $quote->getShippingAddress();
+            //If cart has only virtual items
+            if ($quote->getIsVirtual()) {
+                $address = $quote->getBillingAddress();
+            }
+            $reference = $quote->getReservedOrderId() ? $quote->getReservedOrderId() : 'unknown';
+            $cart_reference = $quote->getId();
+            $shipping_amount = $address ? $address->getShippingInclTax() : 0.0;
+            $discount_amount = $address ? $address->getDiscountAmount() : 0.0;
+            $tax_amount = $address ? $address->getTaxAmount() : 0.0;
+            $grand_total = $quote->getGrandTotal() ?: 0.0;
+            $currency = $quote->getQuoteCurrencyCode() ?: null;
+            $gift_cards_amount = $quote->getGiftCardsAmount() ?: 0.0;
+        } elseif ($order = $this->getOrder()) {
+            $reference = $order->getIncrementId() ?: 'unknown';
+            $shipping_amount = $order->getShippingInclTax() ?: 0.0;
+            $discount_amount = $order->getDiscountAmount() ?: 0.0;
+            $tax_amount = $order->getTaxAmount() ?: 0.0;
+            $gift_cards_amount = $order->getGiftCardsAmount() ?: 0.0;
+            $grand_total = $order->getGrandTotal() ?: 0.0;
+        }
+
+        $this->_logger->debug("Gift Card Amount:- " . $gift_cards_amount);
+
+        if ($gift_cards_amount) {
+            $discount_amount -= $gift_cards_amount;
+        }
+
+        // Discount Item
+        if ($discount_amount < 0) {
+            $discountItem = new OrderItem;
+            $discountItem->setName("Discount");
+            $discountItem->setAmount((float)$discount_amount);
+            $discountItem->setReference("Discount");
+            $discountItem->setQuantity(1);
+            $discountItem->setType("discount");
+            $orderItems[] = $discountItem;
+        }
+
+        // Shipping Item
+        if ($shipping_amount > 0) {
+            $shippingItem = new OrderItem;
+            $shippingItem->setName("Shipping");
+            $shippingItem->setAmount((float)$shipping_amount);
+            $shippingItem->setReference("Shipping");
+            $shippingItem->setType("shipping");
+            $shippingItem->setQuantity(1);
+            $orderItems[] = $shippingItem;
+        }
+
+        //re-calculated and support all kind of discounts or surcharges
+        $this->_logger->debug($grand_total . '-' . $discount_amount . '-' . $shipping_amount . '-' . $totalItemPrice);
+        $balance = round($grand_total - $discount_amount - $shipping_amount - $totalItemPrice, 2);
+        if ($balance >= 0.01) {
+            $fee = new OrderItem;
+            $fee->setName("Fee");
+            $fee->setAmount($balance);
+            $fee->setType("shipping");
+            $fee->setReference("shipping");
+            $fee->setQuantity(1);
+            $orderItems[] = $fee;
+        } elseif ($balance <= -0.01) {
+            $other = new OrderItem;
+            $other->setName("other discount");
+            $other->setAmount($balance);
+            $other->setReference("discount");
+            $other->setType("discount");
+            $other->setQuantity(1);
+            $orderItems[] = $other;
+        }
+
+        if (isset($grand_total) && $quote) {
+            $reqOrder->setAmount($grand_total);
+        }
+
+        if (isset($currency) && $quote) {
+            $reqOrder->setCurrency($currency);
+        }
+
+        if ($cart_reference) {
+            $reqOrder->setCartReference((string)$cart_reference);
+        }
+
+        $reqOrder->setReference($reference)
+            ->setShipping($this->getShippingDetails())
+            ->setItems($orderItems);
+
+        return $reqOrder;
     }
 
     /**
-     * Returns the child product
+     * Prepares the Order items
      *
-     * @param mixed \Magento\Quote\Model\ResourceModel\Quote\Item |  \Magento\Sales\Model\Order\Item $item
-     * @return \Magento\Catalog\Model\Product
+     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\OrderItem[]
      */
-    public function getChildProduct($item)
+    public function getOrderItems()
     {
-        if ($option = $item->getOptionByCode('simple_product')) {
-            return $option->getProduct();
+        if ($quote = $this->getQuote()) {
+            $items = $quote->getAllItems();
+            $storeId = $quote->getStoreId();
+        } elseif ($order = $this->getOrder()) {
+            $items = $order->getAllItems();
+            $storeId = $order->getStoreId();
         }
-        return $item->getProduct();
-    }
 
-    /**
-     * Returns the child product
-     *
-     * @param mixed \Magento\Quote\Model\ResourceModel\Quote\Item |  \Magento\Sales\Model\Order\Item $item
-     * @return string
-     */
-    protected function _getProductImage($item)
-    {
-        $imageUrl = '';
-        try {
-            //only use visible product do not care type $item must be visible cart product
-            $product =  $item->getProduct();
-            $imageUrl = (string)$this->_imageHelper->init($product, 'thumbnail')->getUrl();
-        } catch (\Exception $e) {
-            $this->_logger->warn('An error occurred during getting item image for product ' . $product->getId());
-            $this->_logger->error($e->getMessage());
-            $this->_logger->debug($e->getTraceAsString());
+        $itemsArray = array();
+
+        // @var Mage_Sales_Model_Order_Item $oItem
+        foreach ($items as $item) {
+            if (!$item->getProduct()->getIsVirtual()) {
+                $this->_isVirtual = false;
+            }
+
+            if ($item->getParentItemId()) {
+                continue;   // Only sends parent items to zipMoney
+            }
+
+            $orderItem = new OrderItem;
+
+            $description = $item->getDescription();
+
+            if (!isset($description) || empty($description)) {
+                // Check product description
+                $description = $this->_getDescription($item, $storeId);
+            }
+
+            if ($quote) {
+                $qty = $item->getQty();
+            } elseif ($order) {
+                $qty = $item->getQtyOrdered();
+            }
+            //API do not handle long SKU exception so we have to handle in plugin
+            $sku = (strlen($item->getSku())) > 49 ? substr($item->getSku(), 0, 49) : $item->getSku();
+
+            $orderItem->setName($item->getName())
+                ->setAmount($item->getPriceInclTax() ? (float)$item->getPriceInclTax() : 0.00)
+                ->setReference((string)$item->getId())
+                ->setDescription($description)
+                ->setQuantity(round($qty))
+                ->setType("sku")
+                ->setImageUri($this->_getProductImage($item))
+                ->setItemUri($item->getProduct()->getProductUrl())
+                ->setProductCode($sku);
+            $itemsArray[] = $orderItem;
         }
-        return $imageUrl;
+
+        $this->_logger->debug(sprintf("Shipping Required:- %s", !$this->_isVirtual ? "Yes" : "No"));
+
+        return $itemsArray;
     }
 
     /**
@@ -871,6 +673,20 @@ class Payload extends AbstractHelper
      * Returns the child product
      *
      * @param mixed \Magento\Quote\Model\ResourceModel\Quote\Item |  \Magento\Sales\Model\Order\Item $item
+     * @return \Magento\Catalog\Model\Product
+     */
+    public function getChildProduct($item)
+    {
+        if ($option = $item->getOptionByCode('simple_product')) {
+            return $option->getProduct();
+        }
+        return $item->getProduct();
+    }
+
+    /**
+     * Returns the child product
+     *
+     * @param mixed \Magento\Quote\Model\ResourceModel\Quote\Item |  \Magento\Sales\Model\Order\Item $item
      * @param int $storeId
      * @return string
      */
@@ -891,6 +707,192 @@ class Payload extends AbstractHelper
         }
 
         return $description;
+    }
+
+    /**
+     * Returns the child product
+     *
+     * @param mixed \Magento\Quote\Model\ResourceModel\Quote\Item |  \Magento\Sales\Model\Order\Item $item
+     * @return string
+     */
+    protected function _getProductImage($item)
+    {
+        $imageUrl = '';
+        try {
+            //only use visible product do not care type $item must be visible cart product
+            $product = $item->getProduct();
+            $imageUrl = (string)$this->_imageHelper->init($product, 'thumbnail')->getUrl();
+        } catch (\Exception $e) {
+            $this->_logger->warn('An error occurred during getting item image for product ' . $product->getId());
+            $this->_logger->error($e->getMessage());
+            $this->_logger->debug($e->getTraceAsString());
+        }
+        return $imageUrl;
+    }
+
+    /**
+     * Prepares the shipping details
+     *
+     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\OrderShipping
+     */
+    public function getShippingDetails()
+    {
+        $shipping = new OrderShipping;
+
+        if ($this->_isVirtual) {
+            $shipping->setPickup(true);
+            return $shipping;
+        }
+
+        if ($this->getQuote()) {
+            $shipping_address = $this->getQuote()->getShippingAddress();
+        } elseif ($this->getOrder()) {
+            $shipping_address = $this->getOrder()->getShippingAddress();
+
+            if ($shipping_address) {
+                if ($shipping_method = $shipping_address->getShippingMethod()) {
+                    $tracking = new OrderShippingTracking;
+                    $tracking->setNumber($this->getTrackingNumbers())
+                        ->setCarrier($shipping_method);
+
+                    $shipping->setTracking($tracking);
+                }
+            }
+        }
+
+        if ($shipping_address) {
+            if ($address = $this->_getAddress($shipping_address)) {
+                $shipping->setPickup(false)
+                    ->setAddress($address);
+            }
+        }
+
+        return $shipping;
+    }
+
+    /**
+     * Returns the metadata
+     *
+     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Metadata
+     */
+    public function getMetadata()
+    {
+        $metadata = new Metadata;
+
+        return $metadata;
+    }
+
+    /**
+     * Returns the checkoutconfiguration
+     *
+     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration
+     */
+    public function getCheckoutConfiguration()
+    {
+        $checkout_config = new CheckoutConfiguration();
+        $redirect_url = $this->_urlBuilder->getUrl('zippayment/complete', array('_secure' => true));
+
+        $checkout_config->setRedirectUri($redirect_url);
+
+        return $checkout_config;
+    }
+
+    /**
+     * Prepares the charge payload
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateChargeRequest
+     */
+    public function getChargePayload($order)
+    {
+        $chargeReq = new ChargeRequest();
+
+        $this->setOrder($order);
+
+        $order = $this->getOrder();
+
+        $grand_total = $order->getGrandTotal() ? $order->getGrandTotal() : 0;
+        $currency = $order->getOrderCurrencyCode() ? $order->getOrderCurrencyCode() : null;
+        // set capture = true when currency is not AUD
+        $capture = ($currency == 'AUD') ? $this->_config->isCharge() : true;
+
+        $chargeReq->setAmount((float)$grand_total)
+            ->setCurrency($currency)
+            ->setOrder($this->getOrderDetails(new ChargeOrder))
+            ->setMetadata($this->getMetadata())
+            ->setCapture($capture)
+            ->setAuthority($this->getAuthority());
+
+        return $chargeReq;
+    }
+
+    /**
+     * Returns the authority
+     *
+     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Authority
+     */
+    public function getAuthority()
+    {
+        $quoteId = $this->getOrder()->getQuoteId();
+
+        $quote = $this->_quoteFactory->create()->load($quoteId);
+        $addtionalPaymentInfo = $quote->getPayment()->getAdditionalInformation();
+        $checkout_id = $addtionalPaymentInfo['zip_checkout_id'];
+        //$checkout_id = $quote->getZipmoneyCheckoutId();
+        $authority = new Authority;
+        $authority->setType('checkout_id')
+            ->setValue($checkout_id);
+
+        return $authority;
+    }
+
+    /**
+     * Prepares the refund payload
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @param float $amount
+     * @param string $reason
+     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateRefundRequest
+     */
+    public function getRefundPayload($order, $amount, $reason)
+    {
+        $chargeReq = new RefundRequest();
+
+        $this->setOrder($order);
+
+        $currency = $order->getOrderCurrencyCode() ? $order->getOrderCurrencyCode() : null;
+        $chargeId = $order->getPayment()->getZipmoneyChargeId();
+        if (!$chargeId) {
+            $additionalPaymentInfo = $order->getPayment()->getAdditionalInformation();
+            $chargeId = $additionalPaymentInfo['zip_charge_id'];
+        }
+        $chargeReq->setAmount((float)$amount)
+            ->setReason($reason)
+            ->setCurrency($currency)
+            ->setChargeId($chargeId)
+            ->setMetadata($this->getMetadata());
+
+        return $chargeReq;
+    }
+
+    /**
+     * Prepares the capture charge payload
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @param float $amount
+     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CaptureChargeRequest
+     */
+    public function getCapturePayload($order, $amount)
+    {
+        $captureChargeReq = new CaptureChargeRequest();
+
+        $this->setOrder($order);
+
+        $order = $this->getOrder();
+
+        $captureChargeReq->setAmount((float)$amount);
+
+        return $captureChargeReq;
     }
 
     /**

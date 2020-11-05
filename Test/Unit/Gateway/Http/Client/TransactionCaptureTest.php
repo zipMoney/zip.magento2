@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace  Zip\ZipPayment\Test\Unit\Gateway\Http\Client;
+namespace Zip\ZipPayment\Test\Unit\Gateway\Http\Client;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Http\TransferInterface;
@@ -27,8 +27,6 @@ use Zip\ZipPayment\Helper\Data as ZipMoneyDataHelper;
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
  */
-
-
 class TransactionCaptureTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -45,47 +43,48 @@ class TransactionCaptureTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-       
-        $objManager = new ObjectManager($this);
-        
-        $config = $this->getMockBuilder(Config::class)
-                    ->disableOriginalConstructor()
-                    ->getMock();
 
-        $config->expects(static::any())->method('getLogSetting')->willReturn(10);  
+        $objManager = new ObjectManager($this);
+
+        $config = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $config->expects(static::any())->method('getLogSetting')->willReturn(10);
 
         $this->_chargesApiMock = $this->getMockBuilder(\Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class)->getMock();
-        
+
         $this->_clientMock = $objManager->getObject("\Zip\ZipPayment\Gateway\Http\Client\TransactionCapture",
-            [ '_service' => $this->_chargesApiMock]);
-        
+            ['_service' => $this->_chargesApiMock]);
+
     }
+
     /**
      * @param array $expectedRequest
      * @param array $expectedResponse
      *
      * @dataProvider placeRequestDataProvider
      */
-    public function testPlaceRequest( $expectedRequest, $expectedResponse)
-    {          
+    public function testPlaceRequest($expectedRequest, $expectedResponse)
+    {
 
         $transferObject = $this->getMockBuilder("\Magento\Payment\Gateway\Http\TransferInterface")->getMock();
 
         $transferObject->expects(static::any())->method('getBody')->willReturn($expectedRequest);
-        
-        $this->_chargesApiMock->expects(static::any())->method('chargesCapture')->willReturn( $expectedResponse   );
+
+        $this->_chargesApiMock->expects(static::any())->method('chargesCapture')->willReturn($expectedResponse);
 
         static::assertEquals(
-            [ 'api_response' => $expectedResponse ],
+            ['api_response' => $expectedResponse],
             $this->_clientMock->placeRequest($transferObject)
         );
     }
 
 
     public function placeRequestDataProvider()
-    {   
+    {
         $chargeResponse = new \Zip\ZipPayment\MerchantApi\Lib\Model\Charge;
-      
+
         $chargeResponse->setId("112343");
         $chargeResponse->setState("captured");
         return [

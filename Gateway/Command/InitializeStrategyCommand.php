@@ -1,4 +1,5 @@
 <?php
+
 namespace Zip\ZipPayment\Gateway\Command;
 
 use Magento\Payment\Gateway\Command\CommandException;
@@ -29,26 +30,29 @@ use Psr\Log\LoggerInterface;
 /**
  * Class CaptureStrategyCommand
  */
-class InitializeStrategyCommand   implements CommandInterface
+class InitializeStrategyCommand implements CommandInterface
 {
-   
-  /**
-   * @var LoggerInterface
-   */
-  private $logger;
 
-  public function __construct(
-      LoggerInterface $logger
-  ) {
-      $this->logger = $logger;
-  }
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(
+        LoggerInterface $logger
+    )
+    {
+        $this->logger = $logger;
+    }
 
 
-  /**
-   * Executes command basing on business object
-   *
-   * @param array $commandSubject
-   * @return void
-   */
-  public function execute(array $commandSubject){}
+    /**
+     * Executes command basing on business object
+     *
+     * @param array $commandSubject
+     * @return void
+     */
+    public function execute(array $commandSubject)
+    {
+    }
 }

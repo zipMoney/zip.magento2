@@ -65,10 +65,10 @@ class TokensApi
      *
      * Create token
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateTokenRequest $body  (optional)
+     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateTokenRequest $body (optional)
      * @param string $idempotency_key The unique idempotency key. (optional)
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Token
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function tokensCreate($body = null, $idempotency_key = null)
     {
@@ -81,10 +81,10 @@ class TokensApi
      *
      * Create token
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateTokenRequest $body  (optional)
+     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateTokenRequest $body (optional)
      * @param string $idempotency_key The unique idempotency key. (optional)
      * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Token, HTTP status code, HTTP response headers (array of strings)
-     *@throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
+     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function tokensCreateWithHttpInfo($body = null, $idempotency_key = null)
     {

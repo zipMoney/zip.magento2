@@ -15,9 +15,11 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "Zip\\ZipPayment\\":"",
+            "Zip\\ZipPayment\\": "",
             "Zip\\ZipPayment\\Tests\\": ""
-        },    
-        "files": [ "registration.php" ]
+        },
+        "files": [
+            "registration.php"
+        ]
     }
 }

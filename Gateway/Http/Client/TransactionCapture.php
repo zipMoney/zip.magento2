@@ -1,4 +1,5 @@
 <?php
+
 namespace Zip\ZipPayment\Gateway\Http\Client;
 
 use Magento\Payment\Gateway\Http\ClientInterface;
@@ -18,9 +19,9 @@ use Magento\Payment\Gateway\Http\ClientException;
  * Class TransactionCapture
  */
 class TransactionCapture extends AbstractTransaction implements ClientInterface
-{   
+{
     protected $_service = null;
-    
+
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
@@ -30,11 +31,12 @@ class TransactionCapture extends AbstractTransaction implements ClientInterface
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi $chargesApi,
         array $data = []
-    ) {
-       
-       parent::__construct($context,$encryptor,$payloadHelper,$logger,$helper,$config);
+    )
+    {
 
-       $this->_service = $chargesApi;
+        parent::__construct($context, $encryptor, $payloadHelper, $logger, $helper, $config);
+
+        $this->_service = $chargesApi;
     }
 
     /**
@@ -46,26 +48,25 @@ class TransactionCapture extends AbstractTransaction implements ClientInterface
         $request = $transferObject->getBody();
         $payload = $request['payload'];
         $zip_charge_id = $request['zip_charge_id'];
-        
+
         $response = null;
 
         try {
 
             $charge = $this->_service->chargesCapture($zip_charge_id, $payload, $this->_helper->generateIdempotencyKey());
-            $response =  ["api_response" => $charge];
-            $this->_logger->debug("Capture Charge Response:- ".$this->_helper->json_encode($charge));
+            $response = ["api_response" => $charge];
+            $this->_logger->debug("Capture Charge Response:- " . $this->_helper->json_encode($charge));
 
-        } catch(\Zip\ZipPayment\MerchantApi\Lib\ApiException $e){
-            
-            list($apiError, $message, $logMessage) = $this->_helper->handleException($e);  
+        } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
+
+            list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
 
             $response['message'] = $message;
-        }   finally {
+        } finally {
             $log['response'] = $response;
         }
 
         return $response;
     }
-
 
 }

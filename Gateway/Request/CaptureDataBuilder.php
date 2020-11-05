@@ -3,6 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Zip\ZipPayment\Gateway\Request;
 
 use Magento\Payment\Gateway\ConfigInterface;
@@ -18,9 +19,8 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
  */
-
 class CaptureDataBuilder extends AbstractDataBuilder
-{   
+{
 
     /**
      * Builds ENV request
@@ -29,8 +29,8 @@ class CaptureDataBuilder extends AbstractDataBuilder
      * @return array
      */
     public function build(array $buildSubject)
-    {   
-        $amount =  \Magento\Payment\Gateway\Helper\SubjectReader::readAmount($buildSubject);
+    {
+        $amount = \Magento\Payment\Gateway\Helper\SubjectReader::readAmount($buildSubject);
 
         if (!isset($buildSubject['payment'])
             || !$buildSubject['payment'] instanceof PaymentDataObjectInterface
@@ -46,17 +46,17 @@ class CaptureDataBuilder extends AbstractDataBuilder
         $order = $payment->getOrder();
 
         $payload = $this->_payloadHelper->getCapturePayload($order, $amount);
-    
-        $this->_logger->debug("Capture Request:- ".$this->_helper->json_encode($payload));
-        
+
+        $this->_logger->debug("Capture Request:- " . $this->_helper->json_encode($payload));
+
         if (!$payment instanceof OrderPaymentInterface) {
             throw new \LogicException('Order payment should be provided.');
         }
-    
+
         $return['payload'] = $payload;
         $return['txn_id'] = $payment->getLastTransId();
         $return['zip_charge_id'] = $payment->getLastTransId();
-   
+
         return $return;
     }
 }

@@ -21,7 +21,7 @@ define(
                 method = 'post',
                 paymentData = quote.paymentMethod();
 
-            if (typeof(paymentData.__disableTmpl) !== 'undefined') {
+            if (typeof (paymentData.__disableTmpl) !== 'undefined') {
                 delete paymentData.__disableTmpl;
             }
 
@@ -41,12 +41,12 @@ define(
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/set-payment-information', {});
                 payload = {
-                    cartId: quote.getQuoteId(),            
+                    cartId: quote.getQuoteId(),
                     paymentMethod: paymentData,
                     billingAddress: quote.billingAddress()
                 };
             }
-            
+
             fullScreenLoader.startLoader();
 
             return storage[method](

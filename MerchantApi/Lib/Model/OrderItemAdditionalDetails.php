@@ -16,26 +16,19 @@ use \ArrayAccess;
 class OrderItemAdditionalDetails implements ArrayAccess
 {
     const DISCRIMINATOR = 'subclass';
-
+    const TYPE_FLIGHTS = 'Flights';
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'OrderItem_additional_details';
-
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'type' => 'string'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -61,6 +54,25 @@ class OrderItemAdditionalDetails implements ArrayAccess
     protected static $getters = array(
         'type' => 'getType'
     );
+    /**
+     * Associative array for storing property values
+     * @var mixed[]
+     */
+    protected $container = array();
+
+    /**
+     * Constructor
+     * @param mixed[] $data Associated array of property values initializing the model
+     */
+    public function __construct(array $data = null)
+    {
+        $this->container['type'] = isset($data['type']) ? $data['type'] : null;
+    }
+
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
 
     public static function attributeMap()
     {
@@ -77,10 +89,6 @@ class OrderItemAdditionalDetails implements ArrayAccess
         return self::$getters;
     }
 
-    const TYPE_FLIGHTS = 'Flights';
-    
-
-    
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -90,22 +98,6 @@ class OrderItemAdditionalDetails implements ArrayAccess
         return array(
             self::TYPE_FLIGHTS,
         );
-    }
-    
-
-    /**
-     * Associative array for storing property values
-     * @var mixed[]
-     */
-    protected $container = array();
-
-    /**
-     * Constructor
-     * @param mixed[] $data Associated array of property values initializing the model
-     */
-    public function __construct(array $data = null)
-    {
-        $this->container['type'] = isset($data['type']) ? $data['type'] : null;
     }
 
     /**
@@ -166,9 +158,10 @@ class OrderItemAdditionalDetails implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -178,7 +171,7 @@ class OrderItemAdditionalDetails implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -188,8 +181,8 @@ class OrderItemAdditionalDetails implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -203,7 +196,7 @@ class OrderItemAdditionalDetails implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -224,5 +217,3 @@ class OrderItemAdditionalDetails implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

@@ -12,23 +12,24 @@
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CurrencyUtil;
+use \Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 class ShopperStatistics implements ArrayAccess
 {
     const DISCRIMINATOR = 'subclass';
-
+    const FRAUD_CHECK_RESULT_PASS = 'pass';
+    const FRAUD_CHECK_RESULT_FAIL = 'fail';
+    const FRAUD_CHECK_RESULT_UNKNOWN = 'unknown';
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
 
     protected static $swaggerModelName = 'Shopper_statistics';
-
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'account_created' => '\DateTime',
         'sales_total_count' => 'int',
@@ -42,12 +43,6 @@ class ShopperStatistics implements ArrayAccess
         'has_previous_purchases' => 'bool',
         'fraud_check_result' => 'string'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -65,8 +60,6 @@ class ShopperStatistics implements ArrayAccess
         'has_previous_purchases' => 'has_previous_purchases',
         'fraud_check_result' => 'fraud_check_result'
     );
-
-
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
@@ -84,8 +77,6 @@ class ShopperStatistics implements ArrayAccess
         'has_previous_purchases' => 'setHasPreviousPurchases',
         'fraud_check_result' => 'setFraudCheckResult'
     );
-
-
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
@@ -103,40 +94,6 @@ class ShopperStatistics implements ArrayAccess
         'has_previous_purchases' => 'getHasPreviousPurchases',
         'fraud_check_result' => 'getFraudCheckResult'
     );
-
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
-
-    public static function setters()
-    {
-        return self::$setters;
-    }
-
-    public static function getters()
-    {
-        return self::$getters;
-    }
-
-    const FRAUD_CHECK_RESULT_PASS = 'pass';
-    const FRAUD_CHECK_RESULT_FAIL = 'fail';
-    const FRAUD_CHECK_RESULT_UNKNOWN = 'unknown';
-
-    /**
-     * Gets allowable values of the enum
-     * @return string[]
-     */
-    public function getFraudCheckResultAllowableValues()
-    {
-        return array(
-            self::FRAUD_CHECK_RESULT_PASS,
-            self::FRAUD_CHECK_RESULT_FAIL,
-            self::FRAUD_CHECK_RESULT_UNKNOWN,
-        );
-    }
-
-
     /**
      * Associative array for storing property values
      * @var mixed[]
@@ -162,6 +119,39 @@ class ShopperStatistics implements ArrayAccess
         $this->container['fraud_check_result'] = isset($data['fraud_check_result']) ? $data['fraud_check_result'] : null;
     }
 
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
+
+    public static function attributeMap()
+    {
+        return self::$attributeMap;
+    }
+
+    public static function setters()
+    {
+        return self::$setters;
+    }
+
+    public static function getters()
+    {
+        return self::$getters;
+    }
+
+    /**
+     * Gets allowable values of the enum
+     * @return string[]
+     */
+    public function getFraudCheckResultAllowableValues()
+    {
+        return array(
+            self::FRAUD_CHECK_RESULT_PASS,
+            self::FRAUD_CHECK_RESULT_FAIL,
+            self::FRAUD_CHECK_RESULT_UNKNOWN,
+        );
+    }
+
     /**
      * show all the invalid properties with reasons.
      *
@@ -170,7 +160,7 @@ class ShopperStatistics implements ArrayAccess
     public function listInvalidProperties()
     {
         $invalid_properties = array();
-        $allowed_values = currencyUtil::isValidCurrency($this->container['currency']);
+        $allowed_values = CommonUtil::isValidCurrency($this->container['currency']);
         if (!$allowed_values['valid']) {
             $invalid_properties[] = $allowed_values['message'];
         }
@@ -192,7 +182,7 @@ class ShopperStatistics implements ArrayAccess
     public function valid()
     {
 
-        $allowed_values = currencyUtil::isValidCurrency($this->container['currency']);
+        $allowed_values = CommonUtil::isValidCurrency($this->container['currency']);
         if (!$allowed_values['valid']) {
             return false;
         }
@@ -367,7 +357,7 @@ class ShopperStatistics implements ArrayAccess
      */
     public function setCurrency($currency)
     {
-        $allowed_values = currencyUtil::isValidCurrency($currency);
+        $allowed_values = CommonUtil::isValidCurrency($currency);
         if (!is_null($currency) && (!$allowed_values['valid'])) {
             throw new \InvalidArgumentException($allowed_values['message']);
         }
@@ -442,9 +432,10 @@ class ShopperStatistics implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -454,7 +445,7 @@ class ShopperStatistics implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -464,8 +455,8 @@ class ShopperStatistics implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -479,7 +470,7 @@ class ShopperStatistics implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -500,5 +491,3 @@ class ShopperStatistics implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

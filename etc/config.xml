@@ -11,7 +11,8 @@
 */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
             <zippayment>
@@ -21,11 +22,12 @@
                 <title>Zip - Own it now, pay later</title>
                 <api_source>global</api_source>
                 <widget_region>au</widget_region>
-                <merchant_private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <merchant_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <merchant_private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <merchant_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <order_status>new</order_status>
+                <display_widget_mode>iframe</display_widget_mode>
                 <min_order_total>1</min_order_total>
-                <max_order_total>1000</max_order_total>
+                <max_order_total>1500</max_order_total>
                 <order_status>pending_payment</order_status>
                 <payment_action>capture</payment_action>
                 <can_initialize>1</can_initialize>
@@ -46,7 +48,9 @@
                     <error_header>An error has occurred!</error_header>
                     <error_body>An error occurred while processing your request.</error_body>
                     <referred_header>Your application has been referred!</referred_header>
-                    <referred_body>Your application is currently under review by zipMoney and will be processed very shortly. You can contact the customer care at customercare@zipmoney.com.au for any enquiries.</referred_body>
+                    <referred_body>Your application is currently under review by zipMoney and will be processed very
+                        shortly. You can contact the customer care at customercare@zipmoney.com.au for any enquiries.
+                    </referred_body>
                 </zip_messages>
                 <zip_advert>
                     <homepage>

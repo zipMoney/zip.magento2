@@ -16,17 +16,18 @@ use \ArrayAccess;
 class Shopper implements ArrayAccess
 {
     const DISCRIMINATOR = 'subclass';
-
+    const GENDER_MALE = 'Male';
+    const GENDER_FEMALE = 'Female';
+    const GENDER_OTHER = 'Other';
     /**
-      * The original name of the model.
-      * @var string
-      */
+     * The original name of the model.
+     * @var string
+     */
     protected static $swaggerModelName = 'Shopper';
-
     /**
-      * Array of property to type mappings. Used for (de)serialization
-      * @var string[]
-      */
+     * Array of property to type mappings. Used for (de)serialization
+     * @var string[]
+     */
     protected static $zipTypes = array(
         'title' => 'string',
         'first_name' => 'string',
@@ -39,12 +40,6 @@ class Shopper implements ArrayAccess
         'statistics' => '\Zip\ZipPayment\MerchantApi\Lib\Model\ShopperStatistics',
         'billing_address' => '\Zip\ZipPayment\MerchantApi\Lib\Model\Address'
     );
-
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
-
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
@@ -61,8 +56,6 @@ class Shopper implements ArrayAccess
         'statistics' => 'statistics',
         'billing_address' => 'billing_address'
     );
-
-
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
@@ -79,8 +72,6 @@ class Shopper implements ArrayAccess
         'statistics' => 'setStatistics',
         'billing_address' => 'setBillingAddress'
     );
-
-
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
@@ -97,42 +88,6 @@ class Shopper implements ArrayAccess
         'statistics' => 'getStatistics',
         'billing_address' => 'getBillingAddress'
     );
-
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
-
-    public static function setters()
-    {
-        return self::$setters;
-    }
-
-    public static function getters()
-    {
-        return self::$getters;
-    }
-
-    const GENDER_MALE = 'Male';
-    const GENDER_FEMALE = 'Female';
-    const GENDER_OTHER = 'Other';
-    
-
-    
-    /**
-     * Gets allowable values of the enum
-     * @return string[]
-     */
-    public function getGenderAllowableValues()
-    {
-        return array(
-            self::GENDER_MALE,
-            self::GENDER_FEMALE,
-            self::GENDER_OTHER,
-        );
-    }
-    
-
     /**
      * Associative array for storing property values
      * @var mixed[]
@@ -155,6 +110,39 @@ class Shopper implements ArrayAccess
         $this->container['gender'] = isset($data['gender']) ? $data['gender'] : null;
         $this->container['statistics'] = isset($data['statistics']) ? $data['statistics'] : null;
         $this->container['billing_address'] = isset($data['billing_address']) ? $data['billing_address'] : null;
+    }
+
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
+
+    public static function attributeMap()
+    {
+        return self::$attributeMap;
+    }
+
+    public static function setters()
+    {
+        return self::$setters;
+    }
+
+    public static function getters()
+    {
+        return self::$getters;
+    }
+
+    /**
+     * Gets allowable values of the enum
+     * @return string[]
+     */
+    public function getGenderAllowableValues()
+    {
+        return array(
+            self::GENDER_MALE,
+            self::GENDER_FEMALE,
+            self::GENDER_OTHER,
+        );
     }
 
     /**
@@ -440,9 +428,10 @@ class Shopper implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -452,7 +441,7 @@ class Shopper implements ArrayAccess
 
     /**
      * Gets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -462,8 +451,8 @@ class Shopper implements ArrayAccess
 
     /**
      * Sets value based on offset.
-     * @param  integer $offset Offset
-     * @param  mixed   $value  Value to be set
+     * @param integer $offset Offset
+     * @param mixed $value Value to be set
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -477,7 +466,7 @@ class Shopper implements ArrayAccess
 
     /**
      * Unsets offset.
-     * @param  integer $offset Offset
+     * @param integer $offset Offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -498,5 +487,3 @@ class Shopper implements ArrayAccess
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

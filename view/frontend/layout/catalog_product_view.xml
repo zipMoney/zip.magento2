@@ -5,19 +5,21 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <!-- Fonts -->
-        <link src="//fonts.googleapis.com/css?family=Noto+Sans" src_type="url" />
-        <css  src="Zip_ZipPayment::css/zipmoney.css" />
+        <link src="//fonts.googleapis.com/css?family=Noto+Sans" src_type="url"/>
+        <css src="Zip_ZipPayment::css/zipmoney.css"/>
     </head>
     <body>
         <referenceBlock name="head.components">
-            <block class="Zip\ZipPayment\Block\Advert\RootEl" name="zipmoney.rootel" />
+            <block class="Zip\ZipPayment\Block\Advert\RootEl" name="zipmoney.rootel"/>
         </referenceBlock>
 
         <referenceContainer name="page.top">
-            <block class="Zip\ZipPayment\Block\Advert\Banner" name="zipmoney.productbanner" template="advert/banner.phtml">
+            <block class="Zip\ZipPayment\Block\Advert\Banner" name="zipmoney.productbanner"
+                   template="advert/banner.phtml">
                 <arguments>
                     <argument name="page_type" xsi:type="string">product</argument>
                 </arguments>
@@ -25,7 +27,8 @@
         </referenceContainer>
 
         <referenceContainer name="product.info.main">
-            <block class="Zip\ZipPayment\Block\Advert\Widget" after="product.info.price" name="product.info.price.zipmoney.productwidget" template="advert/widget.phtml">
+            <block class="Zip\ZipPayment\Block\Advert\Widget" after="product.info.price"
+                   name="product.info.price.zipmoney.productwidget" template="advert/widget.phtml">
                 <arguments>
                     <argument name="page_type" xsi:type="string">product</argument>
                 </arguments>

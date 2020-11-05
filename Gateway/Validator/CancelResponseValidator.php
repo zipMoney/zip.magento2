@@ -1,4 +1,5 @@
 <?php
+
 namespace Zip\ZipPayment\Gateway\Validator;
 
 use Magento\Payment\Gateway\Validator\AbstractValidator;
@@ -13,7 +14,6 @@ use Magento\SamplePaymentGateway\Gateway\Http\Client\ClientMock;
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
  */
-
 class CancelResponseValidator extends AbstractValidator
 {
 
@@ -31,18 +31,18 @@ class CancelResponseValidator extends AbstractValidator
 
         $response = $validationSubject['response'];
 
-        if(isset($response['api_response']) && is_object($response['api_response'])){
-            if(isset($response['api_response']->error)){
+        if (isset($response['api_response']) && is_object($response['api_response'])) {
+            if (isset($response['api_response']->error)) {
                 return $this->createResult(
                     false,
                     [__('Could not cancel the charge')]
                 );
             }
-        } else if(isset($response['message'])) {
+        } else if (isset($response['message'])) {
             return $this->createResult(
-                    false,
-                    [__($response['message'])]
-                );
+                false,
+                [__($response['message'])]
+            );
         }
 
         return $this->createResult(true);
