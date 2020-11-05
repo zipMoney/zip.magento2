@@ -163,7 +163,7 @@ class HealthCheck
                 }
 
                 // if API credential is invalid
-                if ($httpCode == 401) {
+                if ($httpCode == 401 || $httpCode == 403) {
                     $this->appendItem(self::STATUS_ERROR, self::API_CREDENTIAL_INVALID_MESSAGE);
                 }
                 if (($httpCode >= 200 && $httpCode <= 299) && $isAuEndpoint == false) {
