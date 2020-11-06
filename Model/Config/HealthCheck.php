@@ -88,7 +88,7 @@ class HealthCheck
     /**
      * check multiple items and get health result
      */
-    public function getHealthResult($websiteId, $apiKey = null)
+    public function getHealthResult($websiteId, $apiKey = null, $publicKey = null, $env = null)
     {
         /** @var Curl $curlObject */
         $curlObject = $this->_curlFactory->create();
@@ -98,9 +98,9 @@ class HealthCheck
         $storeManager = $objectManager->create('\Magento\Store\Model\StoreManagerInterface');
 
         $storeId = $storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
-        $publicKey = $this->_config->getMerchantPublicKey($storeId);
+        $publicKey = $publicKey ?? $this->_config->getMerchantPublicKey($storeId);
         $privateKey = $apiKey ?? $this->_config->getMerchantPrivateKey($storeId);
-        $environment = $this->_config->getEnvironment($storeId);
+        $environment = $env ?? $this->_config->getEnvironment($storeId);
         $apiConfig->setApiKey('Authorization', $privateKey)
             ->setApiKeyPrefix('Authorization', 'Bearer')
             ->setEnvironment($environment)

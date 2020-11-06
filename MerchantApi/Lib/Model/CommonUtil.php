@@ -29,6 +29,9 @@ class CommonUtil
     // Zip widget will display inline
     const INLINE = 'inline';
 
+    // environment
+    const SANDBOX = 'sandbox';
+    const PRODUCTION = 'production';
 
     public static function isValidCurrency($currency)
     {
@@ -70,5 +73,14 @@ class CommonUtil
             ['value' => self::SOUTH_AFRICA, 'label' => __('South Africa')],
             ['value' => self::UNITED_STATE, 'label' => __('United State')],
         ];
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function getEnvironmentList()
+    {
+        return [['value' => self::SANDBOX, 'label' => __('Sandbox')],
+            ['value' => self::PRODUCTION, 'label' => __('Production')]];
     }
 }

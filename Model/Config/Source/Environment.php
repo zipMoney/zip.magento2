@@ -2,6 +2,8 @@
 
 namespace Zip\ZipPayment\Model\Config\Source;
 
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+
 /**
  * @category  Zipmoney
  * @package   Zipmoney_ZipPayment
@@ -20,7 +22,7 @@ class Environment implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return [['value' => 'sandbox', 'label' => __('Sandbox')], ['value' => 'production', 'label' => __('Production')]];
+        return CommonUtil::getEnvironmentList();
     }
 
 }
