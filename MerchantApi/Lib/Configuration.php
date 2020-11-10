@@ -10,6 +10,8 @@
 
 namespace Zip\ZipPayment\MerchantApi\Lib;
 
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+
 class Configuration
 {
     private static $defaultConfiguration = null;
@@ -84,8 +86,8 @@ class Configuration
      * @var array
      */
     protected $supportedEnvironments = array(
-        "sandbox" => array("host" => "https://global-api.sand.au.edge.zip.co/merchant"),
-        "production" => array("host" => 'https://global-api.prod.au.edge.zip.co/merchant')
+       CommonUtil::SANDBOX => array("host" => "https://global-api.sand.au.edge.zip.co/merchant"),
+       CommonUtil::PRODUCTION => array("host" => 'https://global-api.prod.au.edge.zip.co/merchant')
     );
 
     /**

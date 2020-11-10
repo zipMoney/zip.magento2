@@ -23,7 +23,6 @@ class HealthCheck
     const CURL_EXTENSION_DISABLED = 'CURL extension has not been installed or disabled';
     const API_CERTIFICATE_INVALID_MESSAGE = 'SSL Certificate is not valid for the API';
     const API_PRIVATE_KEY_INVALID_MESSAGE = 'Your API private key is empty or invalid';
-    const API_PUBLIC_KEY_INVALID_MESSAGE = 'Your API public key is empty or invalid';
     const API_CREDENTIAL_INVALID_MESSAGE = 'Your API credential is invalid';
     const MERCHANT_COUNTRY_NOT_SUPPORTED_MESSAGE = 'Your merchant country not been supported';
 
@@ -88,7 +87,7 @@ class HealthCheck
     /**
      * check multiple items and get health result
      */
-    public function getHealthResult($websiteId, $apiKey = null)
+    public function getHealthResult($websiteId, $apiKey = null, $publicKey = null, $env = null)
     {
         /** @var Curl $curlObject */
         $curlObject = $this->_curlFactory->create();
@@ -98,9 +97,9 @@ class HealthCheck
         $storeManager = $objectManager->create('\Magento\Store\Model\StoreManagerInterface');
 
         $storeId = $storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
-        $publicKey = $this->_config->getMerchantPublicKey($storeId);
+        $publicKey = $publicKey ?? $this->_config->getMerchantPublicKey($storeId);
         $privateKey = $apiKey ?? $this->_config->getMerchantPrivateKey($storeId);
-        $environment = $this->_config->getEnvironment($storeId);
+        $environment = $env ?? $this->_config->getEnvironment($storeId);
         $apiConfig->setApiKey('Authorization', $privateKey)
             ->setApiKeyPrefix('Authorization', 'Bearer')
             ->setEnvironment($environment)
@@ -111,11 +110,6 @@ class HealthCheck
         // check if private key is empty
         if (empty($privateKey)) {
             $this->appendItem(self::STATUS_ERROR, self::API_PRIVATE_KEY_INVALID_MESSAGE);
-        }
-
-        // check if public key is empty
-        if (empty($publicKey)) {
-            $this->appendItem(self::STATUS_ERROR, self::API_PUBLIC_KEY_INVALID_MESSAGE);
         }
 
         // check whether SSL is enabled
