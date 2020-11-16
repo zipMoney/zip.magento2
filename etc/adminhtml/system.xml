@@ -57,6 +57,7 @@
                        showInWebsite="1" showInStore="0">
                     <label>Capture Method</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\PaymentAction</source_model>
+                    <comment>Please select capture for non AUD currency</comment>
                 </field>
                 <field id="log_settings" translate="label" type="select" sortOrder="9" showInDefault="1"
                        showInWebsite="1" showInStore="0">
