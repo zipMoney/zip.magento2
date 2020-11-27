@@ -5,6 +5,8 @@ namespace Zip\ZipPayment\Block\Advert;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+use Magento\Catalog\Block as CatalogBlock;
+
 
 /**
  * @category  Zipmoney
@@ -14,40 +16,13 @@ use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
  */
-class RootEl extends \Magento\Framework\View\Element\Template
+class RootEl extends AbstractAdvert implements CatalogBlock\ShortcutInterface
 {
 
     /**
      * Get country path
      */
     const COUNTRY_CODE_PATH = 'general/country/default';
-    /**
-     * @var boolean
-     */
-    protected $_render = false;
-    /**
-     * @var \Zip\ZipPayment\Model\Config
-     */
-    protected $_config;
-    /**
-     * @var \Zip\ZipPayment\Helper\Logger
-     */
-    protected $_logger;
-
-    public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Zip\ZipPayment\Model\Config $config,
-        \Zip\ZipPayment\Helper\Logger $logger,
-        $template,
-        array $data = []
-    )
-    {
-        $this->_config = $config;
-        $this->_loggger = $logger;
-        $this->setTemplate("Zip_ZipPayment::" . $template);
-
-        parent::__construct($context, $data);
-    }
 
     /**
      * Get merchant public key
@@ -99,5 +74,27 @@ class RootEl extends \Magento\Framework\View\Element\Template
             $displayInline = "true";
         }
         return $displayInline;
+    }
+
+    /**
+     * Get shortcut alias
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->_alias;
+    }
+
+    /**
+     * Render the block if needed
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+
+            return parent::_toHtml();
+
     }
 }

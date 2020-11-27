@@ -107,6 +107,12 @@
                             <label>Display Strip Banner</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         </field>
+                        <field id="banner_selector" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1"
+                               showInStore="0">
+                            <label>Strip Banner Element selector</label>
+                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <comment><![CDATA[Example HTML element selector is .sections .nav-sections. Keep it empty for displaying in default location.]]></comment>
+                        </field>
                     </group>
                     <group id="productpage" translate="label" type="text" sortOrder="2" showInDefault="1"
                            showInWebsite="1" showInStore="1">
@@ -116,15 +122,33 @@
                             <label>Display Strip Banner</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         </field>
-                        <field id="widget" translate="label" type="select" sortOrder="2" showInDefault="1"
+                        <field id="banner_selector" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1"
+                               showInStore="0">
+                            <label>Strip Banner Element selector</label>
+                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <comment><![CDATA[Example HTML element selector is .sections .nav-sections. Keep it empty for displaying in default location.]]></comment>
+                        </field>
+                        <field id="widget" translate="label" type="select" sortOrder="3" showInDefault="1"
                                showInWebsite="1" showInStore="1">
                             <label>Display Widget</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         </field>
-                        <field id="tagline" translate="label" type="select" sortOrder="3" showInDefault="1"
+                        <field id="widget_selector" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1"
+                               showInStore="0">
+                            <label>Product Widget Element selector</label>
+                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <comment><![CDATA[Example HTML element selector is .product-info-price. Keep it empty for displaying in default location.]]></comment>
+                        </field>
+                        <field id="tagline" translate="label" type="select" sortOrder="5" showInDefault="1"
                                showInWebsite="1" showInStore="1">
                             <label>Display Tagline</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="tagline_selector" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1"
+                               showInStore="0">
+                            <label>Tagline Element selector</label>
+                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <comment><![CDATA[Example HTML element selector is .product-options-bottom. Keep it empty for displaying in default location.]]></comment>
                         </field>
                     </group>
                     <group id="cartpage" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1"
@@ -135,15 +159,33 @@
                             <label>Display Strip Banner</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         </field>
+                        <field id="banner_selector" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1"
+                               showInStore="0">
+                            <label>Strip Banner Element selector</label>
+                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <comment><![CDATA[Example HTML element selector is .sections .nav-sections. Keep it empty for displaying in default location.]]></comment>
+                        </field>
                         <field id="widget" translate="label" type="select" sortOrder="2" showInDefault="1"
                                showInWebsite="1" showInStore="1">
                             <label>Display Widget</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         </field>
-                        <field id="tagline" translate="label" type="select" sortOrder="3" showInDefault="1"
+                        <field id="widget_selector" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1"
+                               showInStore="0">
+                            <label>Cart Widget Element selector</label>
+                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <comment><![CDATA[Example HTML element selector is #cart-totals. Keep it empty for displaying in default location.]]></comment>
+                        </field>
+                        <field id="tagline" translate="label" type="select" sortOrder="4" showInDefault="1"
                                showInWebsite="1" showInStore="1">
                             <label>Display Tagline</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="tagline_selector" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1"
+                               showInStore="0">
+                            <label>Tagline Element selector</label>
+                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <comment><![CDATA[Example HTML element selector is .cart-summary. Keep it empty for displaying in default location.]]></comment>
                         </field>
                     </group>
                     <group id="categorypage" translate="label" type="text" sortOrder="7" showInDefault="1"
@@ -153,6 +195,12 @@
                                showInWebsite="1" showInStore="1">
                             <label>Display Strip Banner</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="banner_selector" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1"
+                               showInStore="0">
+                            <label>Strip Banner Element selector</label>
+                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <comment><![CDATA[Example HTML element selector is .sections .nav-sections. Keep it empty for displaying in default location.]]></comment>
                         </field>
                     </group>
                 </group>
