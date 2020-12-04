@@ -31,7 +31,7 @@ class DisplayWidget implements \Magento\Framework\Option\ArrayInterface
     {
 
         return [['value' => CommonUtil::IFRAME, 'label' => __('Iframe')],
-            ['value' => CommonUtil::INLINE, 'label' => __('In Line')]];
+            ['value' => CommonUtil::INLINE, 'label' => __('Inline')]];
 
     }
 }

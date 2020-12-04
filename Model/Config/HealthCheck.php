@@ -156,6 +156,10 @@ class HealthCheck
                     $this->appendItem(self::STATUS_WARNING, self::API_CERTIFICATE_INVALID_MESSAGE);
                 }
 
+                // if API call is failed
+                if ($httpCode == 0) {
+                    $this->appendItem(self::STATUS_ERROR, 'API call to '.$url.' failed');
+                }
                 // if API credential is invalid
                 if ($httpCode == 401 || $httpCode == 403) {
                     $this->appendItem(self::STATUS_ERROR, self::API_CREDENTIAL_INVALID_MESSAGE);
