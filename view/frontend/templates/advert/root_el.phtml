@@ -14,4 +14,16 @@
     zip_widget_min_price = '<?php  echo $this->getOrderTotalMinimum();?>';
     // widget display inline if this value is true otherwise it will display iframe
     zip_widget_display_inline = '<?php  echo $this->isDisplayInlineWidget();?>';
+    // product price for dynamic widget
+    <?php
+    if ($this->getPageType() == 'cart') :?>
+        zip_widget_cart_price = <?php echo $this->getCartTotal();?>;
+    <?php endif;?>
+    <?php if ($this->getPageType() == 'product') :?>
+        zip_widget_product_price = <?php echo $this->getProductPrice();?>;
+    <?php endif; ?>
+    // display widget selector
+    <?php foreach ($this->getElementSelectors() as $key => $selector): ?>
+    zip_widget_<?php echo $this->escapeHtml($key); ?>="<?php echo $this->escapeHtml($selector); ?>";
+    <?php endforeach; ?>
 </script>
