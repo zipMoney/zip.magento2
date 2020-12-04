@@ -111,11 +111,21 @@ class Config implements ConfigInterface
     const ADVERTS_HOMEPAGE_BANNER_ACTIVE = 'zip_advert/homepage/banner';
 
     /**
+     * Homepage banner html element selector
+     */
+    const ADVERTS_HOMEPAGE_BANNER_SELECTOR= 'zip_advert/homepage/banner_selector';
+
+    /**
      * Product Page Banner Active
      *
      * @const
      */
     const ADVERTS_PRODUCT_BANNER_ACTIVE = 'zip_advert/productpage/banner';
+
+    /**
+     * Porduct page banner html selector
+     */
+    const ADVERTS_PRODUCT_BANNER_SELECTOR = 'zip_advert/productpage/banner_selector';
 
     /**
      * Cart Page Banner Active
@@ -125,11 +135,21 @@ class Config implements ConfigInterface
     const ADVERTS_CART_BANNER_ACTIVE = 'zip_advert/cartpage/banner';
 
     /**
-     * Cateogyr Page Banner Active
+     * Cart Page Banner html element selector
+     */
+    const ADVERTS_CART_BANNER_SELECTOR = 'zip_advert/cartpage/banner_selector';
+
+    /**
+     * Category Page Banner Active
      *
      * @const
      */
     const ADVERTS_CATEGORY_BANNER_ACTIVE = 'zip_advert/categorypage/banner';
+
+    /**
+     * Category Page Banner html element selector
+     */
+    const ADVERTS_CATEGORY_BANNER_SELECTOR = 'zip_advert/categorypage/banner_selector';
 
     /**
      * Product Page Widget Active
@@ -139,11 +159,25 @@ class Config implements ConfigInterface
     const ADVERTS_PRODUCT_IMAGE_ACTIVE = 'zip_advert/productpage/widget';
 
     /**
+     * Product Page Widget html element selector
+     *
+     * @const
+     */
+    const ADVERTS_PRODUCT_IMAGE_SELECTOR = 'zip_advert/productpage/widget_selector';
+
+    /**
      * Cart Page Widget Active
      *
      * @const
      */
     const ADVERTS_CART_IMAGE_ACTIVE = 'zip_advert/cartpage/widget';
+
+    /**
+     * Cart Page Widget html element selector
+     *
+     * @const
+     */
+    const ADVERTS_CART_IMAGE_SELECTOR = 'zip_advert/cartpage/widget_selector';
 
     /**
      * Cart Page Tagline Active
@@ -153,11 +187,25 @@ class Config implements ConfigInterface
     const ADVERTS_PRODUCT_TAGLINE_ACTIVE = 'zip_advert/productpage/tagline';
 
     /**
+     * Cart Page Tagline html element selector
+     *
+     * @const
+     */
+    const ADVERTS_PRODUCT_TAGLINE_SELECTOR = 'zip_advert/productpage/tagline_selector';
+
+    /**
      * Cart Page Tagline Active
      *
      * @const
      */
     const ADVERTS_CART_TAGLINE_ACTIVE = 'zip_advert/cartpage/tagline';
+
+    /**
+     * Cart Page Tagline html element selector
+     *
+     * @const
+     */
+    const ADVERTS_CART_TAGLINE_SELECTOR = 'zip_advert/cartpage/tagline_selector';
 
     /**
      * Payment Method Logo Url

@@ -27,10 +27,4 @@
         </arguments>
     </type>
 
-    <type name="\Zip\ZipPayment\Block\Advert\RootEl">
-        <arguments>
-            <argument name="template" xsi:type="string">advert/root_el.phtml</argument>
-        </arguments>
-    </type>
-
 </config>

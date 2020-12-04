@@ -39,7 +39,7 @@ class Tagline extends AbstractAdvert implements CatalogBlock\ShortcutInterface
     protected function _toHtml()
     {
 
-        if ($this->_configShow(self::WIDGET_TYPE, $this->getPageType())) {
+        if ($this->_configShow(self::WIDGET_TYPE, $this->getPageType()) && !$this->_isSelectorExist(self::WIDGET_TYPE, $this->getPageType())) {
             return parent::_toHtml();
         }
         return '';

@@ -49,22 +49,32 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
      */
     protected $_alias = '';
 
+    protected $_supportedWidgetTypes = array('widget', 'banner', 'tagline');
+
     /**
      * @var array
      */
     protected $_configConstants = ['widget' => [
         'product' => Config::ADVERTS_PRODUCT_IMAGE_ACTIVE,
-        'cart' => Config::ADVERTS_CART_IMAGE_ACTIVE
+        'product_selector' => Config::ADVERTS_PRODUCT_IMAGE_SELECTOR,
+        'cart' => Config::ADVERTS_CART_IMAGE_ACTIVE,
+        'cart_selector' => Config::ADVERTS_CART_IMAGE_SELECTOR
     ],
         'tagline' => [
             'product' => Config::ADVERTS_PRODUCT_TAGLINE_ACTIVE,
-            'cart' => Config::ADVERTS_CART_TAGLINE_ACTIVE
+            'product_selector' => Config::ADVERTS_PRODUCT_TAGLINE_SELECTOR,
+            'cart' => Config::ADVERTS_CART_TAGLINE_ACTIVE,
+            'cart_selector' => Config::ADVERTS_CART_TAGLINE_SELECTOR
         ],
         'banner' => [
             'product' => Config::ADVERTS_PRODUCT_BANNER_ACTIVE,
+            'product_selector' => Config::ADVERTS_PRODUCT_BANNER_SELECTOR,
             'cart' => Config::ADVERTS_CART_BANNER_ACTIVE,
+            'cart_selector' => Config::ADVERTS_CART_BANNER_SELECTOR,
             'home' => Config::ADVERTS_HOMEPAGE_BANNER_ACTIVE,
-            'category' => Config::ADVERTS_CATEGORY_BANNER_ACTIVE
+            'home_selector' => Config::ADVERTS_HOMEPAGE_BANNER_SELECTOR,
+            'category' => Config::ADVERTS_CATEGORY_BANNER_ACTIVE,
+            'category_selector' => Config::ADVERTS_CATEGORY_BANNER_SELECTOR
         ]
     ];
 
@@ -130,6 +140,17 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Check if widget html selector has value
+     *
+     * @return bool
+     */
+    protected function _isSelectorExist($widget, $page)
+    {
+        $selectorConfigPath =$this->_getConfigPath($widget,$page.'_selector');
+        return empty($this->_config->getValue($selectorConfigPath)) ? false : true ;
+    }
+
+    /**
      * Returns the config path
      *
      * @return bool
@@ -140,5 +161,26 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
             return isset($this->_configConstants[$widget][$page]) ? $this->_configConstants[$widget][$page] : null;
         else
             return null;
+    }
+
+    /**
+     * get element selectors for current widgets
+     */
+    public function getElementSelectors()
+    {
+        $selectors = array();
+
+        foreach ($this->_supportedWidgetTypes as $widgetType) {
+            $pageType = $this->getPageType();
+            $enabled = $this->_configShow($widgetType, $pageType);
+
+            if ($enabled !== null && $enabled) {
+                $configPath =$this->_getConfigPath($widgetType,$pageType.'_selector') ;
+                $widgetType = $widgetType == 'widget' ? $pageType . '_' . $widgetType : $widgetType;
+                $selectors[$widgetType] = $this->_config->getValue($configPath);
+            }
+        }
+
+        return $selectors;
     }
 }
