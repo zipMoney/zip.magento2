@@ -23,7 +23,9 @@
         zip_widget_product_price = <?php echo $this->getProductPrice();?>;
     <?php endif; ?>
     // display widget selector
-    <?php foreach ($this->getElementSelectors() as $key => $selector): ?>
-    zip_widget_<?php echo $this->escapeHtml($key); ?>="<?php echo $this->escapeHtml($selector); ?>";
-    <?php endforeach; ?>
+    <?php foreach ($this->getElementSelectors() as $key => $selector):
+    if (!empty($selector)) :?>
+        zip_widget_<?php echo $this->escapeHtml($key); ?>= "<?php echo $this->escapeHtml($selector); ?>";
+    <?php endif;
+    endforeach; ?>
 </script>
