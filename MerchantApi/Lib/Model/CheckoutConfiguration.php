@@ -7,8 +7,6 @@
  * @author    Zip Plugin Team <integration@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
-
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
@@ -27,35 +25,35 @@ class CheckoutConfiguration implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'redirect_uri' => 'string'
-    );
+    ];
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'redirect_uri' => 'redirect_uri'
-    );
+    ];
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'redirect_uri' => 'setRedirectUri'
-    );
+    ];
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'redirect_uri' => 'getRedirectUri'
-    );
+    ];
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -93,7 +91,7 @@ class CheckoutConfiguration implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if ($this->container['redirect_uri'] === null) {
             $invalid_properties[] = "'redirect_uri' can't be null";
@@ -109,13 +107,11 @@ class CheckoutConfiguration implements ArrayAccess
      */
     public function valid()
     {
-
         if ($this->container['redirect_uri'] === null) {
             return false;
         }
         return true;
     }
-
 
     /**
      * Gets redirect_uri
@@ -128,13 +124,15 @@ class CheckoutConfiguration implements ArrayAccess
 
     /**
      * Sets redirect_uri
-     * @param string $redirect_uri The URI to redirect after the checkout is complete.  This must be provided, even if using in-context checkout.  If using redirection we will automatically redirect to this url with the result and checkoutId.  If using in-context we will not automatically redirect to this URI.
+     * @param string $redirect_uri The URI to redirect after the checkout is complete.
+     * This must be provided, even if using in-context checkout.
+     * If using redirection we will automatically redirect to this url with the result and checkoutId.
+     * If using in-context we will not automatically redirect to this URI.
      * @return $this
      */
     public function setRedirectUri($redirect_uri)
     {
         $this->container['redirect_uri'] = $redirect_uri;
-
         return $this;
     }
 
@@ -190,7 +188,10 @@ class CheckoutConfiguration implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

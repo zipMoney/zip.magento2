@@ -37,14 +37,14 @@ class Checkout implements ArrayAccess
         'id' => 'string',
         'uri' => 'string',
         'type' => 'string',
-        'shopper' => '\Zip\ZipPayment\MerchantApi\Lib\Model\Shopper',
-        'order' => '\Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder',
-        'features' => '\Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutFeatures',
-        'config' => '\Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration',
+        'shopper' => \Zip\ZipPayment\MerchantApi\Lib\Model\Shopper::class,
+        'order' => \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder::class,
+        'features' => \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutFeatures::class,
+        'config' => \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration::class,
         'created' => '\DateTime',
         'state' => 'string',
         'customer_id' => 'string',
-        'metadata' => '\Zip\ZipPayment\MerchantApi\Lib\Model\Metadata'
+        'metadata' => \Zip\ZipPayment\MerchantApi\Lib\Model\Metadata::class
     ];
 
     /**

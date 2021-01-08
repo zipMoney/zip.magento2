@@ -35,14 +35,15 @@ class CommonUtil
 
     public static function isValidCurrency($currency)
     {
-        $result = array(
+        $result = [
             'valid' => true,
             'message' => '',
-        );
+        ];
         $allowed_values = self::getAllowedCurrencyList();
         if (!in_array($currency, $allowed_values)) {
             $result['valid'] = false;
-            $result['message'] = "invalid value for 'currency', must be one of '" . implode("','", $allowed_values) . "'.";
+            $result['message'] = "invalid value for 'currency', "
+                . "must be one of '" . implode("','", $allowed_values) . "'.";
         }
         return $result;
     }
@@ -53,12 +54,12 @@ class CommonUtil
      */
     private static function getAllowedCurrencyList()
     {
-        return array(
+        return [
             self::CURRENCY_AUD,
             self::CURRENCY_NZD,
             self::CURRENCY_USD,
             self::CURRENCY_GBP,
-        );
+        ];
     }
 
     /**
