@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Authority
  *
@@ -7,7 +8,6 @@
  * @author    Zip Plugin Team <integration@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
 
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
@@ -28,39 +28,43 @@ class Authority implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'type' => 'string',
         'value' => 'string'
-    );
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'type' => 'type',
         'value' => 'value'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'type' => 'setType',
         'value' => 'setValue'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'type' => 'getType',
         'value' => 'getValue'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -98,11 +102,11 @@ class Authority implements ArrayAccess
      */
     public function getTypeAllowableValues()
     {
-        return array(
+        return [
             self::TYPE_CHECKOUT_ID,
             self::TYPE_STORE_CODE,
             self::TYPE_ACCOUNT_TOKEN,
-        );
+        ];
     }
 
     /**
@@ -112,14 +116,15 @@ class Authority implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if ($this->container['type'] === null) {
             $invalid_properties[] = "'type' can't be null";
         }
-        $allowed_values = array("checkout_id", "store_code", "account_token");
+        $allowed_values = ["checkout_id", "store_code", "account_token"];
         if (!in_array($this->container['type'], $allowed_values)) {
-            $invalid_properties[] = "invalid value for 'type', must be one of 'checkout_id', 'store_code', 'account_token'.";
+            $invalid_properties[] = "invalid value for 'type', must be one of 'checkout_id', "
+            . "'store_code', 'account_token'.";
         }
 
         if ($this->container['value'] === null) {
@@ -140,7 +145,7 @@ class Authority implements ArrayAccess
         if ($this->container['type'] === null) {
             return false;
         }
-        $allowed_values = array("checkout_id", "store_code", "account_token");
+        $allowed_values = ["checkout_id", "store_code", "account_token"];
         if (!in_array($this->container['type'], $allowed_values)) {
             return false;
         }
@@ -149,7 +154,6 @@ class Authority implements ArrayAccess
         }
         return true;
     }
-
 
     /**
      * Gets type
@@ -167,9 +171,10 @@ class Authority implements ArrayAccess
      */
     public function setType($type)
     {
-        $allowed_values = array('checkout_id', 'store_code', 'account_token');
+        $allowed_values = ['checkout_id', 'store_code', 'account_token'];
         if ((!in_array($type, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'type', must be one of 'checkout_id', 'store_code', 'account_token'");
+            throw new \InvalidArgumentException("Invalid value for 'type', must be one of 'checkout_id', "
+            . "'store_code', 'account_token'");
         }
         $this->container['type'] = $type;
 
@@ -249,7 +254,10 @@ class Authority implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

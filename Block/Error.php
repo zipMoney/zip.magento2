@@ -5,12 +5,9 @@ namespace Zip\ZipPayment\Block;
 use Magento\Framework\View\Element\Template;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 class Error extends Template
 {
@@ -23,6 +20,9 @@ class Error extends Template
      */
     const ERROR_HEADER = 'payment/zippayment/zip_messages/error_header';
 
+    /**
+     * @var Magento\Framework\Message\ManagerInterface
+     */
     protected $_messageManager;
     protected $_config;
 
@@ -30,8 +30,8 @@ class Error extends Template
         Template\Context $context,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Zip\ZipPayment\Model\Config $config,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         $this->_messageManager = $messageManager;
         $this->_config = $config;
         parent::__construct($context, $data);
@@ -112,6 +112,5 @@ class Error extends Template
         $this->pageConfig->getTitle()->set(__($text));
 
         return parent::_prepareLayout();
-
     }
 }

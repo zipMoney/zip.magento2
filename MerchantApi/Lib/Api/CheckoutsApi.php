@@ -81,7 +81,8 @@ class CheckoutsApi
      * Create a checkout
      *
      * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequest $body (optional)
-     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout,
+     * HTTP status code, HTTP response headers (array of strings)
      * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function checkoutsCreateWithHttpInfo($body = null)
@@ -89,14 +90,14 @@ class CheckoutsApi
         // parse inputs
         $resourcePath = "/checkouts";
         $httpBody = '';
-        $queryParams = array();
-        $headerParams = array();
-        $formParams = array();
-        $_header_accept = $this->apiClient->selectHeaderAccept(array('application/json'));
+        $queryParams = [];
+        $headerParams = [];
+        $formParams = [];
+        $_header_accept = $this->apiClient->selectHeaderAccept(['application/json']);
         if (!is_null($_header_accept)) {
             $headerParams['Accept'] = $_header_accept;
         }
-        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array('application/json'));
+        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(['application/json']);
 
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
@@ -126,35 +127,67 @@ class CheckoutsApi
                 $queryParams,
                 $httpBody,
                 $headerParams,
-                '\Zip\ZipPayment\MerchantApi\Lib\Model\Checkout',
+                \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout::class,
                 '/checkouts'
             );
 
-            return array($this->apiClient->getSerializer()->deserialize($response, '\Zip\ZipPayment\MerchantApi\Lib\Model\Checkout', $httpHeader), $statusCode, $httpHeader);
+            return [
+                $this->apiClient->getSerializer()->deserialize(
+                    $response,
+                    \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout::class,
+                    $httpHeader
+                ),
+                $statusCode,
+                $httpHeader
+            ];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 201:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\Checkout', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 400:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 401:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 402:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 403:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 409:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
             }
@@ -184,7 +217,8 @@ class CheckoutsApi
      * Retrieve a checkout
      *
      * @param string $id (required)
-     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout,
+     * HTTP status code, HTTP response headers (array of strings)
      * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function checkoutsGetWithHttpInfo($id)
@@ -196,14 +230,14 @@ class CheckoutsApi
         // parse inputs
         $resourcePath = "/checkouts/{id}";
         $httpBody = '';
-        $queryParams = array();
-        $headerParams = array();
-        $formParams = array();
-        $_header_accept = $this->apiClient->selectHeaderAccept(array('application/json'));
+        $queryParams = [];
+        $headerParams = [];
+        $formParams = [];
+        $_header_accept = $this->apiClient->selectHeaderAccept(['application/json']);
         if (!is_null($_header_accept)) {
             $headerParams['Accept'] = $_header_accept;
         }
-        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array('application/json'));
+        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(['application/json']);
 
         // path params
         if ($id !== null) {
@@ -215,7 +249,6 @@ class CheckoutsApi
         }
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
-
 
         // for model (json/xml)
         if (isset($_tempBody)) {
@@ -236,31 +269,59 @@ class CheckoutsApi
                 $queryParams,
                 $httpBody,
                 $headerParams,
-                '\Zip\ZipPayment\MerchantApi\Lib\Model\Checkout',
+                \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout::class,
                 '/checkouts/{id}'
             );
 
-            return array($this->apiClient->getSerializer()->deserialize($response, '\Zip\ZipPayment\MerchantApi\Lib\Model\Checkout', $httpHeader), $statusCode, $httpHeader);
+            return [
+                $this->apiClient->getSerializer()->deserialize(
+                    $response,
+                    \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout::class,
+                    $httpHeader
+                ),
+                $statusCode,
+                $httpHeader
+            ];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 200:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\Checkout', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 401:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 403:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 404:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 409:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
             }

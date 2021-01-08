@@ -22,10 +22,10 @@ define(
             initialize: function (paymentData) {
                 this.paymentData = paymentData;
                 Zip.Checkout.init({
-                    redirect:1,
+                    // redirect:1,
                     // ignore config data setting for old merchant. It will always redirect to zip.
                     // when we will fix the checkout js for lightbox then will take the config setting
-                    // redirect: window.checkoutConfig.payment.zippayment.inContextCheckoutEnabled ? 0 : 1,
+                    redirect: window.checkoutConfig.payment.zippayment.inContextCheckoutEnabled ? 0 : 1,
                     checkoutUri: window.checkoutConfig.payment.zippayment.checkoutUri,
                     redirectUri: window.checkoutConfig.payment.zippayment.redirectUri,
                     onComplete: this.onComplete.bind(this),

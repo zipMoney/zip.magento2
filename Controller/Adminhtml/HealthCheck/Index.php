@@ -33,8 +33,7 @@ class Index extends \Magento\Backend\App\Action
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Zip\ZipPayment\Model\Config\HealthCheck $healthCheck,
         \Zip\ZipPayment\Helper\Logger $logger
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->resultFactory = $resultJsonFactory;
         $this->_healthCheck = $healthCheck;
@@ -81,13 +80,13 @@ class Index extends \Magento\Backend\App\Action
      * get environment list
      * @return array
      */
-    private function getEnvironmentList() {
-        $result = array(
+    private function getEnvironmentList()
+    {
+        $result = [
             CommonUtil::PRODUCTION,
             CommonUtil::SANDBOX
-        );
+        ];
 
         return $result;
     }
-
 }

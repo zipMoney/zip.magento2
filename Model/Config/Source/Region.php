@@ -5,11 +5,8 @@ namespace Zip\ZipPayment\Model\Config\Source;
 use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 class Region implements \Magento\Framework\Option\ArrayInterface
 {
@@ -21,8 +18,6 @@ class Region implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-
         return CommonUtil::getAvailableRegionList();
     }
-
 }

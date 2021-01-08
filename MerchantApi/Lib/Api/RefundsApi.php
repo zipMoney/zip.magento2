@@ -83,7 +83,8 @@ class RefundsApi
      *
      * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateRefundRequest $body (optional)
      * @param string $idempotency_key The unique idempotency key. (optional)
-     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Refund, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Refund,
+     * HTTP status code, HTTP response headers (array of strings)
      * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function refundsCreateWithHttpInfo($body = null, $idempotency_key = null)
@@ -91,14 +92,14 @@ class RefundsApi
         // parse inputs
         $resourcePath = "/refunds";
         $httpBody = '';
-        $queryParams = array();
-        $headerParams = array();
-        $formParams = array();
-        $_header_accept = $this->apiClient->selectHeaderAccept(array('application/javascript'));
+        $queryParams = [];
+        $headerParams = [];
+        $formParams = [];
+        $_header_accept = $this->apiClient->selectHeaderAccept(['application/javascript']);
         if (!is_null($_header_accept)) {
             $headerParams['Accept'] = $_header_accept;
         }
-        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array('application/json'));
+        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(['application/json']);
 
         // header params
         if ($idempotency_key !== null) {
@@ -132,27 +133,51 @@ class RefundsApi
                 $queryParams,
                 $httpBody,
                 $headerParams,
-                '\Zip\ZipPayment\MerchantApi\Lib\Model\Refund',
+                \Zip\ZipPayment\MerchantApi\Lib\Model\Refund::class,
                 '/refunds'
             );
 
-            return array($this->apiClient->getSerializer()->deserialize($response, '\Zip\ZipPayment\MerchantApi\Lib\Model\Refund', $httpHeader), $statusCode, $httpHeader);
+            return [
+                $this->apiClient->getSerializer()->deserialize(
+                    $response,
+                    \Zip\ZipPayment\MerchantApi\Lib\Model\Refund::class,
+                    $httpHeader
+                ),
+                $statusCode,
+                $httpHeader
+            ];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 201:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\Refund', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\Refund::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 400:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 401:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 402:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
             }
@@ -186,7 +211,8 @@ class RefundsApi
      * @param string $charge_id (optional)
      * @param int $skip Number of items to skip when paging (optional, default to 0)
      * @param int $limit Number of items to retrieve when paging (optional, default to 100)
-     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\InlineResponse200[], HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\InlineResponse200[],
+     * HTTP status code, HTTP response headers (array of strings)
      * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function refundsListWithHttpInfo($charge_id = null, $skip = null, $limit = null)
@@ -194,14 +220,14 @@ class RefundsApi
         // parse inputs
         $resourcePath = "/refunds";
         $httpBody = '';
-        $queryParams = array();
-        $headerParams = array();
-        $formParams = array();
-        $_header_accept = $this->apiClient->selectHeaderAccept(array('application/javascript'));
+        $queryParams = [];
+        $headerParams = [];
+        $formParams = [];
+        $_header_accept = $this->apiClient->selectHeaderAccept(['application/javascript']);
         if (!is_null($_header_accept)) {
             $headerParams['Accept'] = $_header_accept;
         }
-        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array('application/javascript'));
+        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(['application/javascript']);
 
         // query params
         if ($charge_id !== null) {
@@ -217,7 +243,6 @@ class RefundsApi
         }
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
-
 
         // for model (json/xml)
         if (isset($_tempBody)) {
@@ -242,11 +267,23 @@ class RefundsApi
                 '/refunds'
             );
 
-            return array($this->apiClient->getSerializer()->deserialize($response, '\Zip\ZipPayment\MerchantApi\Lib\Model\InlineResponse200[]', $httpHeader), $statusCode, $httpHeader);
+            return [
+                $this->apiClient->getSerializer()->deserialize(
+                    $response,
+                    '\Zip\ZipPayment\MerchantApi\Lib\Model\InlineResponse200[]',
+                    $httpHeader
+                ),
+                $statusCode,
+                $httpHeader
+            ];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 200:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\InlineResponse200[]', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        '\Zip\ZipPayment\MerchantApi\Lib\Model\InlineResponse200[]',
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
             }
@@ -275,7 +312,8 @@ class RefundsApi
      * Retrieve a refund
      *
      * @param string $id The id of the refund (required)
-     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Refund, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Refund,
+     * HTTP status code, HTTP response headers (array of strings)
      * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function refundsRetrieveWithHttpInfo($id)
@@ -287,14 +325,14 @@ class RefundsApi
         // parse inputs
         $resourcePath = "/refunds/{id}";
         $httpBody = '';
-        $queryParams = array();
-        $headerParams = array();
-        $formParams = array();
-        $_header_accept = $this->apiClient->selectHeaderAccept(array('application/javascript'));
+        $queryParams = [];
+        $headerParams = [];
+        $formParams = [];
+        $_header_accept = $this->apiClient->selectHeaderAccept(['application/javascript']);
         if (!is_null($_header_accept)) {
             $headerParams['Accept'] = $_header_accept;
         }
-        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array('application/javascript'));
+        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(['application/javascript']);
 
         // path params
         if ($id !== null) {
@@ -306,7 +344,6 @@ class RefundsApi
         }
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
-
 
         // for model (json/xml)
         if (isset($_tempBody)) {
@@ -327,15 +364,27 @@ class RefundsApi
                 $queryParams,
                 $httpBody,
                 $headerParams,
-                '\Zip\ZipPayment\MerchantApi\Lib\Model\Refund',
+                \Zip\ZipPayment\MerchantApi\Lib\Model\Refund::class,
                 '/refunds/{id}'
             );
 
-            return array($this->apiClient->getSerializer()->deserialize($response, '\Zip\ZipPayment\MerchantApi\Lib\Model\Refund', $httpHeader), $statusCode, $httpHeader);
+            return [
+                $this->apiClient->getSerializer()->deserialize(
+                    $response,
+                    \Zip\ZipPayment\MerchantApi\Lib\Model\Refund::class,
+                    $httpHeader
+                ),
+                $statusCode,
+                $httpHeader
+            ];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 200:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\Refund', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\Refund::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
             }

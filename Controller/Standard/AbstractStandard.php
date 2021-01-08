@@ -6,12 +6,11 @@ use \Magento\Framework\App\Action\Action;
 use \Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
+ * @category  Zip
+ * @package   ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 abstract class AbstractStandard extends Action
 {
@@ -50,90 +49,111 @@ abstract class AbstractStandard extends Action
      * @var string
      */
     protected $_configMethod;
+
     /**
      * Checkout type
      *
      * @var string
      */
-    protected $_checkoutModel = "\Zip\ZipPayment\Model\Checkout";
+    protected $_checkoutModel = \Zip\ZipPayment\Model\Checkout::class;
+
     /**
      * Checkout mode type
      *
      * @var string
      */
-    protected $_chargeModel = "\Zip\ZipPayment\Model\Charge";
+    protected $_chargeModel = \Zip\ZipPayment\Model\Charge::class;
+
     /**
      * @var \Magento\Checkout\Model\Session
      */
     protected $_checkoutSession;
+
     /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
+
     /**
      * @var \Magento\Sales\Model\OrderFactory
      */
     protected $_orderFactory;
+
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $_quoteRepository;
+
     /**
      * @var \Magento\Framework\Url\Helper
      */
     protected $_urlHelper;
+
     /**
      * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
+
     /**
      * @var \Magento\Customer\Model\Url
      */
     protected $_customerUrl;
+
     /**
      * @var \Zip\ZipPayment\Helper\Order
      */
     protected $_orderHelper;
+
     /**
      * @var \Magento\Framework\Json\Helper\Data
      */
     protected $_jsonHelper;
+
     /**
      * @var \Zip\ZipPayment\Helper\Logger
      */
     protected $_logger;
+
     /**
      * @var \Zip\ZipPayment\Helper\Data
      */
     protected $_helper;
+
     /**
      * @var \Zip\ZipPayment\Model\Standard\
      */
     protected $_checkoutFactory;
+
     /**
      * @var \Zip\ZipPayment\Model\Checkout
      */
     protected $_checkout;
+
     /**
      * @var \Zip\ZipPayment\Model\Charge
      */
     protected $_charge;
+
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory
      */
     protected $_quoteCollectionFactory;
+
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory
      */
     protected $_quotePaymentCollectionFactory;
+
     /**
      * @var \Magento\Checkout\Model\PaymentInformationManagement
      */
     protected $_paymentInformationManagement;
+
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $_messageManager;
+
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
@@ -156,11 +176,8 @@ abstract class AbstractStandard extends Action
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\Model\Checkout\Factory $checkoutFactory
-    )
-    {
-
+    ) {
         $this->_pageFactory = $pageFactory;
-
         $this->_checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
         $this->_orderFactory = $orderFactory;
@@ -172,11 +189,9 @@ abstract class AbstractStandard extends Action
         $this->_customerUrl = $customerUrl;
         $this->_jsonHelper = $jsonHelper;
         $this->_paymentInformationManagement = $paymentInformationManagement;
-
         $this->_helper = $helper;
         $this->_logger = $logger;
         $this->_checkoutFactory = $checkoutFactory;
-
         $this->_messageManager = $context->getMessageManager();
         $this->_config = $config;
 
@@ -207,7 +222,7 @@ abstract class AbstractStandard extends Action
             // Make sure the qoute is active
             $this->_activateQuote($quote);
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException("Could not retrieve the quote");
+            throw new \Magento\Framework\Exception\LocalizedException(__("Could not retrieve the quote"));
         }
     }
 
@@ -227,7 +242,7 @@ abstract class AbstractStandard extends Action
         if (!$sessionQuote) {
             $this->_logger->error(__("Session Quote doesnot exist."));
             $use_checkout_api_quote = true;
-        } else if ($checkout_id != $zipMoneyCheckoutId) {
+        } elseif ($checkout_id != $zipMoneyCheckoutId) {
             $this->_logger->error(__("Checkout Id doesnot match with the session quote."));
             $use_checkout_api_quote = true;
         } else {
@@ -263,7 +278,8 @@ abstract class AbstractStandard extends Action
         $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey())
             ->setApiKeyPrefix('Authorization', 'Bearer')
             ->setEnvironment($this->_config->getEnvironment())
-            ->setPlatform("Magento/" . $this->_helper->getMagentoVersion() . "Zip_ZipPayment/" . $this->_helper->getExtensionVersion());
+            ->setPlatform("Magento/" . $this->_helper->getMagentoVersion()
+                . "Zip_ZipPayment/" . $this->_helper->getExtensionVersion());
         try {
             $checkoutApi = new CheckoutsApi();
             $checkout = $checkoutApi->checkoutsGet($zip_checkout_id);
@@ -302,19 +318,13 @@ abstract class AbstractStandard extends Action
         }
 
         $this->_logger->debug(
-            __("Current Customer Id:- %s Quote Customer Id:- %s Quote checkout method:- %s",
-                $customerSession->getId(), $quoteCustomerId, $quote->getCheckoutMethod())
+            __(
+                "Current Customer Id:- %s Quote Customer Id:- %s Quote checkout method:- %s",
+                $customerSession->getId(),
+                $quoteCustomerId,
+                $quote->getCheckoutMethod()
+            )
         );
-
-        $log_in = false;
-
-        if (isset($currentCustomer)) {
-            if ($currentCustomer->getId() != $quoteCustomerId) {
-                $customerSession->logout(); // Logout the logged in customer
-                $customerSession->renewSession();
-            }
-        }
-
     }
 
     /**
@@ -340,11 +350,12 @@ abstract class AbstractStandard extends Action
                 if ($orderIncId) {
                     $order = $this->_orderFactory->create()->loadByIncrementId($orderIncId);
                     if ($order && $order->getId()) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('Can not activate the quote. It has already been converted to order.'));
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('Can not activate the quote. It has already been converted to order.')
+                        );
                     }
                 }
-                $quote->setIsActive(1)
-                    ->save();
+                $quote->setIsActive(1)->save();
                 $this->_logger->warn(__('Activated quote ' . $quote->getId() . '.'));
                 return true;
             }
@@ -435,7 +446,6 @@ abstract class AbstractStandard extends Action
      */
     protected function _initCheckout()
     {
-
         $quote = $this->_getQuote();
 
         if (!$quote->getId()) {

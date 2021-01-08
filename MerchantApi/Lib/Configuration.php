@@ -21,14 +21,14 @@ class Configuration
      *
      * @var string[]
      */
-    protected $apiKeys = array();
+    protected $apiKeys = [];
 
     /**
      * Associate array to store API prefix (e.g. Bearer)
      *
      * @var string[]
      */
-    protected $apiKeyPrefixes = array();
+    protected $apiKeyPrefixes = [];
 
     /**
      * Access token for OAuth
@@ -56,7 +56,7 @@ class Configuration
      *
      * @var array
      */
-    protected $defaultHeaders = array();
+    protected $defaultHeaders = [];
 
     /**
      * The host
@@ -79,16 +79,15 @@ class Configuration
      */
     protected $platform = null;
 
-
     /**
      * The environments
      *
      * @var array
      */
-    protected $supportedEnvironments = array(
-       CommonUtil::SANDBOX => array("host" => "https://global-api.sand.au.edge.zip.co/merchant"),
-       CommonUtil::PRODUCTION => array("host" => 'https://global-api.prod.au.edge.zip.co/merchant')
-    );
+    protected $supportedEnvironments = [
+       CommonUtil::SANDBOX => ["host" => "https://global-api.sand.au.edge.zip.co/merchant"],
+       CommonUtil::PRODUCTION => ["host" => 'https://global-api.prod.au.edge.zip.co/merchant']
+    ];
 
     /**
      * The default enviornment to be used
@@ -197,7 +196,6 @@ class Configuration
      * @var string
      */
     protected $proxyPassword;
-
 
     /**
      * Constructor
@@ -423,8 +421,7 @@ class Configuration
 
     public function setDefaultHeaders()
     {
-        $user_agent_array = array();
-
+        $user_agent_array = [];
 
         if ($platform = $this->getPlatform()) {
             $user_agent_array[] = $platform;
@@ -434,7 +431,6 @@ class Configuration
 
         $this->setUserAgent($default_user_agent);
         $this->setApiVersion($this->api_version);
-
     }
 
     /**

@@ -10,12 +10,9 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 class CancelHandler implements HandlerInterface
 {
@@ -36,11 +33,9 @@ class CancelHandler implements HandlerInterface
 
         /** @var PaymentDataObjectInterface $paymentDO */
         $paymentDO = $handlingSubject['payment'];
-
+        /** @var $payment \Magento\Sales\Model\Order\Payment */
         $payment = $paymentDO->getPayment();
 
-        /** @var $payment \Magento\Sales\Model\Order\Payment */
         $payment->setIsTransactionClosed(true);
-
     }
 }

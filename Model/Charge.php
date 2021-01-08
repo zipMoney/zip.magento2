@@ -2,15 +2,12 @@
 
 namespace Zip\ZipPayment\Model;
 
-use \Magento\Checkout\Model\Type\Onepage;
-use \Magento\Customer\Api\Data\GroupInterface;
-use \Magento\Sales\Model\Order;
-use \Zip\ZipPayment\Model\Config;
-use \Zip\ZipPayment\Model\Checkout\AbstractCheckout;
+use Magento\Checkout\Model\Type\Onepage;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Sales\Model\Order;
+use Zip\ZipPayment\Model\Checkout\AbstractCheckout;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -94,8 +91,7 @@ class Charge extends AbstractCheckout
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi $chargesApi,
         array $data = []
-    )
-    {
+    ) {
         $this->_quoteManagement = $cartManagement;
         $this->_accountManagement = $accountManagement;
         $this->_messageManager = $messageManager;
@@ -108,10 +104,19 @@ class Charge extends AbstractCheckout
         $this->_dataObjectHelper = $dataObjectHelper;
         $this->_api = $chargesApi;
 
-        parent::__construct($customerSession, $checkoutSession, $customerFactory, $quoteRepository, $payloadHelper, $logger, $helper, $config);
+        parent::__construct(
+            $customerSession,
+            $checkoutSession,
+            $customerFactory,
+            $quoteRepository,
+            $payloadHelper,
+            $logger,
+            $helper,
+            $config
+        );
 
         if (isset($data['order'])) {
-            if ($data['order'] instanceof \Magento\Quote\Model\Order) {
+            if ($data['order'] instanceof \Magento\Sales\Model\Order) {
                 $this->setQuote($data['order']);
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
@@ -133,13 +138,13 @@ class Charge extends AbstractCheckout
 
         $payload = $this->_payloadHelper->getChargePayload($this->_order);
 
-        $this->_logger->debug("Charge Payload:- " . $this->_helper->json_encode($payload));
+        $this->_logger->debug("Charge Payload:- " . $this->_helper->jsonEncode($payload));
 
         try {
             $charge = $this->getApi()
                 ->chargesCreate($payload, $this->genIdempotencyKey());
 
-            $this->_logger->debug("Charge Response:- " . $this->_helper->json_encode($charge));
+            $this->_logger->debug("Charge Response:- " . $this->_helper->jsonEncode($charge));
 
             if (isset($charge->error)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Could not create the charge'));
@@ -372,10 +377,10 @@ class Charge extends AbstractCheckout
 
         $isNewCustomer = false;
         switch ($checkoutMethod) {
-            case  Onepage::METHOD_GUEST:
+            case Onepage::METHOD_GUEST:
                 $this->_prepareGuestQuote();
                 break;
-            case  Onepage::METHOD_REGISTER:
+            case Onepage::METHOD_REGISTER:
                 $this->_prepareNewCustomerQuote();
                 $isNewCustomer = true;
                 break;

@@ -2,23 +2,16 @@
 
 namespace Zip\ZipPayment\Block\Advert;
 
-use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 use Magento\Catalog\Block as CatalogBlock;
 
-
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 class RootEl extends AbstractAdvert implements CatalogBlock\ShortcutInterface
 {
-
     /**
      * Get country path
      */
@@ -84,17 +77,5 @@ class RootEl extends AbstractAdvert implements CatalogBlock\ShortcutInterface
     public function getAlias()
     {
         return $this->_alias;
-    }
-
-    /**
-     * Render the block if needed
-     *
-     * @return string
-     */
-    protected function _toHtml()
-    {
-
-            return parent::_toHtml();
-
     }
 }

@@ -22,12 +22,9 @@ use \Zip\ZipPayment\MerchantApi\Lib\Model\Metadata;
 use \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
- * @copyright 2019 Zip Co.
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      https://www.zip.co/
+ * @author    Zip Plugin Team <integrations@zip.co>
+ * @copyright 2020 Zip Co.
+ * @link      https://zop.co
  */
 class Payload extends AbstractHelper
 {
@@ -133,8 +130,7 @@ class Payload extends AbstractHelper
         \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection $transactionCollection,
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper
-    )
-    {
+    ) {
         parent::__construct($context);
 
         $this->_customerFactory = $customerFactory;
@@ -317,7 +313,6 @@ class Payload extends AbstractHelper
         if (!$customer || !$customer->getId()) {
             return null;
         }
-        $customerData = array();
 
         if ($this->_customerSession->isLoggedIn() || $customer->getId()) {
             $orderCollection = $this->_orderCollectionFactory->create($customer->getId())
@@ -474,8 +469,10 @@ class Payload extends AbstractHelper
     /**
      * Prepares the Order details
      *
-     * @param mixed \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder $reqOrder | \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder $reqOrder
-     * @return mixed \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder | \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder
+     * @param mixed \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder
+     * | \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder $reqOrder
+     * @return mixed \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder
+     * | \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder
      */
     public function getOrderDetails($reqOrder)
     {
@@ -592,7 +589,7 @@ class Payload extends AbstractHelper
             $storeId = $order->getStoreId();
         }
 
-        $itemsArray = array();
+        $itemsArray = [];
 
         // @var Mage_Sales_Model_Order_Item $oItem
         foreach ($items as $item) {
@@ -721,9 +718,9 @@ class Payload extends AbstractHelper
         try {
             //only use visible product do not care type $item must be visible cart product
             $product = $item->getProduct();
-            $imageUrl = (string)$this->_imageHelper->init($product, 'thumbnail')->getUrl();
+            $imageUrl = (string) $this->_imageHelper->init($product, 'thumbnail')->getUrl();
         } catch (\Exception $e) {
-            $this->_logger->warn('An error occurred during getting item image for product ' . $product->getId());
+            $this->_logger->warning('An error occurred during getting item image for product ' . $product->getId());
             $this->_logger->error($e->getMessage());
             $this->_logger->debug($e->getTraceAsString());
         }
@@ -790,7 +787,7 @@ class Payload extends AbstractHelper
     public function getCheckoutConfiguration()
     {
         $checkout_config = new CheckoutConfiguration();
-        $redirect_url = $this->_urlBuilder->getUrl('zippayment/complete', array('_secure' => true));
+        $redirect_url = $this->_urlBuilder->getUrl('zippayment/complete', ['_secure' => true]);
 
         $checkout_config->setRedirectUri($redirect_url);
 
