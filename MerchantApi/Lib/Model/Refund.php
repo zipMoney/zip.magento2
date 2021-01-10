@@ -4,10 +4,9 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
 
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
@@ -27,55 +26,59 @@ class Refund implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'id' => 'string',
         'charge_id' => 'string',
         'reason' => 'string',
         'amount' => 'float',
         'created' => '\DateTime',
         'metadata' => 'object'
-    );
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'id' => 'id',
         'charge_id' => 'charge_id',
         'reason' => 'reason',
         'amount' => 'amount',
         'created' => 'created',
         'metadata' => 'metadata'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'id' => 'setId',
         'charge_id' => 'setChargeId',
         'reason' => 'setReason',
         'amount' => 'setAmount',
         'created' => 'setCreated',
         'metadata' => 'setMetadata'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'id' => 'getId',
         'charge_id' => 'getChargeId',
         'reason' => 'getReason',
         'amount' => 'getAmount',
         'created' => 'getCreated',
         'metadata' => 'getMetadata'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -118,7 +121,7 @@ class Refund implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if ($this->container['id'] === null) {
             $invalid_properties[] = "'id' can't be null";
@@ -158,7 +161,6 @@ class Refund implements ArrayAccess
         }
         return true;
     }
-
 
     /**
      * Gets id
@@ -338,7 +340,10 @@ class Refund implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

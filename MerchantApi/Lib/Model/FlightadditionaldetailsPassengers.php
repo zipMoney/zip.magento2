@@ -4,10 +4,9 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
 
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
@@ -27,55 +26,59 @@ class FlightadditionaldetailsPassengers implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'title' => 'string',
         'first_name' => 'string',
         'last_name' => 'string',
         'gender' => 'string',
         'date_of_birth' => '\DateTime',
         'seat_number' => 'string'
-    );
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'title' => 'title',
         'first_name' => 'first_name',
         'last_name' => 'last_name',
         'gender' => 'gender',
         'date_of_birth' => 'date_of_birth',
         'seat_number' => 'seat_number'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'title' => 'setTitle',
         'first_name' => 'setFirstName',
         'last_name' => 'setLastName',
         'gender' => 'setGender',
         'date_of_birth' => 'setDateOfBirth',
         'seat_number' => 'setSeatNumber'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'title' => 'getTitle',
         'first_name' => 'getFirstName',
         'last_name' => 'getLastName',
         'gender' => 'getGender',
         'date_of_birth' => 'getDateOfBirth',
         'seat_number' => 'getSeatNumber'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -118,7 +121,7 @@ class FlightadditionaldetailsPassengers implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if ($this->container['first_name'] === null) {
             $invalid_properties[] = "'first_name' can't be null";
@@ -137,7 +140,6 @@ class FlightadditionaldetailsPassengers implements ArrayAccess
      */
     public function valid()
     {
-
         if ($this->container['first_name'] === null) {
             return false;
         }
@@ -146,7 +148,6 @@ class FlightadditionaldetailsPassengers implements ArrayAccess
         }
         return true;
     }
-
 
     /**
      * Gets title
@@ -326,7 +327,10 @@ class FlightadditionaldetailsPassengers implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));
