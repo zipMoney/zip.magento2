@@ -11,8 +11,6 @@ use Magento\Payment\Gateway\Http\TransferInterface;
 use Zip\ZipPayment\Model\Config;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -43,11 +41,14 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
 
         $config->expects(static::any())->method('getLogSetting')->willReturn(10);
 
-        $this->_refundsApiMock = $this->getMockBuilder(\Zip\ZipPayment\MerchantApi\Lib\Api\RefundsApi::class)->getMock();
+        $this->_refundsApiMock = $this->getMockBuilder(
+            \Zip\ZipPayment\MerchantApi\Lib\Api\RefundsApi::class
+        )->getMock();
 
-        $this->_clientMock = $objManager->getObject("\Zip\ZipPayment\Gateway\Http\Client\TransactionRefund",
-            ['_service' => $this->_refundsApiMock]);
-
+        $this->_clientMock = $objManager->getObject(
+            "\Zip\ZipPayment\Gateway\Http\Client\TransactionRefund",
+            ['_service' => $this->_refundsApiMock]
+        );
     }
 
     /**
@@ -69,7 +70,6 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     public function placeRequestDataProvider()
     {
         $chargeResponse = new \Zip\ZipPayment\MerchantApi\Lib\Model\Charge;
@@ -86,5 +86,4 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
             ]
         ];
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -20,8 +21,6 @@ use Zip\ZipPayment\Helper\Logger;
 use Zip\ZipPayment\Helper\Data as ZipMoneyDataHelper;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -52,11 +51,14 @@ class TransactionCaptureTest extends \PHPUnit\Framework\TestCase
 
         $config->expects(static::any())->method('getLogSetting')->willReturn(10);
 
-        $this->_chargesApiMock = $this->getMockBuilder(\Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class)->getMock();
+        $this->_chargesApiMock = $this->getMockBuilder(
+            \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class
+        )->getMock();
 
-        $this->_clientMock = $objManager->getObject("\Zip\ZipPayment\Gateway\Http\Client\TransactionCapture",
-            ['_service' => $this->_chargesApiMock]);
-
+        $this->_clientMock = $objManager->getObject(
+            "\Zip\ZipPayment\Gateway\Http\Client\TransactionCapture",
+            ['_service' => $this->_chargesApiMock]
+        );
     }
 
     /**
@@ -80,7 +82,6 @@ class TransactionCaptureTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     public function placeRequestDataProvider()
     {
         $chargeResponse = new \Zip\ZipPayment\MerchantApi\Lib\Model\Charge;
@@ -90,12 +91,11 @@ class TransactionCaptureTest extends \PHPUnit\Framework\TestCase
         return [
             'success' => [
                 'expectedRequest' => [
-                    'payload' => array(),
+                    'payload' => [],
                     'zip_checkout_id' => 123
                 ],
                 $chargeResponse
             ]
         ];
     }
-
 }

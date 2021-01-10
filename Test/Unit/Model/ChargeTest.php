@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -21,8 +22,6 @@ use Zip\ZipPayment\Helper\Logger;
 use Zip\ZipPayment\Helper\Data as ZipMoneyDataHelper;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -40,7 +39,6 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
      */
     protected $config;
 
-
     protected $messageManager;
 
     public function setUp()
@@ -48,14 +46,15 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
 
         $objManager = new ObjectManager($this);
 
-
         $config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $config->expects(static::any())->method('getLogSetting')->willReturn(10);
 
-        $this->_chargesApiMock = $this->getMockBuilder(\Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class)->getMock();
+        $this->_chargesApiMock = $this->getMockBuilder(
+            \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class
+        )->getMock();
 
         $quoteManagement = $this->getMockBuilder(Magento\Quote\Api\CartManagementInterface::class)
             ->setMethods(['submit'])
@@ -70,7 +69,14 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
         $checkoutSession = $objManager->getObject('\Magento\Checkout\Model\Session');
 
         $checkoutSession = $this->getMockBuilder(\Magento\Checkout\Model\Session::class)
-            ->setMethods(['setLastSuccessQuoteId', 'setLastQuoteId', 'clearHelperData', 'setLastOrderId', 'setLastRealOrderId', 'setLastOrderStatus'])
+            ->setMethods([
+                'setLastSuccessQuoteId',
+                'setLastQuoteId',
+                'clearHelperData',
+                'setLastOrderId',
+                'setLastRealOrderId',
+                'setLastOrderStatus'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -79,11 +85,12 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
         $checkoutSession->expects(static::any())->method('setLastOrderId')->willReturn($checkoutSession);
         $checkoutSession->expects(static::any())->method('setLastRealOrderId')->willReturn($checkoutSession);
 
-        $this->_chargeModel = $objManager->getObject("\Zip\ZipPayment\Model\Charge",
-            ['_quoteManagement' => $quoteManagement, '_checkoutSession' => $checkoutSession]);
+        $this->_chargeModel = $objManager->getObject(
+            "\Zip\ZipPayment\Model\Charge",
+            ['_quoteManagement' => $quoteManagement, '_checkoutSession' => $checkoutSession]
+        );
 
         $this->_chargeModel->setApi($this->_chargesApiMock);
-
     }
 
     public function testChargeCapture()
@@ -119,7 +126,12 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
 
         // Payment Model
         $paymentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
-            ->setMethods(['setZipmoneyChargeId', 'registerCaptureNotification', 'registerAuthorizationNotification', 'getCreatedInvoice'])
+            ->setMethods([
+                'setZipmoneyChargeId',
+                'registerCaptureNotification',
+                'registerAuthorizationNotification',
+                'getCreatedInvoice'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -128,9 +140,9 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
         $paymentMock->expects(static::any())->method('registerAuthorizationNotification')->willReturn(true);
         $paymentMock->expects(static::any())->method('getCreatedInvoice')->willReturn($invoiceMock);
 
-
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
-            ->setMethods(['getId',
+            ->setMethods([
+                'getId',
                 'getCheckoutMethod',
                 'getIsMultiShipping',
                 'getStoreId',
@@ -141,7 +153,8 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
                 'setGrandTotal',
                 'setBaseGrandTotal',
                 'getPayment',
-                'getState', 'canInvoice', 'getBaseTotalDue', 'addStatusHistoryComment', 'setIsCustomerNotified'])
+                'getState', 'canInvoice', 'getBaseTotalDue', 'addStatusHistoryComment', 'setIsCustomerNotified'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -256,7 +269,8 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
     public function getQuoteMock()
     {
         $quoteMock = $this->getMockBuilder(Magento\Quote\Model\Quote::class)
-            ->setMethods(['getId',
+            ->setMethods([
+                'getId',
                 'getCheckoutMethod',
                 'getIsMultiShipping',
                 'getStoreId',
@@ -268,7 +282,13 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
                 'setBaseGrandTotal',
                 'getBillingAddress',
                 'getShippingAddress',
-                'getIsVirtual', 'getCustomerId', 'setCustomerId', 'setCustomerEmail', 'setCustomerIsGuest', 'setCustomerGroupId'])
+                'getIsVirtual',
+                'getCustomerId',
+                'setCustomerId',
+                'setCustomerEmail',
+                'setCustomerIsGuest',
+                'setCustomerGroupId'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
 

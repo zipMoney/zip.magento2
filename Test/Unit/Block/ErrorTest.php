@@ -15,8 +15,6 @@ use Zip\ZipPayment\Block\Error;
 use Zip\ZipPayment\Model\Config;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -70,7 +68,10 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
             $this->config
         );
 
-        static::assertSame("There was an error processing your request. Please try again later.", (string)$info->getBodyText());
+        static::assertSame(
+            "There was an error processing your request. Please try again later.",
+            (string)$info->getBodyText()
+        );
     }
 
     public function testGetBodyTextReturnsNull()
@@ -102,5 +103,4 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
 
         static::assertNull($info->getBodyText());
     }
-
 }

@@ -29,8 +29,6 @@ use Zip\ZipPayment\Helper\Logger;
 use Zip\ZipPayment\Helper\Data as ZipMoneyDataHelper;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -47,7 +45,6 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $config;
-
 
     protected $messageManager;
 
@@ -67,14 +64,16 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
         $config->expects(static::any())->method('getLogSetting')->willReturn(10);
 
+        $this->_checkoutsApiMock = $this->getMockBuilder(
+            \Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi::class
+        )->getMock();
 
-        $this->_checkoutsApiMock = $this->getMockBuilder(\Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi::class)->getMock();
-
-        $this->_checkoutModel = $objManager->getObject("\Zip\ZipPayment\Model\Checkout",
-            ['_checkoutHelper' => $checkoutHelperMock]);
+        $this->_checkoutModel = $objManager->getObject(
+            "\Zip\ZipPayment\Model\Checkout",
+            ['_checkoutHelper' => $checkoutHelperMock]
+        );
 
         $this->_checkoutModel->setApi($this->_checkoutsApiMock);
-
     }
 
     public function testCheckoutStart()
@@ -143,7 +142,6 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->_checkoutModel->start();
     }
 
-
     /**
      * @test
      * @group Zipmoney_ZipPayment
@@ -156,7 +154,6 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->_checkoutModel->setQuote($quoteMock);
         $this->_checkoutModel->start();
     }
-
 
     /**
      * @test
@@ -171,7 +168,6 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $return_url = "https://account.zipmoney.com.au/?ch=ch_f8h2sz09na";
         $checkout->error = new \stdClass;
 
-
         $this->_checkoutsApiMock->expects($this->any())
             ->method('checkoutsCreate')
             ->willReturn($checkout);
@@ -184,5 +180,4 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->_checkoutModel->setQuote($quoteMock);
         $this->_checkoutModel->start();
     }
-
 }
