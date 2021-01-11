@@ -4,7 +4,7 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
 namespace Zip\ZipPayment\MerchantApi\Lib;
@@ -299,15 +299,14 @@ class ApiClient
 
         $header_text = substr($raw_headers, 0, strpos($raw_headers, "\r\n\r\n"));
 
-        foreach (explode("\r\n", $header_text) as $i => $line)
-            if ($i === 0)
+        foreach (explode("\r\n", $header_text) as $i => $line) {
+            if ($i === 0) {
                 $headers['http_code'] = $line;
-            else
-            {
+            } else {
                 list ($key, $value) = explode(': ', $line);
-
                 $headers[$key] = $value;
             }
+        }
 
         return $headers;
     }

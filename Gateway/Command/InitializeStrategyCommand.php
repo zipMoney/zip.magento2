@@ -12,7 +12,6 @@ use Psr\Log\LoggerInterface;
  */
 class InitializeStrategyCommand implements CommandInterface
 {
-
     /**
      * @var LoggerInterface
      */
@@ -30,8 +29,10 @@ class InitializeStrategyCommand implements CommandInterface
      * @param array $commandSubject
      * @return void
      */
+    // @codingStandardsIgnoreStart
     public function execute(array $commandSubject)
     {
         // Gateway commands
+        // @codingStandardsIgnoreEnd
     }
 }
