@@ -3,29 +3,27 @@
         "zipMoneyWidgetJs"
     ]);
     // merchant Id
-    zip_widget_merchantId = '<?php  echo $this->getMerchantPublicKey();?>';
+    zip_widget_merchantId = '<?= /* @noEscape */ $block->getMerchantPublicKey(); ?>';
     // Environment like sandbox or production
-    zip_widget_env = '<?php  echo $this->getEnvironment();?>';
+    zip_widget_env = '<?= $block->escapeHtml($block->getEnvironment());?>';
     // region like au/nz/uk/us/za
-    zip_widget_region = '<?php  echo strtolower($this->getRegion());?>';
+    zip_widget_region = '<?= $block->escapeHtml(strtolower($block->getRegion()));?>';
     // max price to show the zip cart or product widget
-    zip_widget_max_price = '<?php  echo $this->getOrderTotalMaximum();?>';
+    zip_widget_max_price = '<?= /* @noEscape */ $block->getOrderTotalMaximum();?>';
     // min price to show the zip cart or product widget
-    zip_widget_min_price = '<?php  echo $this->getOrderTotalMinimum();?>';
+    zip_widget_min_price = '<?= /* @noEscape */ $block->getOrderTotalMinimum();?>';
     // widget display inline if this value is true otherwise it will display iframe
-    zip_widget_display_inline = '<?php  echo $this->isDisplayInlineWidget();?>';
+    zip_widget_display_inline = '<?= $block->escapeHtml($block->isDisplayInlineWidget());?>';
     // product price for dynamic widget
-    <?php
-    if ($this->getPageType() == 'cart') :?>
-        zip_widget_cart_price = <?php echo $this->getCartTotal();?>;
-    <?php endif;?>
-    <?php if ($this->getPageType() == 'product') :?>
-        zip_widget_product_price = <?php echo $this->getProductPrice();?>;
-    <?php endif; ?>
+<?php if ($block->getPageType() == 'cart'): ?>
+    zip_widget_cart_price = <?= /* @noEscape */ $block->getCartTotal();?>;
+<?php endif;?>
+<?php if ($block->getPageType() == 'product'): ?>
+    zip_widget_product_price = <?= /* @noEscape */ $block->getProductPrice();?>;
+<?php endif; ?>
     // display widget selector
-    <?php foreach ($this->getElementSelectors() as $key => $selector):
-    if (!empty($selector)) :?>
-        zip_widget_<?php echo $this->escapeHtml($key); ?>= "<?php echo $this->escapeHtml($selector); ?>";
-    <?php endif;
-    endforeach; ?>
+<?php foreach ($block->getElementSelectors() as $key => $selector): if (!empty($selector)): ?>
+    zip_widget_<?= $block->escapeHtml($key); ?> = "<?= $block->escapeHtml($selector); ?>";
+<?php endif; ?>
+<?php endforeach; ?>
 </script>
