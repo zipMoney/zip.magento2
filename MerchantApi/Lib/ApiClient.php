@@ -296,30 +296,18 @@ class ApiClient
     {
         // ref/credit: http://php.net/manual/en/function.http-parse-headers.php#112986
         $headers = [];
-        $key = '';
 
-        foreach (explode("\n", $raw_headers) as $h) {
-            $h = explode(':', $h, 2);
+        $header_text = substr($raw_headers, 0, strpos($raw_headers, "\r\n\r\n"));
 
-            if (isset($h[1])) {
-                if (!isset($headers[$h[0]])) {
-                    $headers[$h[0]] = trim($h[1]);
-                } elseif (is_array($headers[$h[0]])) {
-                    $headers[$h[0]] = array_merge($headers[$h[0]], [trim($h[1])]);
-                } else {
-                    $headers[$h[0]] = array_merge([$headers[$h[0]]], [trim($h[1])]);
-                }
+        foreach (explode("\r\n", $header_text) as $i => $line)
+            if ($i === 0)
+                $headers['http_code'] = $line;
+            else
+            {
+                list ($key, $value) = explode(': ', $line);
 
-                $key = $h[0];
-            } else {
-                if (substr($h[0], 0, 1) === "\t") {
-                    $headers[$key] .= "\r\n\t" . trim($h[0]);
-                } elseif (!$key) {
-                    $headers[0] = trim($h[0]);
-                }
-                trim($h[0]);
+                $headers[$key] = $value;
             }
-        }
 
         return $headers;
     }
