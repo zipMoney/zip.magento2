@@ -58,6 +58,10 @@ class HealthCheck
      * @var CurlFactory
      */
     private $_curlFactory;
+    /**
+     * @var \Zend\Uri\Uri
+     */
+    private $_zendUri;
 
     /**
      * HealthCheck constructor.
@@ -66,19 +70,22 @@ class HealthCheck
      * @param \Zip\ZipPayment\Model\Config $config
      * @param CurlFactory $curlFactory ,
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Zend\Uri\Uri $zendUri
      */
     public function __construct(
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
         CurlFactory $curlFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Zend\Uri\Uri $zendUri
     ) {
         $this->_logger = $logger;
         $this->_helper = $helper;
         $this->_config = $config;
         $this->_curlFactory = $curlFactory;
         $this->_storeManager = $storeManager;
+        $this->_zendUri = $zendUri;
     }
 
     /**
@@ -226,9 +233,8 @@ class HealthCheck
                 }
 
                 $storeSecureUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, true);
-                $url = parse_url($storeSecureUrl);
-
-                if ($url['scheme'] !== 'https') {
+                $url = $this->_zendUri->parse($storeSecureUrl);
+                if ($url->getScheme() !== 'https') {
                     $message = self::SSL_DISABLED_MESSAGE;
                     $message = str_replace('{store_name}', $store->getName(), $message);
                     $message = str_replace('{store_url}', $storeSecureUrl, $message);
