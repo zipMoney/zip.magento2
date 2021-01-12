@@ -1,0 +1,23 @@
+<?php
+use Magento\Framework\View\Element\Template;
+/** @var Template $block */
+$checkoutId = $block->getData('checkoutId');
+$state = $block->getData('state');
+?>
+<script type="text/javascript">
+    if (window.self !== window.top) { // detect if current windw is an iFrame
+  window.parent.postMessage({
+        msg: {
+            eventType: 'close',
+            data: {
+			    state: "<?php echo $state; ?>", // get from URL parameter
+				checkoutId: "<?php echo $checkoutId; ?>" // get from URL parameter
+			}
+        },
+        zipmoney: true
+    }, '*');
+} else {
+  window.location.href = redirectUrl;
+}
+</script>
+

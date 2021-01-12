@@ -86,7 +86,8 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
             "redirectUri" => $this->_config->getRedirectUrl(),
             "environment" => $this->_config->getEnvironment(),
             "title" => $this->_config->getTitle(),
-            "inContextCheckoutEnabled" => (bool)$this->_config->isInContextCheckout()
+            "inContextCheckoutEnabled" => (bool)$this->_config->isInContextCheckout(),
+            "iframe" => $this->_config->isInContextCheckout()
         ];
         return $config;
     }

@@ -591,4 +591,12 @@ abstract class AbstractStandard extends Action
         }
         return false;
     }
+
+    /**
+     * @return string
+     */
+    protected function _getCurrencyCode()
+    {
+        return $this->_getQuote()->getQuoteCurrencyCode();
+    }
 }

@@ -2,7 +2,11 @@
 
 namespace Zip\ZipPayment\Controller\Complete;
 
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Result\Page;
 use Zip\ZipPayment\Controller\Standard\AbstractStandard;
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 /**
  * @author    Zip Plugin Team <integrations@zip.co>
@@ -37,10 +41,22 @@ class Index extends AbstractStandard
 
             $this->_logger->debug(__("Result:- %s", $result));
             // Is checkout id valid?
-            if (!$this->getRequest()->getParam('checkoutId')) {
+            $checkoutId = $this->getRequest()->getParam('checkoutId');
+            if (!$checkoutId) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('The checkoutId doesnot exist in the querystring.')
                 );
+            }
+            $iframe = $this->getRequest()->getParam('iframe');
+            if($iframe && $this->_getCurrencyCode() != CommonUtil::CURRENCY_AUD) {
+                /** @var Page $page */
+                $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+                /** @var Template $block */
+                $block = $page->getLayout()->getBlock('zip.iframe.js');
+                $block->setData('checkoutId', $checkoutId);
+                $block->setData('state', $result);
+
+                return $page;
             }
             // Set the customer quote
             $this->_setCustomerQuote();

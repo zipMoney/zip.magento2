@@ -36,7 +36,7 @@ define(
             onComplete: function (response) {
                 if (response.state == "approved" || response.state == "referred") {
                     customerData.invalidate(['cart']);
-                    location.href = window.checkoutConfig.payment.zippayment.redirectUri + "?result=" + response.state + "&checkoutId=" + response.checkoutId;
+                    location.href = window.checkoutConfig.payment.zippayment.redirectUri + "?iframe="+ window.checkoutConfig.payment.zippayment.iframe+ "&result=" + response.state + "&checkoutId=" + response.checkoutId;
                 } else {
                     fullScreenLoader.stopLoader();
                 }
