@@ -55,7 +55,7 @@ class Index extends AbstractStandard
                 $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
                 /** @var Template $block */
                 $layout = $page->getLayout();
-                $block = $layout->createBlock('Magento\Framework\View\Element\Template')
+                $block = $layout->createBlock(\Magento\Framework\View\Element\Template::class)
                     ->setTemplate('Zip_ZipPayment::iframe/iframe_js.phtml');
                 $block->setData('checkoutId', $checkoutId);
                 $block->setData('state', $result);
