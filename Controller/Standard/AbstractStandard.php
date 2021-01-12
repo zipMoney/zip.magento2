@@ -263,7 +263,7 @@ abstract class AbstractStandard extends Action
     }
 
     /**
-     * @param $zip_checkout_id
+     * @param  $zip_checkout_id
      * @return \Magento\Framework\DataObject|\Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException

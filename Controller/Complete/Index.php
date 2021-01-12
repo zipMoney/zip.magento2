@@ -30,34 +30,44 @@ class Index extends AbstractStandard
     public function execute()
     {
         $this->_logger->debug(__("On Complete Controller"));
-
         try {
+            $this->_logger->debug($this->getRequest()->getRequestUri());
+            $checkoutId = $this->getRequest()->getParam('checkoutId');
+            $result = $this->getRequest()->getParam('result');
+            $iframe = $this->getRequest()->getParam('iframe', null);
+
+            $this->_logger->debug(__("Result:- %s", $result));
             // Is result valid ?
             if (!$this->_isResultValid()) {
                 $this->_redirectToCartOrError();
                 return;
             }
-            $result = $this->getRequest()->getParam('result');
 
-            $this->_logger->debug(__("Result:- %s", $result));
-            // Is checkout id valid?
-            $checkoutId = $this->getRequest()->getParam('checkoutId');
             if (!$checkoutId) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('The checkoutId doesnot exist in the querystring.')
                 );
             }
-            $iframe = $this->getRequest()->getParam('iframe');
-            if($iframe && $this->_getCurrencyCode() != CommonUtil::CURRENCY_AUD) {
+
+            // as AU stack already handle iframe in redirect
+            if ($iframe && $this->_getCurrencyCode() !== CommonUtil::CURRENCY_AUD) {
                 /** @var Page $page */
                 $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
                 /** @var Template $block */
-                $block = $page->getLayout()->getBlock('zip.iframe.js');
+                $layout = $page->getLayout();
+                $block = $layout->createBlock('Magento\Framework\View\Element\Template')
+                    ->setTemplate('Zip_ZipPayment::iframe/iframe_js.phtml');
                 $block->setData('checkoutId', $checkoutId);
                 $block->setData('state', $result);
-
-                return $page;
+                $url = $this->_urlBuilder->getUrl('zippayment/complete')
+                    . '?checkoutId=' . $checkoutId
+                    . '&result=' . $result;
+                $block->setData('redirectUrl', $url);
+                /** @var \Magento\Framework\App\Response $response */
+                $response = $this->getResponse();
+                return $response->setBody($block->toHtml());
             }
+
             // Set the customer quote
             $this->_setCustomerQuote();
             // Initialise the charge

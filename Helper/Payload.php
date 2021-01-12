@@ -787,7 +787,21 @@ class Payload extends AbstractHelper
     public function getCheckoutConfiguration()
     {
         $checkout_config = new CheckoutConfiguration();
+        $inContextCheckout = $this->scopeConfig->getValue(
+            'payment/zippayment/incontext_checkout',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         $redirect_url = $this->_urlBuilder->getUrl('zippayment/complete', ['_secure' => true]);
+
+        if ($inContextCheckout) {
+            $redirect_url = $this->_urlBuilder->getUrl(
+                'zippayment/complete',
+                [
+                    '_secure' => true,
+                    '_query'=>['iframe'=>1]
+                ]
+            );
+        }
 
         $checkout_config->setRedirectUri($redirect_url);
 
