@@ -7,8 +7,6 @@
  * @author    Zip Plugin Team <integration@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
-
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
@@ -27,47 +25,51 @@ class ChargeOrder implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'reference' => 'string',
-        'shipping' => '\Zip\ZipPayment\MerchantApi\Lib\Model\OrderShipping',
+        'shipping' => \Zip\ZipPayment\MerchantApi\Lib\Model\OrderShipping::class,
         'items' => '\Zip\ZipPayment\MerchantApi\Lib\Model\OrderItem[]',
         'cart_reference' => 'string'
-    );
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'reference' => 'reference',
         'shipping' => 'shipping',
         'items' => 'items',
         'cart_reference' => 'cart_reference'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'reference' => 'setReference',
         'shipping' => 'setShipping',
         'items' => 'setItems',
         'cart_reference' => 'setCartReference'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'reference' => 'getReference',
         'shipping' => 'getShipping',
         'items' => 'getItems',
         'cart_reference' => 'getCartReference'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -108,17 +110,20 @@ class ChargeOrder implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if (!is_null($this->container['reference']) && (strlen($this->container['reference']) > 50)) {
-            $invalid_properties[] = "invalid value for 'reference', the character length must be smaller than or equal to 50.";
+            $invalid_properties[] = "invalid value for 'reference', "
+            . "the character length must be smaller than or equal to 50.";
         }
 
         if ($this->container['shipping'] === null) {
             $invalid_properties[] = "'shipping' can't be null";
         }
+
         if (!is_null($this->container['cart_reference']) && (strlen($this->container['cart_reference']) > 100)) {
-            $invalid_properties[] = "invalid value for 'cart_reference', the character length must be smaller than or equal to 100.";
+            $invalid_properties[] = "invalid value for 'cart_reference', "
+            . "the character length must be smaller than or equal to 100.";
         }
 
         return $invalid_properties;
@@ -132,7 +137,6 @@ class ChargeOrder implements ArrayAccess
      */
     public function valid()
     {
-
         if (strlen($this->container['reference']) > 50) {
             return false;
         }
@@ -144,7 +148,6 @@ class ChargeOrder implements ArrayAccess
         }
         return true;
     }
-
 
     /**
      * Gets reference
@@ -163,7 +166,8 @@ class ChargeOrder implements ArrayAccess
     public function setReference($reference)
     {
         if (!is_null($reference) && (strlen($reference) > 50)) {
-            throw new \InvalidArgumentException('invalid length for $reference when calling ChargeOrder., must be smaller than or equal to 50.');
+            throw new \InvalidArgumentException('Invalid length for $reference when calling ChargeOrder, '
+            . 'must be smaller than or equal to 50.');
         }
 
         $this->container['reference'] = $reference;
@@ -230,7 +234,8 @@ class ChargeOrder implements ArrayAccess
     public function setCartReference($cart_reference)
     {
         if (!is_null($cart_reference) && (strlen($cart_reference) > 100)) {
-            throw new \InvalidArgumentException('invalid length for $cart_reference when calling ChargeOrder., must be smaller than or equal to 100.');
+            throw new \InvalidArgumentException('Invalid length for $cart_reference when calling ChargeOrder, '
+            . 'must be smaller than or equal to 100.');
         }
 
         $this->container['cart_reference'] = $cart_reference;
@@ -290,7 +295,10 @@ class ChargeOrder implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

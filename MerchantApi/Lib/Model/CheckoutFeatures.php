@@ -4,11 +4,9 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
-
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
@@ -27,35 +25,35 @@ class CheckoutFeatures implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
-        'tokenisation' => '\Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutFeaturesTokenisation'
-    );
+    protected static $zipTypes = [
+        'tokenisation' => \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutFeaturesTokenisation::class
+    ];
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'tokenisation' => 'tokenisation'
-    );
+    ];
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'tokenisation' => 'setTokenisation'
-    );
+    ];
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'tokenisation' => 'getTokenisation'
-    );
+    ];
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -93,7 +91,7 @@ class CheckoutFeatures implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         return $invalid_properties;
     }
@@ -106,10 +104,8 @@ class CheckoutFeatures implements ArrayAccess
      */
     public function valid()
     {
-
         return true;
     }
-
 
     /**
      * Gets tokenisation
@@ -184,7 +180,10 @@ class CheckoutFeatures implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

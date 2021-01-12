@@ -1,22 +1,20 @@
 <?php
+
 /**
  * ObjectSerializer
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author    Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
 
 namespace Zip\ZipPayment\MerchantApi\Lib;
 
 /**
  * ObjectSerializer Class Doc Comment
  *
- * @category Class
- * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
 class ObjectSerializer
@@ -41,7 +39,7 @@ class ObjectSerializer
             return $data;
         } elseif (is_object($data)) {
             $attr = $data::attributeMap();
-            $values = array();
+            $values = [];
             foreach (array_keys($data::zipTypes()) as $property) {
                 $getterArr = $data::getters();
                 $getter = $getterArr[$property];
@@ -71,7 +69,7 @@ class ObjectSerializer
             return null;
         } elseif (substr($class, 0, 4) === 'map[') { // for associative array e.g. map[string,int]
             $inner = substr($class, 4, -1);
-            $deserialized = array();
+            $deserialized = [];
             if (strrpos($inner, ",") !== false) {
                 $subClass_array = explode(',', $inner, 2);
                 $subClass = $subClass_array[1];
@@ -82,7 +80,7 @@ class ObjectSerializer
             return $deserialized;
         } elseif (strcasecmp(substr($class, -2), '[]') === 0) {
             $subClass = substr($class, 0, -2);
-            $values = array();
+            $values = [];
             foreach ($data as $key => $value) {
                 $values[] = self::deserialize($value, $subClass, null);
             }
@@ -102,14 +100,34 @@ class ObjectSerializer
             } else {
                 return null;
             }
-        } elseif (in_array($class, array('DateTime', 'bool', 'boolean', 'byte', 'double', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'), true)) {
+        } elseif (in_array(
+            $class,
+            [
+                'DateTime',
+                'bool',
+                'boolean',
+                'byte',
+                'double',
+                'float',
+                'int',
+                'integer',
+                'mixed',
+                'number',
+                'object',
+                'string',
+                'void'
+            ],
+            true
+        )) {
             settype($data, $class);
             return $data;
         } elseif ($class === '\SplFileObject') {
             // determine file name
             if (array_key_exists('Content-Disposition', $httpHeaders) &&
-                preg_match('/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i', $httpHeaders['Content-Disposition'], $match)) {
-                $filename = Configuration::getDefaultConfiguration()->getTempFolderPath() . sanitizeFilename($match[1]);
+                preg_match('/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i', $httpHeaders['Content-Disposition'], $match)
+            ) {
+                $filename = Configuration::getDefaultConfiguration()->getTempFolderPath()
+                    . self::sanitizeFilename($match[1]);
             } else {
                 $filename = tempnam(Configuration::getDefaultConfiguration()->getTempFolderPath(), '');
             }
@@ -153,7 +171,7 @@ class ObjectSerializer
      *
      * @return string the sanitized filename
      */
-    public function sanitizeFilename($filename)
+    public static function sanitizeFilename($filename)
     {
         if (preg_match("/.*[\/\\\\](.*)$/", $filename, $match)) {
             return $match[1];

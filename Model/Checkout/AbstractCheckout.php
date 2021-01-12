@@ -3,15 +3,13 @@
 namespace Zip\ZipPayment\Model\Checkout;
 
 use \Magento\Checkout\Model\Type\Onepage;
-use \Zip\ZipPayment\Model\Config;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
+ * @category  Zip
+ * @package   ZipPayment
+ * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 abstract class AbstractCheckout
 {
@@ -73,8 +71,7 @@ abstract class AbstractCheckout
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config
-    )
-    {
+    ) {
         $this->_customerSession = $customerSession;
         $this->_customerFactory = $customerFactory;
         $this->_checkoutSession = $checkoutSession;
@@ -90,7 +87,8 @@ abstract class AbstractCheckout
         $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey())
             ->setApiKeyPrefix('Authorization', 'Bearer')
             ->setEnvironment($this->_config->getEnvironment())
-            ->setPlatform("Magento/" . $this->_helper->getMagentoVersion() . "Zip_ZipPayment/" . $this->_helper->getExtensionVersion());
+            ->setPlatform("Magento/" . $this->_helper->getMagentoVersion() . "Zip_ZipPayment/"
+                . $this->_helper->getExtensionVersion());
     }
 
     /**
@@ -146,7 +144,7 @@ abstract class AbstractCheckout
     {
         if (is_object($api)) {
             $this->_api = $api;
-        } else if (is_string($api)) {
+        } elseif (is_string($api)) {
             $this->_api = new $api;
         }
         return $this;
@@ -231,5 +229,4 @@ abstract class AbstractCheckout
             ->loadByEmail($this->_quote->getCustomerEmail())
             ->getId();
     }
-
 }

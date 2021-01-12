@@ -4,10 +4,9 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
 
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
@@ -30,7 +29,7 @@ class OrderItem implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'name' => 'string',
         'amount' => 'float',
         'reference' => 'string',
@@ -41,12 +40,13 @@ class OrderItem implements ArrayAccess
         'item_uri' => 'string',
         'product_code' => 'string',
         'additional_details' => '\Zip\ZipPayment\MerchantApi\Lib\Model\OrderItemAdditionalDetails[]'
-    );
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'name' => 'name',
         'amount' => 'amount',
         'reference' => 'reference',
@@ -57,12 +57,13 @@ class OrderItem implements ArrayAccess
         'item_uri' => 'item_uri',
         'product_code' => 'product_code',
         'additional_details' => 'additional_details'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'name' => 'setName',
         'amount' => 'setAmount',
         'reference' => 'setReference',
@@ -73,12 +74,13 @@ class OrderItem implements ArrayAccess
         'item_uri' => 'setItemUri',
         'product_code' => 'setProductCode',
         'additional_details' => 'setAdditionalDetails'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'name' => 'getName',
         'amount' => 'getAmount',
         'reference' => 'getReference',
@@ -89,12 +91,13 @@ class OrderItem implements ArrayAccess
         'item_uri' => 'getItemUri',
         'product_code' => 'getProductCode',
         'additional_details' => 'getAdditionalDetails'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -111,7 +114,8 @@ class OrderItem implements ArrayAccess
         $this->container['image_uri'] = isset($data['image_uri']) ? $data['image_uri'] : null;
         $this->container['item_uri'] = isset($data['item_uri']) ? $data['item_uri'] : null;
         $this->container['product_code'] = isset($data['product_code']) ? $data['product_code'] : null;
-        $this->container['additional_details'] = isset($data['additional_details']) ? $data['additional_details'] : null;
+        $this->container['additional_details'] = isset($data['additional_details'])
+            ? $data['additional_details'] : null;
     }
 
     public static function zipTypes()
@@ -140,13 +144,13 @@ class OrderItem implements ArrayAccess
      */
     public function getTypeAllowableValues()
     {
-        return array(
+        return [
             self::TYPE_SKU,
             self::TYPE_TAX,
             self::TYPE_SHIPPING,
             self::TYPE_DISCOUNT,
             self::TYPE_STORE_CREDIT,
-        );
+        ];
     }
 
     /**
@@ -156,7 +160,7 @@ class OrderItem implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if ($this->container['name'] === null) {
             $invalid_properties[] = "'name' can't be null";
@@ -171,13 +175,15 @@ class OrderItem implements ArrayAccess
         if ($this->container['type'] === null) {
             $invalid_properties[] = "'type' can't be null";
         }
-        $allowed_values = array("sku", "tax", "shipping", "discount", "store_credit");
+        $allowed_values = ["sku", "tax", "shipping", "discount", "store_credit"];
         if (!in_array($this->container['type'], $allowed_values)) {
-            $invalid_properties[] = "invalid value for 'type', must be one of 'sku', 'tax', 'shipping', 'discount', 'store_credit'.";
+            $invalid_properties[] = "invalid value for 'type', "
+            . "must be one of 'sku', 'tax', 'shipping', 'discount', 'store_credit'.";
         }
 
         if (!is_null($this->container['product_code']) && (strlen($this->container['product_code']) > 200)) {
-            $invalid_properties[] = "invalid value for 'product_code', the character length must be smaller than or equal to 200.";
+            $invalid_properties[] = "invalid value for 'product_code', "
+            . "the character length must be smaller than or equal to 200.";
         }
 
         return $invalid_properties;
@@ -204,7 +210,7 @@ class OrderItem implements ArrayAccess
         if ($this->container['type'] === null) {
             return false;
         }
-        $allowed_values = array("sku", "tax", "shipping", "discount", "store_credit");
+        $allowed_values = ["sku", "tax", "shipping", "discount", "store_credit"];
         if (!in_array($this->container['type'], $allowed_values)) {
             return false;
         }
@@ -213,7 +219,6 @@ class OrderItem implements ArrayAccess
         }
         return true;
     }
-
 
     /**
      * Gets name
@@ -317,7 +322,9 @@ class OrderItem implements ArrayAccess
     {
 
         if (!is_null($quantity) && ($quantity <= 0)) {
-            throw new \InvalidArgumentException('invalid value for $quantity when calling OrderItem., must be bigger than 0.');
+            throw new \InvalidArgumentException(
+                'Invalid value for $quantity when calling OrderItem, must be bigger than 0.'
+            );
         }
 
         $this->container['quantity'] = $quantity;
@@ -341,9 +348,10 @@ class OrderItem implements ArrayAccess
      */
     public function setType($type)
     {
-        $allowed_values = array('sku', 'tax', 'shipping', 'discount', 'store_credit');
+        $allowed_values = ['sku', 'tax', 'shipping', 'discount', 'store_credit'];
         if ((!in_array($type, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'type', must be one of 'sku', 'tax', 'shipping', 'discount', 'store_credit'");
+            throw new \InvalidArgumentException("Invalid value for 'type', "
+            . "must be one of 'sku', 'tax', 'shipping', 'discount', 'store_credit'");
         }
         $this->container['type'] = $type;
 
@@ -409,7 +417,8 @@ class OrderItem implements ArrayAccess
     public function setProductCode($product_code)
     {
         if (!is_null($product_code) && (strlen($product_code) > 200)) {
-            throw new \InvalidArgumentException('invalid length for $product_code when calling OrderItem., must be smaller than or equal to 200.');
+            throw new \InvalidArgumentException('Invalid length for $product_code when calling OrderItem, '
+            . 'must be smaller than or equal to 200.');
         }
 
         $this->container['product_code'] = $product_code;
@@ -490,7 +499,10 @@ class OrderItem implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

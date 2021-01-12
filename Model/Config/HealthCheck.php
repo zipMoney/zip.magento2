@@ -8,12 +8,10 @@ use Magento\Framework\HTTP\Adapter\CurlFactory;
 /**
  * Admin Model of health check
  *
- * @package Zip_Payment
- * @author  Zip Co - Plugin Team
+ * @author  Zip Co - Plugin Team <integrations@zip.co>
  **/
 class HealthCheck
 {
-
     const STATUS_SUCCESS = 1;
     const STATUS_WARNING = 2;
     const STATUS_ERROR = 3;
@@ -26,18 +24,18 @@ class HealthCheck
     const API_CREDENTIAL_INVALID_MESSAGE = 'Your API credential is invalid';
     const MERCHANT_COUNTRY_NOT_SUPPORTED_MESSAGE = 'Your merchant country not been supported';
 
-    protected $_result = array(
+    protected $_result = [
         'overall_status' => self::STATUS_SUCCESS,
-        'items' => array()
-    );
+        'items' => []
+    ];
 
-    protected $_region = array(
+    protected $_region = [
         'au' => 'Australia',
         'nz' => 'New Zealand',
         'us' => 'United States',
         'uk' => 'United Kingdom',
         'za' => 'South Africa',
-    );
+    ];
 
     /**
      * @var \Zip\ZipPayment\Helper\Logger
@@ -60,6 +58,10 @@ class HealthCheck
      * @var CurlFactory
      */
     private $_curlFactory;
+    /**
+     * @var \Zend\Uri\Uri
+     */
+    private $_zendUri;
 
     /**
      * HealthCheck constructor.
@@ -68,20 +70,22 @@ class HealthCheck
      * @param \Zip\ZipPayment\Model\Config $config
      * @param CurlFactory $curlFactory ,
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Zend\Uri\Uri $zendUri
      */
     public function __construct(
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
         CurlFactory $curlFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
-    )
-    {
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Zend\Uri\Uri $zendUri
+    ) {
         $this->_logger = $logger;
         $this->_helper = $helper;
         $this->_config = $config;
         $this->_curlFactory = $curlFactory;
         $this->_storeManager = $storeManager;
+        $this->_zendUri = $zendUri;
     }
 
     /**
@@ -94,7 +98,7 @@ class HealthCheck
         // Configure API Credentials
         $apiConfig = \Zip\ZipPayment\MerchantApi\Lib\Configuration::getDefaultConfiguration();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $storeManager = $objectManager->create('\Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $objectManager->create(\Magento\Store\Model\StoreManagerInterface::class);
 
         $storeId = $storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
         $publicKey = $publicKey ?? $this->_config->getMerchantPublicKey($storeId);
@@ -103,7 +107,8 @@ class HealthCheck
         $apiConfig->setApiKey('Authorization', $privateKey)
             ->setApiKeyPrefix('Authorization', 'Bearer')
             ->setEnvironment($environment)
-            ->setPlatform("Magento/" . $this->_helper->getMagentoVersion() . "Zip_ZipPayment/" . $this->_helper->getExtensionVersion());
+            ->setPlatform("Magento/" . $this->_helper->getMagentoVersion()
+                . "Zip_ZipPayment/" . $this->_helper->getExtensionVersion());
 
         $curlEnabled = function_exists('curl_version');
 
@@ -120,23 +125,23 @@ class HealthCheck
             $this->appendItem(self::STATUS_ERROR, self::CURL_EXTENSION_DISABLED);
         } else {
             $curlObject->setConfig(
-                array(
+                [
                     'timeout' => 10,
-                )
+                ]
             );
 
             try {
                 $apiConfig->setCurlTimeout(30);
-                $headers = array(
+                $headers = [
                     'Authorization: ' .
-                    $apiConfig->getApiKeyPrefix('Authorization') .
-                    ' ' .
-                    $apiConfig->getApiKey('Authorization'),
+                        $apiConfig->getApiKeyPrefix('Authorization') .
+                        ' ' .
+                        $apiConfig->getApiKey('Authorization'),
                     'Accept : application/json',
                     'Zip-Version: 2017-03-01',
                     'Content-Type: application/json',
                     'Idempotency-Key: ' . uniqid()
-                );
+                ];
                 $url = $apiConfig->getHost() . '/me';
                 $isAuEndpoint = false;
 
@@ -158,7 +163,7 @@ class HealthCheck
 
                 // if API call is failed
                 if ($httpCode == 0) {
-                    $this->appendItem(self::STATUS_ERROR, 'API call to '.$url.' failed');
+                    $this->appendItem(self::STATUS_ERROR, 'API call to ' . $url . ' failed');
                 }
                 // if API credential is invalid
                 if ($httpCode == 401 || $httpCode == 403) {
@@ -191,13 +196,13 @@ class HealthCheck
         }
 
         usort(
-            $this->_result['items'], function ($a, $b) {
-            return $b['status'] - $a['status'];
-        }
+            $this->_result['items'],
+            function ($a, $b) {
+                return $b['status'] - $a['status'];
+            }
         );
 
         return $this->_result;
-
     }
 
     /**
@@ -209,11 +214,10 @@ class HealthCheck
             $this->_result['overall_status'] = $status;
         }
 
-        $this->_result['items'][] = array(
+        $this->_result['items'][] = [
             "status" => $status,
             "label" => $label
-        );
-
+        ];
     }
 
     protected function checkStoreSSLSettings()
@@ -229,9 +233,8 @@ class HealthCheck
                 }
 
                 $storeSecureUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, true);
-                $url = parse_url($storeSecureUrl);
-
-                if ($url['scheme'] !== 'https') {
+                $url = $this->_zendUri->parse($storeSecureUrl);
+                if ($url->getScheme() !== 'https') {
                     $message = self::SSL_DISABLED_MESSAGE;
                     $message = str_replace('{store_name}', $store->getName(), $message);
                     $message = str_replace('{store_url}', $storeSecureUrl, $message);
@@ -244,5 +247,4 @@ class HealthCheck
             }
         }
     }
-
 }

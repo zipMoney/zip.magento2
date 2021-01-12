@@ -4,10 +4,9 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
 namespace Zip\ZipPayment\MerchantApi\Lib;
 
 class ApiClient
@@ -111,9 +110,16 @@ class ApiClient
      * @return mixed
      * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on a non 2xx response
      */
-    public function callApi($resourcePath, $method, $queryParams, $postData, $headerParams, $responseType = null, $endpointPath = null)
-    {
-        $headers = array();
+    public function callApi(
+        $resourcePath,
+        $method,
+        $queryParams,
+        $postData,
+        $headerParams,
+        $responseType = null,
+        $endpointPath = null
+    ) {
+        $headers = [];
 
         // construct the http header
         $headerParams = array_merge(
@@ -126,10 +132,15 @@ class ApiClient
         }
 
         // form data
-        if ($postData and in_array('Content-Type: application/x-www-form-urlencoded', $headers, true)) {
+        if ($postData && in_array('Content-Type: application/x-www-form-urlencoded', $headers, true)) {
             $postData = http_build_query($postData);
-        } elseif ((is_object($postData) or is_array($postData)) and !in_array('Content-Type: multipart/form-data', $headers, true)) { // json model
-            $postData = json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($postData));
+        } elseif ((is_object($postData)
+            || is_array($postData))
+            && !in_array('Content-Type: multipart/form-data', $headers, true)) {
+            // json model
+            $postData = json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($postData)
+            );
         }
 
         $url = $this->config->getHost() . $resourcePath;
@@ -168,7 +179,11 @@ class ApiClient
         }
 
         if ($this->config->getCurlProxyUser()) {
-            curl_setopt($curl, CURLOPT_PROXYUSERPWD, $this->config->getCurlProxyUser() . ':' . $this->config->getCurlProxyPassword());
+            curl_setopt(
+                $curl,
+                CURLOPT_PROXYUSERPWD,
+                $this->config->getCurlProxyUser() . ':' . $this->config->getCurlProxyPassword()
+            );
         }
 
         if (!empty($queryParams)) {
@@ -228,7 +243,6 @@ class ApiClient
         ($response_info['http_code'] === 0 && empty($msg)) &&
         !empty($headerParams['Idempotency-Key']));
 
-
         // Handle the response
         if ($response_info['http_code'] === 0) {
             $curl_error_message = curl_error($curl);
@@ -247,7 +261,7 @@ class ApiClient
         } elseif ($response_info['http_code'] >= 200 && $response_info['http_code'] <= 299) {
             // return raw body if response is a file
             if ($responseType === '\SplFileObject' || $responseType === 'string') {
-                return array($http_body, $response_info['http_code'], $http_header);
+                return [$http_body, $response_info['http_code'], $http_header];
             }
 
             $data = json_decode($http_body);
@@ -268,7 +282,7 @@ class ApiClient
             );
         }
 
-        return array($data, $response_info['http_code'], $http_header);
+        return [$data, $response_info['http_code'], $http_header];
     }
 
     /**
@@ -281,29 +295,16 @@ class ApiClient
     protected function httpParseHeaders($raw_headers)
     {
         // ref/credit: http://php.net/manual/en/function.http-parse-headers.php#112986
-        $headers = array();
-        $key = '';
+        $headers = [];
 
-        foreach (explode("\n", $raw_headers) as $h) {
-            $h = explode(':', $h, 2);
+        $header_text = substr($raw_headers, 0, strpos($raw_headers, "\r\n\r\n"));
 
-            if (isset($h[1])) {
-                if (!isset($headers[$h[0]])) {
-                    $headers[$h[0]] = trim($h[1]);
-                } elseif (is_array($headers[$h[0]])) {
-                    $headers[$h[0]] = array_merge($headers[$h[0]], array(trim($h[1])));
-                } else {
-                    $headers[$h[0]] = array_merge(array($headers[$h[0]]), array(trim($h[1])));
-                }
-
-                $key = $h[0];
+        foreach (explode("\r\n", $header_text) as $i => $line) {
+            if ($i === 0) {
+                $headers['http_code'] = $line;
             } else {
-                if (substr($h[0], 0, 1) === "\t") {
-                    $headers[$key] .= "\r\n\t" . trim($h[0]);
-                } elseif (!$key) {
-                    $headers[0] = trim($h[0]);
-                }
-                trim($h[0]);
+                list ($key, $value) = explode(': ', $line);
+                $headers[$key] = $value;
             }
         }
 
@@ -319,7 +320,7 @@ class ApiClient
      */
     public function selectHeaderAccept($accept)
     {
-        if (count($accept) === 0 or (count($accept) === 1 and $accept[0] === '')) {
+        if (count($accept) === 0 || (count($accept) === 1 && $accept[0] === '')) {
             return null;
         } elseif (preg_grep("/application\/json/i", $accept)) {
             return 'application/json';
@@ -337,7 +338,7 @@ class ApiClient
      */
     public function selectHeaderContentType($content_type)
     {
-        if (count($content_type) === 0 or (count($content_type) === 1 and $content_type[0] === '')) {
+        if (count($content_type) === 0 || (count($content_type) === 1 && $content_type[0] === '')) {
             return 'application/json';
         } elseif (preg_grep("/application\/json/i", $content_type)) {
             return 'application/json';

@@ -4,10 +4,9 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
 
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
@@ -27,43 +26,47 @@ class OrderShippingTracking implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'uri' => 'string',
         'number' => 'string',
         'carrier' => 'string'
-    );
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'uri' => 'uri',
         'number' => 'number',
         'carrier' => 'carrier'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'uri' => 'setUri',
         'number' => 'setNumber',
         'carrier' => 'setCarrier'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'uri' => 'getUri',
         'number' => 'getNumber',
         'carrier' => 'getCarrier'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -103,18 +106,21 @@ class OrderShippingTracking implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if (!is_null($this->container['uri']) && (strlen($this->container['uri']) > 500)) {
-            $invalid_properties[] = "invalid value for 'uri', the character length must be smaller than or equal to 500.";
+            $invalid_properties[] = "invalid value for 'uri', "
+             . "the character length must be smaller than or equal to 500.";
         }
 
         if (!is_null($this->container['number']) && (strlen($this->container['number']) > 120)) {
-            $invalid_properties[] = "invalid value for 'number', the character length must be smaller than or equal to 120.";
+            $invalid_properties[] = "invalid value for 'number', "
+            . "the character length must be smaller than or equal to 120.";
         }
 
         if (!is_null($this->container['carrier']) && (strlen($this->container['carrier']) > 120)) {
-            $invalid_properties[] = "invalid value for 'carrier', the character length must be smaller than or equal to 120.";
+            $invalid_properties[] = "invalid value for 'carrier', "
+            . "the character length must be smaller than or equal to 120.";
         }
 
         return $invalid_properties;
@@ -128,7 +134,6 @@ class OrderShippingTracking implements ArrayAccess
      */
     public function valid()
     {
-
         if (strlen($this->container['uri']) > 500) {
             return false;
         }
@@ -140,7 +145,6 @@ class OrderShippingTracking implements ArrayAccess
         }
         return true;
     }
-
 
     /**
      * Gets uri
@@ -159,7 +163,8 @@ class OrderShippingTracking implements ArrayAccess
     public function setUri($uri)
     {
         if (!is_null($uri) && (strlen($uri) > 500)) {
-            throw new \InvalidArgumentException('invalid length for $uri when calling OrderShippingTracking., must be smaller than or equal to 500.');
+            throw new \InvalidArgumentException('Invalid length for $uri when calling OrderShippingTracking, '
+            . 'must be smaller than or equal to 500.');
         }
 
         $this->container['uri'] = $uri;
@@ -184,7 +189,8 @@ class OrderShippingTracking implements ArrayAccess
     public function setNumber($number)
     {
         if (!is_null($number) && (strlen($number) > 120)) {
-            throw new \InvalidArgumentException('invalid length for $number when calling OrderShippingTracking., must be smaller than or equal to 120.');
+            throw new \InvalidArgumentException('Invalid length for $number when calling OrderShippingTracking, '
+            . 'must be smaller than or equal to 120.');
         }
 
         $this->container['number'] = $number;
@@ -209,7 +215,8 @@ class OrderShippingTracking implements ArrayAccess
     public function setCarrier($carrier)
     {
         if (!is_null($carrier) && (strlen($carrier) > 120)) {
-            throw new \InvalidArgumentException('invalid length for $carrier when calling OrderShippingTracking., must be smaller than or equal to 120.');
+            throw new \InvalidArgumentException('Invalid length for $carrier when calling OrderShippingTracking, '
+            . 'must be smaller than or equal to 120.');
         }
 
         $this->container['carrier'] = $carrier;
@@ -269,7 +276,10 @@ class OrderShippingTracking implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

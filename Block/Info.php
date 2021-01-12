@@ -1,16 +1,13 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
 namespace Zip\ZipPayment\Block;
 
 use Magento\Framework\Phrase;
 use Magento\Payment\Block\ConfigurableInfo;
 
 /**
- * Class Info
+ * @author    Zip Plugin Team <integration@zip.co>
+ * @copyright 2020 Zip Co Limited
+ * @link      https://zip.co
  */
 class Info extends ConfigurableInfo
 {
@@ -28,5 +25,4 @@ class Info extends ConfigurableInfo
 
         return __($field);
     }
-
 }

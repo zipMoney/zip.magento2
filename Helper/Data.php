@@ -5,18 +5,14 @@ namespace Zip\ZipPayment\Helper;
 use \Magento\Framework\App\Helper\AbstractHelper;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 class Data extends AbstractHelper
 {
-
     /**
-     * @var \Magento\Sales\Model\OrderFactory
+     * @var \Zip\ZipPayment\Model\Config
      */
     private $_config = null;
     /**
@@ -48,9 +44,8 @@ class Data extends AbstractHelper
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
-        \Zip\ZipPayment\Model\Config\Proxy $config,
-        \Zip\ZipPayment\Helper\Logger $logger)
-    {
+        \Zip\ZipPayment\Model\Config $config
+    ) {
         $this->_orderFactory = $orderFactory;
         $this->_orderRepository = $orderRepository;
         $this->_productMetadata = $productMetadata;
@@ -64,7 +59,7 @@ class Data extends AbstractHelper
      *
      * @return string
      */
-    public function json_encode($object)
+    public function jsonEncode($object)
     {
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($object));
     }
@@ -113,7 +108,7 @@ class Data extends AbstractHelper
 
             $this->_logger->debug($logMessage);
 
-            return array($apiError, $message, $logMessage);
+            return [$apiError, $message, $logMessage];
         }
         return null;
     }
@@ -134,14 +129,14 @@ class Data extends AbstractHelper
     /**
      * Cancels the order
      *
-     * @param Mage_Sales_Model_Order $order
+     * @param \Magento\Sales\Model\Order $order
      * @param string $customer_email
      */
     public function cancelOrder($order, $order_comment = null)
     {
         if ($order) {
             if ($order_comment) {
-                $order->addStatusHistoryComment($order_comment);
+                $order->addCommentToStatusHistory($order_comment);
                 $this->_orderRepository->save($order);
             }
 
@@ -197,12 +192,13 @@ class Data extends AbstractHelper
                 if ($orderIncId) {
                     $order = $this->_orderFactory->create()->loadByIncrementId($orderIncId);
                     if ($order && $order->getId()) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('Can not activate the quote. It has already been converted to order.'));
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('Can not activate the quote. It has already been converted to order.')
+                        );
                     }
                 }
-                $quote->setIsActive(1)
-                    ->save();
-                $this->_logger->warn(__('Activated quote ' . $quote->getId() . '.'));
+                $quote->setIsActive(1)->save();
+                $this->_logger->warning(__('Activated quote ' . $quote->getId() . '.'));
                 return true;
             }
         }
@@ -220,11 +216,10 @@ class Data extends AbstractHelper
         if ($quote && $quote->getId()) {
             if ($quote->getIsActive()) {
                 $quote->setIsActive(0)->save();
-                $this->_logger->warn(__('Deactivated quote ' . $quote->getId() . '.'));
+                $this->_logger->warning(__('Deactivated quote ' . $quote->getId() . '.'));
                 return true;
             }
         }
         return false;
     }
-
 }

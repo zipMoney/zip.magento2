@@ -1,5 +1,4 @@
 <?php
-
 namespace Zip\ZipPayment\Block\Advert;
 
 use Magento\Catalog\Block as CatalogBlock;
@@ -22,7 +21,6 @@ class Widget extends AbstractAdvert implements CatalogBlock\ShortcutInterface
         }
 
         return $this->getCurrencyFormat($price);
-
     }
 
     /**
@@ -43,7 +41,8 @@ class Widget extends AbstractAdvert implements CatalogBlock\ShortcutInterface
     protected function _toHtml()
     {
 
-        if ($this->_configShow(self::ADVERT_TYPE, $this->getPageType()) && !$this->_isSelectorExist(self::ADVERT_TYPE, $this->getPageType())) {
+        if ($this->_configShow(self::ADVERT_TYPE, $this->getPageType())
+            && !$this->_isSelectorExist(self::ADVERT_TYPE, $this->getPageType())) {
             return parent::_toHtml();
         }
 

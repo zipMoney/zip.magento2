@@ -7,8 +7,6 @@
  * @author    Zip Plugin Team <integration@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
-
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
@@ -31,7 +29,7 @@ class Charge implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'id' => 'string',
         'reference' => 'string',
         'amount' => 'float',
@@ -40,15 +38,15 @@ class Charge implements ArrayAccess
         'captured_amount' => 'float',
         'refunded_amount' => 'float',
         'created_date' => '\DateTime',
-        'order' => '\Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder',
+        'order' => \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder::class,
         'metadata' => 'object',
         'receipt_number' => 'string'
-    );
+    ];
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'id' => 'id',
         'reference' => 'reference',
         'amount' => 'amount',
@@ -60,12 +58,13 @@ class Charge implements ArrayAccess
         'order' => 'order',
         'metadata' => 'metadata',
         'receipt_number' => 'receipt_number'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'id' => 'setId',
         'reference' => 'setReference',
         'amount' => 'setAmount',
@@ -77,12 +76,13 @@ class Charge implements ArrayAccess
         'order' => 'setOrder',
         'metadata' => 'setMetadata',
         'receipt_number' => 'setReceiptNumber'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'id' => 'getId',
         'reference' => 'getReference',
         'amount' => 'getAmount',
@@ -94,12 +94,12 @@ class Charge implements ArrayAccess
         'order' => 'getOrder',
         'metadata' => 'getMetadata',
         'receipt_number' => 'getReceiptNumber'
-    );
+    ];
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -146,14 +146,14 @@ class Charge implements ArrayAccess
      */
     public function getStateAllowableValues()
     {
-        return array(
+        return [
             self::STATE_AUTHORISED,
             self::STATE_CAPTURED,
             self::STATE_CANCELLED,
             self::STATE_DECLINED,
             self::STATE_REFUNDED,
             self::STATE_APPROVED,
-        );
+        ];
     }
 
     /**
@@ -163,7 +163,7 @@ class Charge implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if ($this->container['id'] === null) {
             $invalid_properties[] = "'id' can't be null";
@@ -177,9 +177,10 @@ class Charge implements ArrayAccess
         if ($this->container['state'] === null) {
             $invalid_properties[] = "'state' can't be null";
         }
-        $allowed_values = array("authorised", "captured", "cancelled", "refunded", "declined", "approved");
+        $allowed_values = ["authorised", "captured", "cancelled", "refunded", "declined", "approved"];
         if (!in_array($this->container['state'], $allowed_values)) {
-            $invalid_properties[] = "invalid value for 'state', must be one of 'authorised', 'captured', 'cancelled', 'refunded', 'declined', 'approved'.";
+            $invalid_properties[] = "invalid value for 'state', "
+            . "must be one of 'authorised', 'captured', 'cancelled', 'refunded', 'declined', 'approved'.";
         }
 
         if ($this->container['captured_amount'] === null) {
@@ -226,7 +227,7 @@ class Charge implements ArrayAccess
         if ($this->container['state'] === null) {
             return false;
         }
-        $allowed_values = array("authorised", "captured", "cancelled", "refunded", "declined", "approved");
+        $allowed_values = ["authorised", "captured", "cancelled", "refunded", "declined", "approved"];
         if (!in_array($this->container['state'], $allowed_values)) {
             return false;
         }
@@ -250,7 +251,6 @@ class Charge implements ArrayAccess
         }
         return true;
     }
-
 
     /**
      * Gets id
@@ -352,9 +352,10 @@ class Charge implements ArrayAccess
      */
     public function setState($state)
     {
-        $allowed_values = array('authorised', 'captured', 'cancelled', 'refunded', 'declined', "approved");
+        $allowed_values = ['authorised', 'captured', 'cancelled', 'refunded', 'declined', "approved"];
         if ((!in_array($state, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'state', must be one of 'authorised', 'captured', 'cancelled', 'refunded', 'declined', 'approved'");
+            throw new \InvalidArgumentException("Invalid value for 'state', "
+            . "must be one of 'authorised', 'captured', 'cancelled', 'refunded', 'declined', 'approved'");
         }
         $this->container['state'] = $state;
 
@@ -377,9 +378,9 @@ class Charge implements ArrayAccess
      */
     public function setCapturedAmount($captured_amount)
     {
-
         if (($captured_amount < 0)) {
-            throw new \InvalidArgumentException('invalid value for $captured_amount when calling Charge., must be bigger than or equal to 0.');
+            throw new \InvalidArgumentException('Invalid value for $captured_amount when calling Charge, '
+            . 'must be bigger than or equal to 0.');
         }
 
         $this->container['captured_amount'] = $captured_amount;
@@ -405,7 +406,8 @@ class Charge implements ArrayAccess
     {
 
         if (($refunded_amount < 0)) {
-            throw new \InvalidArgumentException('invalid value for $refunded_amount when calling Charge., must be bigger than or equal to 0.');
+            throw new \InvalidArgumentException('Invalid value for $refunded_amount when calling Charge, '
+            . 'must be bigger than or equal to 0.');
         }
 
         $this->container['refunded_amount'] = $refunded_amount;
@@ -549,7 +551,10 @@ class Charge implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

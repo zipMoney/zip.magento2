@@ -3,7 +3,6 @@
 namespace Zip\ZipPayment\Model;
 
 use \Magento\Checkout\Model\Type\Onepage;
-use \Zip\ZipPayment\Model\Config;
 use \Zip\ZipPayment\Model\Checkout\AbstractCheckout;
 
 class Checkout extends AbstractCheckout
@@ -39,8 +38,7 @@ class Checkout extends AbstractCheckout
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi $checkoutsApi,
         array $data = []
-    )
-    {
+    ) {
         $this->_checkoutHelper = $checkoutHelper;
         $this->_api = $checkoutsApi;
 
@@ -52,9 +50,17 @@ class Checkout extends AbstractCheckout
             }
         }
 
-        parent::__construct($customerSession, $checkoutSession, $customerFactory, $quoteRepository, $payloadHelper, $logger, $helper, $config);
+        parent::__construct(
+            $customerSession,
+            $checkoutSession,
+            $customerFactory,
+            $quoteRepository,
+            $payloadHelper,
+            $logger,
+            $helper,
+            $config
+        );
     }
-
 
     /**
      * Create quote in Zip side if not existed, and request for redirect url
@@ -75,7 +81,10 @@ class Checkout extends AbstractCheckout
         }
 
         $checkoutMethod = $this->getCheckoutMethod();
-        $isAllowedGuestCheckout = $this->_checkoutHelper->isAllowedGuestCheckout($this->_quote, $this->_quote->getStoreId());
+        $isAllowedGuestCheckout = $this->_checkoutHelper->isAllowedGuestCheckout(
+            $this->_quote,
+            $this->_quote->getStoreId()
+        );
         $isCustomerLoggedIn = $this->_getCustomerSession()->isLoggedIn();
 
         $this->_logger->debug("Checkout Method:- " . $checkoutMethod);
@@ -92,14 +101,18 @@ class Checkout extends AbstractCheckout
         $this->_quote->collectTotals();
 
         if (!$this->_quote->getGrandTotal() && !$this->_quote->hasNominalItems()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Cannot process the order due to zero amount.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Cannot process the order due to zero amount.')
+            );
         }
 
         $this->_quote->reserveOrderId();
-        /*
-          Commenting out the  following line.
-          Apparantly triggering more than one quote save results in "We don't have as many "Produt Name" as you requested." error when the product has 1 item left.
-        */
+        /**
+         * Commenting out the  following line.
+         * Apparantly triggering more than one quote save results in
+         * "We don't have as many "Produt Name" as you requested."
+         * error when the product has 1 item left.
+         */
         //$this->_quoteRepository->save($this->_quote);
 
         $request = $this->_payloadHelper->getCheckoutPayload($this->_quote);
@@ -127,7 +140,11 @@ class Checkout extends AbstractCheckout
             $this->_logger->debug("Errors:- " . json_encode($e->getResponseBody()));
             $this->_logger->debug("Errors:- " . json_encode($e->getCode()));
             $this->_logger->debug("Errors:- " . json_encode($e->getResponseObject()));
-            throw new \Magento\Framework\Exception\LocalizedException(__('An error occurred while to requesting the redirect url.'), $e, $e->getCode());
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('An error occurred while to requesting the redirect url.'),
+                $e,
+                $e->getCode()
+            );
         }
 
         return $checkout;

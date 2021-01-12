@@ -2,18 +2,15 @@
 
 namespace Zip\ZipPayment\Block\Advert;
 
-use Magento\Catalog\Block as CatalogBlock;
-use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
-use \Zip\ZipPayment\Model\Config;
+use Zip\ZipPayment\Model\Config;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
+ * @category  Zip
+ * @package   ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
 {
@@ -40,7 +37,7 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
     protected $_checkoutSession;
 
     /**
-     *
+     * @var PriceCurrencyInterface
      */
     protected $_priceCurrency;
 
@@ -49,17 +46,21 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
      */
     protected $_alias = '';
 
-    protected $_supportedWidgetTypes = array('widget', 'banner', 'tagline');
+    /**
+     * @var array
+     */
+    protected $_supportedWidgetTypes = ['widget', 'banner', 'tagline'];
 
     /**
      * @var array
      */
-    protected $_configConstants = ['widget' => [
-        'product' => Config::ADVERTS_PRODUCT_IMAGE_ACTIVE,
-        'product_selector' => Config::ADVERTS_PRODUCT_IMAGE_SELECTOR,
-        'cart' => Config::ADVERTS_CART_IMAGE_ACTIVE,
-        'cart_selector' => Config::ADVERTS_CART_IMAGE_SELECTOR
-    ],
+    protected $_configConstants = [
+        'widget' => [
+            'product' => Config::ADVERTS_PRODUCT_IMAGE_ACTIVE,
+            'product_selector' => Config::ADVERTS_PRODUCT_IMAGE_SELECTOR,
+            'cart' => Config::ADVERTS_CART_IMAGE_ACTIVE,
+            'cart_selector' => Config::ADVERTS_CART_IMAGE_SELECTOR
+        ],
         'tagline' => [
             'product' => Config::ADVERTS_PRODUCT_TAGLINE_ACTIVE,
             'product_selector' => Config::ADVERTS_PRODUCT_TAGLINE_SELECTOR,
@@ -86,8 +87,7 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
         \Magento\Checkout\Model\Session $checkoutSession,
         PriceCurrencyInterface $priceCurrency,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
 
         $this->_config = $config;
@@ -95,7 +95,6 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
         $this->_logger = $logger;
         $this->_checkoutSession = $checkoutSession;
         $this->_priceCurrency = $priceCurrency;
-
     }
 
     public function getProductPrice()
@@ -118,7 +117,7 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
     public function getCurrencyFormat($price)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $currency = $objectManager->get('Magento\Directory\Model\Currency');
+        $currency = $objectManager->get(\Magento\Directory\Model\Currency::class);
         return $currency->format($price, ['display' => \Zend_Currency::NO_SYMBOL], false);
     }
 
@@ -134,7 +133,6 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
      */
     protected function _configShow($widget, $page)
     {
-
         $configPath = $this->_getConfigPath($widget, $page);
         return $this->_config->getConfigData($configPath);
     }
@@ -146,7 +144,7 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
      */
     protected function _isSelectorExist($widget, $page)
     {
-        $selectorConfigPath =$this->_getConfigPath($widget,$page.'_selector');
+        $selectorConfigPath = $this->_getConfigPath($widget, $page . '_selector');
         return empty($this->_config->getValue($selectorConfigPath)) ? false : true ;
     }
 
@@ -157,10 +155,11 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
      */
     protected function _getConfigPath($widget, $page)
     {
-        if ($widget && $page)
+        if ($widget && $page) {
             return isset($this->_configConstants[$widget][$page]) ? $this->_configConstants[$widget][$page] : null;
-        else
+        } else {
             return null;
+        }
     }
 
     /**
@@ -168,14 +167,14 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
      */
     public function getElementSelectors()
     {
-        $selectors = array();
+        $selectors = [];
 
         foreach ($this->_supportedWidgetTypes as $widgetType) {
             $pageType = $this->getPageType();
             $enabled = $this->_configShow($widgetType, $pageType);
 
             if ($enabled !== null && $enabled) {
-                $configPath =$this->_getConfigPath($widgetType,$pageType.'_selector') ;
+                $configPath = $this->_getConfigPath($widgetType, $pageType . '_selector') ;
                 $widgetType = $widgetType == 'widget' ? $pageType . '_' . $widgetType : $widgetType;
                 $selectors[$widgetType] = $this->_config->getValue($configPath);
             }

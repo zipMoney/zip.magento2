@@ -7,8 +7,6 @@
  * @author    Zip Plugin Team <integration@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
-
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
@@ -27,7 +25,7 @@ class Address implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'line1' => 'string',
         'line2' => 'string',
         'city' => 'string',
@@ -36,12 +34,13 @@ class Address implements ArrayAccess
         'country' => 'string',
         'first_name' => 'string',
         'last_name' => 'string'
-    );
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'line1' => 'line1',
         'line2' => 'line2',
         'city' => 'city',
@@ -50,12 +49,13 @@ class Address implements ArrayAccess
         'country' => 'country',
         'first_name' => 'first_name',
         'last_name' => 'last_name'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'line1' => 'setLine1',
         'line2' => 'setLine2',
         'city' => 'setCity',
@@ -64,12 +64,13 @@ class Address implements ArrayAccess
         'country' => 'setCountry',
         'first_name' => 'setFirstName',
         'last_name' => 'setLastName'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'line1' => 'getLine1',
         'line2' => 'getLine2',
         'city' => 'getCity',
@@ -78,12 +79,12 @@ class Address implements ArrayAccess
         'country' => 'getCountry',
         'first_name' => 'getFirstName',
         'last_name' => 'getLastName'
-    );
+    ];
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -128,53 +129,64 @@ class Address implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if ($this->container['line1'] === null) {
             $invalid_properties[] = "'line1' can't be null";
         }
         if ((strlen($this->container['line1']) > 200)) {
-            $invalid_properties[] = "invalid value for 'line1', the character length must be smaller than or equal to 200.";
+            $invalid_properties[] = "invalid value for 'line1', "
+            . "the character length must be smaller than or equal to 200.";
         }
 
         if (!is_null($this->container['line2']) && (strlen($this->container['line2']) > 200)) {
-            $invalid_properties[] = "invalid value for 'line2', the character length must be smaller than or equal to 200.";
+            $invalid_properties[] = "invalid value for 'line2', "
+            . "the character length must be smaller than or equal to 200.";
         }
 
         if ($this->container['city'] === null) {
             $invalid_properties[] = "'city' can't be null";
         }
+
         if ((strlen($this->container['city']) > 50)) {
-            $invalid_properties[] = "invalid value for 'city', the character length must be smaller than or equal to 50.";
+            $invalid_properties[] = "invalid value for 'city', "
+            . "the character length must be smaller than or equal to 50.";
         }
 
         if ($this->container['state'] === null) {
             $invalid_properties[] = "'state' can't be null";
         }
         if ((strlen($this->container['state']) > 50)) {
-            $invalid_properties[] = "invalid value for 'state', the character length must be smaller than or equal to 50.";
+            $invalid_properties[] = "invalid value for 'state', "
+            . "the character length must be smaller than or equal to 50.";
         }
 
         if ($this->container['postal_code'] === null) {
             $invalid_properties[] = "'postal_code' can't be null";
         }
+
         if ((strlen($this->container['postal_code']) > 15)) {
-            $invalid_properties[] = "invalid value for 'postal_code', the character length must be smaller than or equal to 15.";
+            $invalid_properties[] = "invalid value for 'postal_code', "
+            . "the character length must be smaller than or equal to 15.";
         }
 
         if ($this->container['country'] === null) {
             $invalid_properties[] = "'country' can't be null";
         }
+
         if ((strlen($this->container['country']) > 2)) {
-            $invalid_properties[] = "invalid value for 'country', the character length must be smaller than or equal to 2.";
+            $invalid_properties[] = "invalid value for 'country', "
+            . "the character length must be smaller than or equal to 2.";
         }
 
         if ((strlen($this->container['country']) < 2)) {
-            $invalid_properties[] = "invalid value for 'country', the character length must be bigger than or equal to 2.";
+            $invalid_properties[] = "invalid value for 'country', "
+            . "the character length must be bigger than or equal to 2.";
         }
 
         if (!is_null($this->container['first_name']) && (strlen($this->container['first_name']) > 200)) {
-            $invalid_properties[] = "invalid value for 'first_name', the character length must be smaller than or equal to 200.";
+            $invalid_properties[] = "invalid value for 'first_name', "
+            . "the character length must be smaller than or equal to 200.";
         }
 
         return $invalid_properties;
@@ -188,7 +200,6 @@ class Address implements ArrayAccess
      */
     public function valid()
     {
-
         if ($this->container['line1'] === null) {
             return false;
         }
@@ -231,7 +242,6 @@ class Address implements ArrayAccess
         return true;
     }
 
-
     /**
      * Gets line1
      * @return string
@@ -249,7 +259,10 @@ class Address implements ArrayAccess
     public function setLine1($line1)
     {
         if ((strlen($line1) > 200)) {
-            throw new \InvalidArgumentException('invalid length for $line1 when calling Address., must be smaller than or equal to 200.');
+            throw new \InvalidArgumentException(
+                'Invalid length for $line1 when calling Address, '
+                . 'must be smaller than or equal to 200.'
+            );
         }
 
         $this->container['line1'] = $line1;
@@ -274,7 +287,8 @@ class Address implements ArrayAccess
     public function setLine2($line2)
     {
         if (!is_null($line2) && (strlen($line2) > 200)) {
-            throw new \InvalidArgumentException('invalid length for $line2 when calling Address., must be smaller than or equal to 200.');
+            throw new \InvalidArgumentException('Invalid length for $line2 when calling Address, '
+            . 'must be smaller than or equal to 200.');
         }
 
         $this->container['line2'] = $line2;
@@ -299,7 +313,8 @@ class Address implements ArrayAccess
     public function setCity($city)
     {
         if ((strlen($city) > 50)) {
-            throw new \InvalidArgumentException('invalid length for $city when calling Address., must be smaller than or equal to 50.');
+            throw new \InvalidArgumentException('Invalid length for $city when calling Address, '
+            . 'must be smaller than or equal to 50.');
         }
 
         $this->container['city'] = $city;
@@ -324,7 +339,8 @@ class Address implements ArrayAccess
     public function setState($state)
     {
         if ((strlen($state) > 50)) {
-            throw new \InvalidArgumentException('invalid length for $state when calling Address., must be smaller than or equal to 50.');
+            throw new \InvalidArgumentException('Invalid length for $state when calling Address, '
+            . 'must be smaller than or equal to 50.');
         }
 
         $this->container['state'] = $state;
@@ -349,7 +365,8 @@ class Address implements ArrayAccess
     public function setPostalCode($postal_code)
     {
         if ((strlen($postal_code) > 15)) {
-            throw new \InvalidArgumentException('invalid length for $postal_code when calling Address., must be smaller than or equal to 15.');
+            throw new \InvalidArgumentException('Invalid length for $postal_code when calling Address, '
+            . 'must be smaller than or equal to 15.');
         }
 
         $this->container['postal_code'] = $postal_code;
@@ -374,10 +391,12 @@ class Address implements ArrayAccess
     public function setCountry($country)
     {
         if ((strlen($country) > 2)) {
-            throw new \InvalidArgumentException('invalid length for $country when calling Address., must be smaller than or equal to 2.');
+            throw new \InvalidArgumentException('Invalid length for $country when calling Address, '
+            . 'must be smaller than or equal to 2.');
         }
         if ((strlen($country) < 2)) {
-            throw new \InvalidArgumentException('invalid length for $country when calling Address., must be bigger than or equal to 2.');
+            throw new \InvalidArgumentException('Invalid length for $country when calling Address, '
+            . 'must be bigger than or equal to 2.');
         }
 
         $this->container['country'] = $country;
@@ -402,7 +421,8 @@ class Address implements ArrayAccess
     public function setFirstName($first_name)
     {
         if (!is_null($first_name) && (strlen($first_name) > 200)) {
-            throw new \InvalidArgumentException('invalid length for $first_name when calling Address., must be smaller than or equal to 200.');
+            throw new \InvalidArgumentException('Invalid length for $first_name when calling Address, '
+            . 'must be smaller than or equal to 200.');
         }
 
         $this->container['first_name'] = $first_name;
@@ -483,7 +503,10 @@ class Address implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

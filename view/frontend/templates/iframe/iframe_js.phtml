@@ -1,0 +1,31 @@
+<?php
+/** @var Template $block */
+$checkoutId = $block->getData('checkoutId');
+$state = $block->getData('state');
+$redirectUrl = $block->getData('redirectUrl');
+?>
+<p>Redirecting please wait...</p>
+<script type="text/javascript">
+if (window.self !== window.top) { // detect if current windw is an iFrame
+    // setting parent redirect info
+    window.parent.postMessage({
+        msg: {
+            eventType: 'complete',
+            data: {
+                state: "<?= $block->escapeHtml($state); ?>", // get from URL parameter
+                checkoutId: "<?= $block->escapeHtml($checkoutId); ?>" // get from URL parameter
+            }
+        },
+        zipmoney: true
+    }, '*');
+    // close iframe
+    window.parent.postMessage({
+        msg: {
+            eventType: 'close'
+        },
+        zipmoney: true
+    }, '*');
+} else {
+    window.location.href = '<?= /* @noEscape */ ($redirectUrl) ?>';
+}
+</script>

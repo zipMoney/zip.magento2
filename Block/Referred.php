@@ -5,12 +5,9 @@ namespace Zip\ZipPayment\Block;
 use Magento\Framework\View\Element\Template;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 class Referred extends Template
 {
@@ -30,8 +27,8 @@ class Referred extends Template
         Template\Context $context,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Zip\ZipPayment\Model\Config $config,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         $this->_messageManager = $messageManager;
         $this->_config = $config;
         parent::__construct($context, $data);
@@ -46,7 +43,10 @@ class Referred extends Template
     {
         $text = $this->_config->getStoreConfig(self::REFERRED_BODY);
         if (!$text) {
-            $text = __('Your application is currently under review by zipMoney and will be processed very shortly. You can contact the customer care at customercare@zipmoney.com.au for any enquiries');
+            $text = __(
+                'Your application is currently under review by zipMoney and will be processed very shortly. '
+                . 'You can contact the customer care at customercare@zipmoney.com.au for any enquiries'
+            );
         }
         return $text;
     }
@@ -68,5 +68,4 @@ class Referred extends Template
 
         return parent::_prepareLayout();
     }
-
 }

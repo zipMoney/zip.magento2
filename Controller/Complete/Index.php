@@ -2,26 +2,25 @@
 
 namespace Zip\ZipPayment\Controller\Complete;
 
-use Magento\Checkout\Model\Type\Onepage;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Result\Page;
 use Zip\ZipPayment\Controller\Standard\AbstractStandard;
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 class Index extends AbstractStandard
 {
-
     /**
      * Valid Application Results
      *
      * @var array
      */
-    protected $_validResults = array('approved', 'declined', 'cancelled', 'referred');
+    protected $_validResults = ['approved', 'declined', 'cancelled', 'referred'];
 
     /**
      * Return from zipMoney and handle the result of the application
@@ -31,20 +30,44 @@ class Index extends AbstractStandard
     public function execute()
     {
         $this->_logger->debug(__("On Complete Controller"));
-
         try {
+            $this->_logger->debug($this->getRequest()->getRequestUri());
+            $checkoutId = $this->getRequest()->getParam('checkoutId');
+            $result = $this->getRequest()->getParam('result');
+            $iframe = $this->getRequest()->getParam('iframe', null);
+
+            $this->_logger->debug(__("Result:- %s", $result));
             // Is result valid ?
             if (!$this->_isResultValid()) {
                 $this->_redirectToCartOrError();
                 return;
             }
-            $result = $this->getRequest()->getParam('result');
 
-            $this->_logger->debug(__("Result:- %s", $result));
-            // Is checkout id valid?
-            if (!$this->getRequest()->getParam('checkoutId')) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The checkoutId doesnot exist in the querystring.'));
+            if (!$checkoutId) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The checkoutId doesnot exist in the querystring.')
+                );
             }
+
+            // as AU stack already handle iframe in redirect
+            if ($iframe && $this->_getCurrencyCode() !== CommonUtil::CURRENCY_AUD) {
+                /** @var Page $page */
+                $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+                /** @var Template $block */
+                $layout = $page->getLayout();
+                $block = $layout->createBlock(\Magento\Framework\View\Element\Template::class)
+                    ->setTemplate('Zip_ZipPayment::iframe/iframe_js.phtml');
+                $block->setData('checkoutId', $checkoutId);
+                $block->setData('state', $result);
+                $url = $this->_urlBuilder->getUrl('zippayment/complete')
+                    . '?checkoutId=' . $checkoutId
+                    . '&result=' . $result;
+                $block->setData('redirectUrl', $url);
+                /** @var \Magento\Framework\App\Response $response */
+                $response = $this->getResponse();
+                return $response->setBody($block->toHtml());
+            }
+
             // Set the customer quote
             $this->_setCustomerQuote();
             // Initialise the charge
@@ -60,15 +83,12 @@ class Index extends AbstractStandard
             return;
         }
 
-        $order_status_history_comment = '';
-
         /* Handle the application result */
         switch ($result) {
 
             case 'approved':
                 /**
-                 * - Create order
-                 * - Charge the customer using the checkout id
+                 * Create order Charge the customer using the checkout id
                  */
                 try {
                     // Create the Order
@@ -76,10 +96,12 @@ class Index extends AbstractStandard
 
                     $this->_charge->charge();
 
-                    //update order status when successfully paid fix bug all order is pending deal to order and payment are async
+                    // update order status when successfully paid fix bug
+                    // all order is pending deal to order and payment are async
                     $orderState = \Magento\Sales\Model\Order::STATE_PROCESSING;
                     $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
-                    $this->_logger->debug("Order captured setting order state: " . $orderState . " status: " . $orderStatus);
+                    $this->_logger->debug("Order captured setting order state: "
+                        . $orderState . " status: " . $orderStatus);
                     $order->setState($orderState)->setStatus($orderStatus);
                     $order->save();
 
@@ -111,5 +133,4 @@ class Index extends AbstractStandard
                 break;
         }
     }
-
 }

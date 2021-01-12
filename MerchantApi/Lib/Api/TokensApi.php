@@ -4,7 +4,7 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
 
@@ -83,7 +83,8 @@ class TokensApi
      *
      * @param \Zip\ZipPayment\MerchantApi\Lib\Model\CreateTokenRequest $body (optional)
      * @param string $idempotency_key The unique idempotency key. (optional)
-     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Token, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Zip\ZipPayment\MerchantApi\Lib\Model\Token,
+     * HTTP status code, HTTP response headers (array of strings)
      * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException on non-2xx response
      */
     public function tokensCreateWithHttpInfo($body = null, $idempotency_key = null)
@@ -91,14 +92,14 @@ class TokensApi
         // parse inputs
         $resourcePath = "/tokens";
         $httpBody = '';
-        $queryParams = array();
-        $headerParams = array();
-        $formParams = array();
-        $_header_accept = $this->apiClient->selectHeaderAccept(array('application/javascript'));
+        $queryParams = [];
+        $headerParams = [];
+        $formParams = [];
+        $_header_accept = $this->apiClient->selectHeaderAccept(['application/javascript']);
         if (!is_null($_header_accept)) {
             $headerParams['Accept'] = $_header_accept;
         }
-        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array('application/json'));
+        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(['application/json']);
 
         // header params
         if ($idempotency_key !== null) {
@@ -132,31 +133,59 @@ class TokensApi
                 $queryParams,
                 $httpBody,
                 $headerParams,
-                '\Zip\ZipPayment\MerchantApi\Lib\Model\Token',
+                \Zip\ZipPayment\MerchantApi\Lib\Model\Token::class,
                 '/tokens'
             );
 
-            return array($this->apiClient->getSerializer()->deserialize($response, '\Zip\ZipPayment\MerchantApi\Lib\Model\Token', $httpHeader), $statusCode, $httpHeader);
+            return [
+                $this->apiClient->getSerializer()->deserialize(
+                    $response,
+                    \Zip\ZipPayment\MerchantApi\Lib\Model\Token::class,
+                    $httpHeader
+                ),
+                $statusCode,
+                $httpHeader
+            ];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 201:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\Token', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\Token::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 401:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 402:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 403:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
                 case 409:
-                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse', $e->getResponseHeaders());
+                    $data = $this->apiClient->getSerializer()->deserialize(
+                        $e->getResponseBody(),
+                        \Zip\ZipPayment\MerchantApi\Lib\Model\ErrorResponse::class,
+                        $e->getResponseHeaders()
+                    );
                     $e->setResponseObject($data);
                     break;
             }

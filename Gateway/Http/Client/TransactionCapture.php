@@ -3,20 +3,11 @@
 namespace Zip\ZipPayment\Gateway\Http\Client;
 
 use Magento\Payment\Gateway\Http\ClientInterface;
-use Magento\Payment\Gateway\Http\ClientException;
-
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
- */
-
-/**
- * Class TransactionCapture
+ * @link      https://www.zip.co
  */
 class TransactionCapture extends AbstractTransaction implements ClientInterface
 {
@@ -31,9 +22,7 @@ class TransactionCapture extends AbstractTransaction implements ClientInterface
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi $chargesApi,
         array $data = []
-    )
-    {
-
+    ) {
         parent::__construct($context, $encryptor, $payloadHelper, $logger, $helper, $config);
 
         $this->_service = $chargesApi;
@@ -53,9 +42,13 @@ class TransactionCapture extends AbstractTransaction implements ClientInterface
 
         try {
 
-            $charge = $this->_service->chargesCapture($zip_charge_id, $payload, $this->_helper->generateIdempotencyKey());
+            $charge = $this->_service->chargesCapture(
+                $zip_charge_id,
+                $payload,
+                $this->_helper->generateIdempotencyKey()
+            );
             $response = ["api_response" => $charge];
-            $this->_logger->debug("Capture Charge Response:- " . $this->_helper->json_encode($charge));
+            $this->_logger->debug("Capture Charge Response:- " . $this->_helper->jsonEncode($charge));
 
         } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
 
@@ -68,5 +61,4 @@ class TransactionCapture extends AbstractTransaction implements ClientInterface
 
         return $response;
     }
-
 }

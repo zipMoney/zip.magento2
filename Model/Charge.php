@@ -2,15 +2,12 @@
 
 namespace Zip\ZipPayment\Model;
 
-use \Magento\Checkout\Model\Type\Onepage;
-use \Magento\Customer\Api\Data\GroupInterface;
-use \Magento\Sales\Model\Order;
-use \Zip\ZipPayment\Model\Config;
-use \Zip\ZipPayment\Model\Checkout\AbstractCheckout;
+use Magento\Checkout\Model\Type\Onepage;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Sales\Model\Order;
+use Zip\ZipPayment\Model\Checkout\AbstractCheckout;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -94,8 +91,7 @@ class Charge extends AbstractCheckout
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi $chargesApi,
         array $data = []
-    )
-    {
+    ) {
         $this->_quoteManagement = $cartManagement;
         $this->_accountManagement = $accountManagement;
         $this->_messageManager = $messageManager;
@@ -108,10 +104,19 @@ class Charge extends AbstractCheckout
         $this->_dataObjectHelper = $dataObjectHelper;
         $this->_api = $chargesApi;
 
-        parent::__construct($customerSession, $checkoutSession, $customerFactory, $quoteRepository, $payloadHelper, $logger, $helper, $config);
+        parent::__construct(
+            $customerSession,
+            $checkoutSession,
+            $customerFactory,
+            $quoteRepository,
+            $payloadHelper,
+            $logger,
+            $helper,
+            $config
+        );
 
         if (isset($data['order'])) {
-            if ($data['order'] instanceof \Magento\Quote\Model\Order) {
+            if ($data['order'] instanceof \Magento\Sales\Model\Order) {
                 $this->setQuote($data['order']);
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
@@ -133,13 +138,13 @@ class Charge extends AbstractCheckout
 
         $payload = $this->_payloadHelper->getChargePayload($this->_order);
 
-        $this->_logger->debug("Charge Payload:- " . $this->_helper->json_encode($payload));
+        $this->_logger->debug("Charge Payload:- " . $this->_helper->jsonEncode($payload));
 
         try {
             $charge = $this->getApi()
                 ->chargesCreate($payload, $this->genIdempotencyKey());
 
-            $this->_logger->debug("Charge Response:- " . $this->_helper->json_encode($charge));
+            $this->_logger->debug("Charge Response:- " . $this->_helper->jsonEncode($charge));
 
             if (isset($charge->error)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Could not create the charge'));
@@ -161,7 +166,6 @@ class Charge extends AbstractCheckout
             }
 
             $this->_chargeResponse($charge, false);
-
         } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
 
@@ -224,10 +228,10 @@ class Charge extends AbstractCheckout
             $orderState = $this->_order->getState();
 
             if (($orderState != Order::STATE_PROCESSING && $orderState != Order::STATE_PENDING_PAYMENT) ||
-                ($orderStatus != self::STATUS_MAGENTO_AUTHORIZED)) {
+                ($orderStatus != self::STATUS_MAGENTO_AUTHORIZED)
+            ) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid order state or status.'));
             }
-
         } else {
             // Check if order has valid state and status
             $this->_verifyOrderState();
@@ -248,7 +252,9 @@ class Charge extends AbstractCheckout
             $authorizationTransaction = $payment->getAuthorizationTransaction();
 
             if (!$authorizationTransaction || !$authorizationTransaction->getId()) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Cannot find payment authorization transaction.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Cannot find payment authorization transaction.')
+                );
             }
 
             if ($authorizationTransaction->getTxnType() != \Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH) {
@@ -283,8 +289,12 @@ class Charge extends AbstractCheckout
 
         if ($invoice) {
 
-            $this->_order->addStatusHistoryComment($this->_helper->__('Notified customer about invoice #%s.', $invoice->getIncrementId()))
-                ->setIsCustomerNotified(true);
+            $this->_order->addStatusHistoryComment(
+                $this->_helper->__(
+                    'Notified customer about invoice #%s.',
+                    $invoice->getIncrementId()
+                )
+            )->setIsCustomerNotified(true);
 
             $this->_orderRepository->save($this->_order);
         }
@@ -316,7 +326,9 @@ class Charge extends AbstractCheckout
         if ($payment && $payment->getId()) {
             $transaction = $payment->getTransaction($txnId);
             if ($transaction && $transaction->getId()) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The payment transaction already exists.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The payment transaction already exists.')
+                );
             }
         }
     }
@@ -367,15 +379,20 @@ class Charge extends AbstractCheckout
         $checkoutMethod = $this->getCheckoutMethod();
 
         $this->_logger->debug(
-            $this->_helper->__('Quote Grand Total:- %s Quote Customer Id:- %s Checkout Method:- %s', $this->_quote->getGrandTotal(), $this->_quote->getCustomerId(), $checkoutMethod)
+            $this->_helper->__(
+                'Quote Grand Total:- %s Quote Customer Id:- %s Checkout Method:- %s',
+                $this->_quote->getGrandTotal(),
+                $this->_quote->getCustomerId(),
+                $checkoutMethod
+            )
         );
 
         $isNewCustomer = false;
         switch ($checkoutMethod) {
-            case  Onepage::METHOD_GUEST:
+            case Onepage::METHOD_GUEST:
                 $this->_prepareGuestQuote();
                 break;
-            case  Onepage::METHOD_REGISTER:
+            case Onepage::METHOD_REGISTER:
                 $this->_prepareNewCustomerQuote();
                 $isNewCustomer = true;
                 break;
@@ -426,7 +443,6 @@ class Charge extends AbstractCheckout
             ->setLastRealOrderId($order->getIncrementId())
             ->setLastOrderStatus($order->getStatus());
 
-
         return $order;
     }
 
@@ -460,19 +476,17 @@ class Charge extends AbstractCheckout
 
         $customer = $quote->getCustomer();
         // $customer->setEmail($billing->getEmail());
-
         // $quote->setCustomerEmail($billing->getEmail())
         //       ->setCustomerFirstname($billing->getFirstname())
         //       ->setCustomerMiddlename($billing->getMiddlename())
         //       ->setCustomerLastname($billing->getLastname());
-
 
         $customerBillingData = $billing->exportCustomerAddress();
         $dataArray = $this->_objectCopyService->getDataFromFieldset('checkout_onepage_quote', 'to_customer', $quote);
         $this->_dataObjectHelper->populateWithArray(
             $customer,
             $dataArray,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $quote->setCustomer($customer)->setCustomerId(true);
 
@@ -498,7 +512,10 @@ class Charge extends AbstractCheckout
         $quote->addCustomerAddress($customerBillingData);
         // $this->_quoteRepository->save($quote);
 
-        $this->_logger->info($this->_helper->__('The new customer has been created successfully. Customer id: %s', $customer->getId()));
+        $this->_logger->info($this->_helper->__(
+            'The new customer has been created successfully. Customer id: %s',
+            $customer->getId()
+        ));
 
         return $this;
     }
@@ -514,7 +531,6 @@ class Charge extends AbstractCheckout
         $billing = $quote->getBillingAddress();
         $shipping = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
-
         if ($this->_getCustomerSession()->isLoggedIn()) {
             $this->_logger->debug($this->_helper->__('Load customer from session.'));
             $customer = $this->_customerRepository->getById($this->_getCustomerSession()->getCustomerId());
@@ -522,12 +538,14 @@ class Charge extends AbstractCheckout
         } else {
             $this->_logger->debug($this->_helper->__('Load customer from db.'));
             $customer = $this->_customerRepository->getById($quote->getCustomerId());
-            $this->_logger->debug($this->_helper->__("Creating Order on behalf of Customer %s", $quote->getCustomerId()));
+            $this->_logger->debug($this->_helper->__(
+                "Creating Order on behalf of Customer %s",
+                $quote->getCustomerId()
+            ));
         }
 
         $hasDefaultBilling = (bool)$customer->getDefaultBilling();
         $hasDefaultShipping = (bool)$customer->getDefaultShipping();
-
 
         if ($shipping && !$shipping->getSameAsBilling() &&
             (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())
@@ -584,12 +602,12 @@ class Charge extends AbstractCheckout
         if ($confirmationStatus === \Magento\Customer\Model\AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
             $url = $this->_customerUrl->getEmailConfirmationUrl($customer->getEmail());
             $this->_messageManager->addSuccess(
-            // @codingStandardsIgnoreStart
+                // @codingStandardsIgnoreStart
                 __(
                     'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
                     $url
                 )
-            // @codingStandardsIgnoreEnd
+                // @codingStandardsIgnoreEnd
             );
         } else {
             $this->_getCustomerSession()->loginById($customer->getId());

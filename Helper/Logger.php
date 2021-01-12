@@ -1,27 +1,16 @@
 <?php
-
 namespace Zip\ZipPayment\Helper;
 
 use \Magento\Framework\App\Helper\AbstractHelper;
-use \Zip\ZipPayment\Model\Config;
 use \Zip\ZipPayment\Logger\Logger as ZipMoneyLogger;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      http://zip.co
  */
 class Logger extends AbstractHelper
 {
-
-    /**
-     * @var \Zip\ZipPayment\Model\Config\Proxy
-     */
-    protected $_config;
-
     /**
      * @var array
      */
@@ -35,16 +24,6 @@ class Logger extends AbstractHelper
         6 => 200, // 'INFO' ,
         7 => 100, // 'DEBUG'
     ];
-
-    public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Zip\ZipPayment\Model\Config\Proxy $config
-    )
-    {
-        parent::__construct($context);
-
-        $this->_config = $config;
-    }
 
     /**
      * Logs the info message to the logfile
@@ -64,7 +43,13 @@ class Logger extends AbstractHelper
      */
     protected function _log($message, $logLevel = ZipMoneyLogger::INFO, $storeId = null)
     {
-        $configLevel = $this->_config->getLogSetting($storeId);
+        $path = "payment/"
+            . \Zip\ZipPayment\Model\Config::METHOD_CODE
+            . "/" . \Zip\ZipPayment\Model\Config::PAYMENT_ZIPMONEY_LOG_SETTINGS;
+        $configLevel = $this->scopeConfig->getValue(
+            $path,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
 
         if ($configLevel < 0) {
             return false;
@@ -78,8 +63,7 @@ class Logger extends AbstractHelper
         if ($logLevel < $configLevel) {
             return false;
         }
-        $logFunc = $this->_logger->getLevelName($logLevel);
-        $this->_logger->$logFunc($message);
+        $this->_logger->log($logLevel, $message);
         return true;
     }
 

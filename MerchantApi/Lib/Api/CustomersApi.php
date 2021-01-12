@@ -93,14 +93,14 @@ class CustomersApi
         // parse inputs
         $resourcePath = "/customers/{id}";
         $httpBody = '';
-        $queryParams = array();
-        $headerParams = array();
-        $formParams = array();
-        $_header_accept = $this->apiClient->selectHeaderAccept(array('application/javascript'));
+        $queryParams = [];
+        $headerParams = [];
+        $formParams = [];
+        $_header_accept = $this->apiClient->selectHeaderAccept(['application/javascript']);
         if (!is_null($_header_accept)) {
             $headerParams['Accept'] = $_header_accept;
         }
-        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array('application/javascript'));
+        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(['application/javascript']);
 
         // path params
         if ($id !== null) {
@@ -112,7 +112,6 @@ class CustomersApi
         }
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
-
 
         // for model (json/xml)
         if (isset($_tempBody)) {
@@ -132,11 +131,8 @@ class CustomersApi
                 '/customers/{id}'
             );
 
-            return array(null, $statusCode, $httpHeader);
+            return [null, $statusCode, $httpHeader];
         } catch (ApiException $e) {
-            switch ($e->getCode()) {
-            }
-
             throw $e;
         }
     }
@@ -168,18 +164,17 @@ class CustomersApi
         // parse inputs
         $resourcePath = "/customers";
         $httpBody = '';
-        $queryParams = array();
-        $headerParams = array();
-        $formParams = array();
-        $_header_accept = $this->apiClient->selectHeaderAccept(array('application/javascript'));
+        $queryParams = [];
+        $headerParams = [];
+        $formParams = [];
+        $_header_accept = $this->apiClient->selectHeaderAccept(['application/javascript']);
         if (!is_null($_header_accept)) {
             $headerParams['Accept'] = $_header_accept;
         }
-        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array('application/javascript'));
+        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(['application/javascript']);
 
         // default format to json
         $resourcePath = str_replace("{format}", "json", $resourcePath);
-
 
         // for model (json/xml)
         if (isset($_tempBody)) {
@@ -199,11 +194,8 @@ class CustomersApi
                 '/customers'
             );
 
-            return array(null, $statusCode, $httpHeader);
+            return [null, $statusCode, $httpHeader];
         } catch (ApiException $e) {
-            switch ($e->getCode()) {
-            }
-
             throw $e;
         }
     }

@@ -10,12 +10,9 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://www.zip.co
  */
 class RefundDataBuilder extends AbstractDataBuilder
 {
@@ -42,10 +39,14 @@ class RefundDataBuilder extends AbstractDataBuilder
         $payment = $paymentDO->getPayment();
         $refundAmount = $this->getMultiCurrencyAmount($payment, $amount);
         $order = $payment->getOrder();
-        $payload = $this->_payloadHelper->getRefundPayload($order, $refundAmount, $order->getIncrementId() . strtotime("now"));
+        $payload = $this->_payloadHelper->getRefundPayload(
+            $order,
+            $refundAmount,
+            $order->getIncrementId() . strtotime("now")
+        );
         $this->_logger->debug(
             "Refund Request:- "
-            . $this->_helper->json_encode($payload)
+            . $this->_helper->jsonEncode($payload)
         );
 
         if (!$payment instanceof OrderPaymentInterface) {
@@ -66,16 +67,19 @@ class RefundDataBuilder extends AbstractDataBuilder
         $baseGrandTotal = $order->getBaseGrandTotal();
 
         $rate = $order->getBaseToOrderRate();
-        if ($rate == 0) $rate = 1;
+        if ($rate == 0) {
+            $rate = 1;
+        }
 
         // Full refund, ignore currency rate in case it changed
-        if ($baseAmount == $baseGrandTotal)
+        if ($baseAmount == $baseGrandTotal) {
             return $grandTotal;
-        // Partial refund, consider currency rate but don't refund more than the original amount
-        else if (is_numeric($rate))
+        } elseif (is_numeric($rate)) {
+            // Partial refund, consider currency rate but don't refund more than the original amount
             return min($baseAmount * $rate, $grandTotal);
-        // Not a multicurrency refund
-        else
+        } else {
+            // Not a multicurrency refund
             return $baseAmount;
+        }
     }
 }

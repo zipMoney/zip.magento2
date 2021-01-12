@@ -7,8 +7,6 @@
  * @author    Zip Plugin Team <integration@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
-
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
@@ -27,35 +25,39 @@ class CaptureChargeRequest implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'amount' => 'float'
-    );
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'amount' => 'amount'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'amount' => 'setAmount'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'amount' => 'getAmount'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -93,7 +95,7 @@ class CaptureChargeRequest implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if ($this->container['amount'] === null) {
             $invalid_properties[] = "'amount' can't be null";
@@ -123,7 +125,6 @@ class CaptureChargeRequest implements ArrayAccess
         return true;
     }
 
-
     /**
      * Gets amount
      * @return float
@@ -140,9 +141,9 @@ class CaptureChargeRequest implements ArrayAccess
      */
     public function setAmount($amount)
     {
-
         if (($amount < 0)) {
-            throw new \InvalidArgumentException('invalid value for $amount when calling CaptureChargeRequest., must be bigger than or equal to 0.');
+            throw new \InvalidArgumentException('invalid value for $amount when calling CaptureChargeRequest, '
+            . 'must be bigger than or equal to 0.');
         }
 
         $this->container['amount'] = $amount;
@@ -202,7 +203,10 @@ class CaptureChargeRequest implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

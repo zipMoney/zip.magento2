@@ -4,10 +4,9 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
 
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
@@ -27,7 +26,7 @@ class Flightadditionaldetails implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'departure_date' => '\DateTime',
         'flight_number' => 'string',
         'aircraft_type' => 'string',
@@ -37,12 +36,13 @@ class Flightadditionaldetails implements ArrayAccess
         'duration' => 'string',
         'passengers' => '\Zip\ZipPayment\MerchantApi\Lib\Model\FlightadditionaldetailsPassengers[]',
         'stopovers' => 'string[]'
-    );
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'departure_date' => 'departure_date',
         'flight_number' => 'flight_number',
         'aircraft_type' => 'aircraft_type',
@@ -52,12 +52,13 @@ class Flightadditionaldetails implements ArrayAccess
         'duration' => 'duration',
         'passengers' => 'passengers',
         'stopovers' => 'stopovers'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'departure_date' => 'setDepartureDate',
         'flight_number' => 'setFlightNumber',
         'aircraft_type' => 'setAircraftType',
@@ -67,12 +68,13 @@ class Flightadditionaldetails implements ArrayAccess
         'duration' => 'setDuration',
         'passengers' => 'setPassengers',
         'stopovers' => 'setStopovers'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'departure_date' => 'getDepartureDate',
         'flight_number' => 'getFlightNumber',
         'aircraft_type' => 'getAircraftType',
@@ -82,12 +84,13 @@ class Flightadditionaldetails implements ArrayAccess
         'duration' => 'getDuration',
         'passengers' => 'getPassengers',
         'stopovers' => 'getStopovers'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -133,7 +136,7 @@ class Flightadditionaldetails implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if ($this->container['departure_date'] === null) {
             $invalid_properties[] = "'departure_date' can't be null";
@@ -155,7 +158,6 @@ class Flightadditionaldetails implements ArrayAccess
         }
         return true;
     }
-
 
     /**
      * Gets departure_date
@@ -398,7 +400,10 @@ class Flightadditionaldetails implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

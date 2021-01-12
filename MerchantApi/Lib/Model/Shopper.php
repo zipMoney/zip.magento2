@@ -4,10 +4,9 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
 
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
@@ -19,6 +18,7 @@ class Shopper implements ArrayAccess
     const GENDER_MALE = 'Male';
     const GENDER_FEMALE = 'Female';
     const GENDER_OTHER = 'Other';
+
     /**
      * The original name of the model.
      * @var string
@@ -28,7 +28,7 @@ class Shopper implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'title' => 'string',
         'first_name' => 'string',
         'last_name' => 'string',
@@ -37,14 +37,15 @@ class Shopper implements ArrayAccess
         'email' => 'string',
         'birth_date' => '\DateTime',
         'gender' => 'string',
-        'statistics' => '\Zip\ZipPayment\MerchantApi\Lib\Model\ShopperStatistics',
-        'billing_address' => '\Zip\ZipPayment\MerchantApi\Lib\Model\Address'
-    );
+        'statistics' => \Zip\ZipPayment\MerchantApi\Lib\Model\ShopperStatistics::class,
+        'billing_address' => \Zip\ZipPayment\MerchantApi\Lib\Model\Address::class
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'title' => 'title',
         'first_name' => 'first_name',
         'last_name' => 'last_name',
@@ -55,12 +56,13 @@ class Shopper implements ArrayAccess
         'gender' => 'gender',
         'statistics' => 'statistics',
         'billing_address' => 'billing_address'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'title' => 'setTitle',
         'first_name' => 'setFirstName',
         'last_name' => 'setLastName',
@@ -71,12 +73,13 @@ class Shopper implements ArrayAccess
         'gender' => 'setGender',
         'statistics' => 'setStatistics',
         'billing_address' => 'setBillingAddress'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'title' => 'getTitle',
         'first_name' => 'getFirstName',
         'last_name' => 'getLastName',
@@ -87,12 +90,13 @@ class Shopper implements ArrayAccess
         'gender' => 'getGender',
         'statistics' => 'getStatistics',
         'billing_address' => 'getBillingAddress'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -138,11 +142,11 @@ class Shopper implements ArrayAccess
      */
     public function getGenderAllowableValues()
     {
-        return array(
+        return [
             self::GENDER_MALE,
             self::GENDER_FEMALE,
             self::GENDER_OTHER,
-        );
+        ];
     }
 
     /**
@@ -152,7 +156,7 @@ class Shopper implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
         if ($this->container['first_name'] === null) {
             $invalid_properties[] = "'first_name' can't be null";
@@ -167,7 +171,7 @@ class Shopper implements ArrayAccess
         if ($this->container['email'] === null) {
             $invalid_properties[] = "'email' can't be null";
         }
-        $allowed_values = array("Male", "Female", "Other");
+        $allowed_values = ["Male", "Female", "Other"];
         if (!in_array($this->container['gender'], $allowed_values)) {
             $invalid_properties[] = "invalid value for 'gender', must be one of 'Male', 'Female', 'Other'.";
         }
@@ -199,7 +203,7 @@ class Shopper implements ArrayAccess
         if ($this->container['email'] === null) {
             return false;
         }
-        $allowed_values = array("Male", "Female", "Other");
+        $allowed_values = ["Male", "Female", "Other"];
         if (!in_array($this->container['gender'], $allowed_values)) {
             return false;
         }
@@ -208,7 +212,6 @@ class Shopper implements ArrayAccess
         }
         return true;
     }
-
 
     /**
      * Gets title
@@ -312,7 +315,8 @@ class Shopper implements ArrayAccess
     {
 
         if (!is_null($phone) && (!preg_match("/^\\+?[\\d\\s]+$/", $phone))) {
-            throw new \InvalidArgumentException("invalid value for $phone when calling Shopper., must conform to the pattern /^\\+?[\\d\\s]+$/.");
+            throw new \InvalidArgumentException("Invalid value for $phone when calling Shopper, "
+            . "must conform to the pattern /^\\+?[\\d\\s]+$/.");
         }
 
         $this->container['phone'] = $phone;
@@ -378,7 +382,7 @@ class Shopper implements ArrayAccess
      */
     public function setGender($gender)
     {
-        $allowed_values = array('Male', 'Female', 'Other');
+        $allowed_values = ['Male', 'Female', 'Other'];
         if (!is_null($gender) && (!in_array($gender, $allowed_values))) {
             throw new \InvalidArgumentException("Invalid value for 'gender', must be one of 'Male', 'Female', 'Other'");
         }
@@ -481,7 +485,10 @@ class Shopper implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

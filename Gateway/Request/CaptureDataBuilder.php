@@ -6,22 +6,16 @@
 
 namespace Zip\ZipPayment\Gateway\Request;
 
-use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://www.zip.co
  */
 class CaptureDataBuilder extends AbstractDataBuilder
 {
-
     /**
      * Builds ENV request
      *
@@ -47,7 +41,7 @@ class CaptureDataBuilder extends AbstractDataBuilder
 
         $payload = $this->_payloadHelper->getCapturePayload($order, $amount);
 
-        $this->_logger->debug("Capture Request:- " . $this->_helper->json_encode($payload));
+        $this->_logger->debug("Capture Request:- " . $this->_helper->jsonEncode($payload));
 
         if (!$payment instanceof OrderPaymentInterface) {
             throw new \LogicException('Order payment should be provided.');

@@ -7,8 +7,6 @@
  * @author    Zip Plugin Team <integration@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
-
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 use \ArrayAccess;
@@ -27,55 +25,59 @@ class CreateCheckoutRequest implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'type' => 'string',
-        'shopper' => '\Zip\ZipPayment\MerchantApi\Lib\Model\Shopper',
-        'order' => '\Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder',
-        'features' => '\Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequestFeatures',
-        'metadata' => '\Zip\ZipPayment\MerchantApi\Lib\Model\Metadata',
-        'config' => '\Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration'
-    );
+        'shopper' => \Zip\ZipPayment\MerchantApi\Lib\Model\Shopper::class,
+        'order' => \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder::class,
+        'features' => \Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequestFeatures::class,
+        'metadata' => \Zip\ZipPayment\MerchantApi\Lib\Model\Metadata::class,
+        'config' => \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration::class
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'type' => 'type',
         'shopper' => 'shopper',
         'order' => 'order',
         'features' => 'features',
         'metadata' => 'metadata',
         'config' => 'config'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'type' => 'setType',
         'shopper' => 'setShopper',
         'order' => 'setOrder',
         'features' => 'setFeatures',
         'metadata' => 'setMetadata',
         'config' => 'setConfig'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'type' => 'getType',
         'shopper' => 'getShopper',
         'order' => 'getOrder',
         'features' => 'getFeatures',
         'metadata' => 'getMetadata',
         'config' => 'getConfig'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -117,10 +119,10 @@ class CreateCheckoutRequest implements ArrayAccess
      */
     public function getTypeAllowableValues()
     {
-        return array(
+        return [
             self::TYPE_STANDARD,
             self::TYPE_EXPRESS,
-        );
+        ];
     }
 
     /**
@@ -130,9 +132,9 @@ class CreateCheckoutRequest implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
 
-        $allowed_values = array("standard", "express");
+        $allowed_values = ["standard", "express"];
         if (!in_array($this->container['type'], $allowed_values)) {
             $invalid_properties[] = "invalid value for 'type', must be one of 'standard', 'express'.";
         }
@@ -154,8 +156,7 @@ class CreateCheckoutRequest implements ArrayAccess
      */
     public function valid()
     {
-
-        $allowed_values = array("standard", "express");
+        $allowed_values = ["standard", "express"];
         if (!in_array($this->container['type'], $allowed_values)) {
             return false;
         }
@@ -167,7 +168,6 @@ class CreateCheckoutRequest implements ArrayAccess
         }
         return true;
     }
-
 
     /**
      * Gets type
@@ -185,7 +185,7 @@ class CreateCheckoutRequest implements ArrayAccess
      */
     public function setType($type)
     {
-        $allowed_values = array('standard', 'express');
+        $allowed_values = ['standard', 'express'];
         if (!is_null($type) && (!in_array($type, $allowed_values))) {
             throw new \InvalidArgumentException("Invalid value for 'type', must be one of 'standard', 'express'");
         }
@@ -351,7 +351,10 @@ class CreateCheckoutRequest implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

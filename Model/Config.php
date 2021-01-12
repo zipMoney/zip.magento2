@@ -2,15 +2,13 @@
 
 namespace Zip\ZipPayment\Model;
 
-use Magento\Payment\Model\Method\ConfigInterface;
+use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-
-use \Zip\ZipPayment\MerchantApi\Lib\Configuration;
 
 class Config implements ConfigInterface
 {
     /**
-     * Method Code
+     * Method Code name in magento
      *
      * @const
      */
@@ -43,7 +41,6 @@ class Config implements ConfigInterface
      * @const
      */
     const PAYMENT_ZIPMONEY_ENVIRONMENT = 'environment';
-
 
     /**
      * Region
@@ -219,13 +216,14 @@ class Config implements ConfigInterface
      *
      * @var array
      */
-    protected $_error_codes_map = array(
+    protected $_error_codes_map = [
         "account_insufficient_funds" => "MG2-0001",
         "account_inoperative" => "MG2-0002",
         "account_locked" => "MG2-0003",
         "amount_invalid" => "MG2-0004",
         "fraud_check" => "MG2-0005"
-    );
+    ];
+
     /**
      * @var string
      */
@@ -272,7 +270,6 @@ class Config implements ConfigInterface
      */
     protected $_messageManager;
 
-
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -281,8 +278,7 @@ class Config implements ConfigInterface
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Zip\ZipPayment\Helper\Logger $logger
-    )
-    {
+    ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_logger = $logger;
@@ -348,7 +344,6 @@ class Config implements ConfigInterface
      */
     public function getConfigData($field, $storeId = null)
     {
-
         if ('order_place_redirect_url' === $field) {
             return $this->getOrderPlaceRedirectUrl();
         }

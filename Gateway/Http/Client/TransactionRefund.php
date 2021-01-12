@@ -6,16 +6,9 @@ use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\ClientException;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
- */
-
-/**
- * Class TransactionCapture
+ * @link      https://www.zip.co
  */
 class TransactionRefund extends AbstractTransaction implements ClientInterface
 {
@@ -30,8 +23,7 @@ class TransactionRefund extends AbstractTransaction implements ClientInterface
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\RefundsApi $refundsApi,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $encryptor, $payloadHelper, $logger, $helper, $config);
         $this->_service = $refundsApi;
     }
@@ -64,7 +56,7 @@ class TransactionRefund extends AbstractTransaction implements ClientInterface
         try {
             $refund = $this->_service->refundsCreate($payload, $this->_helper->generateIdempotencyKey());
             $response = ["api_response" => $refund];
-            $this->_logger->debug("Refund Response:- " . $this->_helper->json_encode($refund));
+            $this->_logger->debug("Refund Response:- " . $this->_helper->jsonEncode($refund));
         } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
             $response['message'] = $message;

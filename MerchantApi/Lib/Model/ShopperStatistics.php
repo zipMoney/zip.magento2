@@ -4,10 +4,9 @@
  *
  * @category Class
  * @package  zipMoney
- * @author    Zip Plugin Team <integration@zip.co>
+ * @author   Zip Plugin Team <integrations@zip.co>
  * @link     https://github.com/zipMoney/merchantapi-php
  */
-
 
 namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
@@ -30,7 +29,7 @@ class ShopperStatistics implements ArrayAccess
      * Array of property to type mappings. Used for (de)serialization
      * @var string[]
      */
-    protected static $zipTypes = array(
+    protected static $zipTypes = [
         'account_created' => '\DateTime',
         'sales_total_count' => 'int',
         'sales_total_amount' => 'float',
@@ -42,12 +41,13 @@ class ShopperStatistics implements ArrayAccess
         'last_login' => '\DateTime',
         'has_previous_purchases' => 'bool',
         'fraud_check_result' => 'string'
-    );
+    ];
+
     /**
      * Array of attributes where the key is the local name, and the value is the original name
      * @var string[]
      */
-    protected static $attributeMap = array(
+    protected static $attributeMap = [
         'account_created' => 'account_created',
         'sales_total_count' => 'sales_total_count',
         'sales_total_amount' => 'sales_total_amount',
@@ -59,12 +59,13 @@ class ShopperStatistics implements ArrayAccess
         'last_login' => 'last_login',
         'has_previous_purchases' => 'has_previous_purchases',
         'fraud_check_result' => 'fraud_check_result'
-    );
+    ];
+
     /**
      * Array of attributes to setter functions (for deserialization of responses)
      * @var string[]
      */
-    protected static $setters = array(
+    protected static $setters = [
         'account_created' => 'setAccountCreated',
         'sales_total_count' => 'setSalesTotalCount',
         'sales_total_amount' => 'setSalesTotalAmount',
@@ -76,12 +77,13 @@ class ShopperStatistics implements ArrayAccess
         'last_login' => 'setLastLogin',
         'has_previous_purchases' => 'setHasPreviousPurchases',
         'fraud_check_result' => 'setFraudCheckResult'
-    );
+    ];
+
     /**
      * Array of attributes to getter functions (for serialization of requests)
      * @var string[]
      */
-    protected static $getters = array(
+    protected static $getters = [
         'account_created' => 'getAccountCreated',
         'sales_total_count' => 'getSalesTotalCount',
         'sales_total_amount' => 'getSalesTotalAmount',
@@ -93,12 +95,13 @@ class ShopperStatistics implements ArrayAccess
         'last_login' => 'getLastLogin',
         'has_previous_purchases' => 'getHasPreviousPurchases',
         'fraud_check_result' => 'getFraudCheckResult'
-    );
+    ];
+
     /**
      * Associative array for storing property values
      * @var mixed[]
      */
-    protected $container = array();
+    protected $container = [];
 
     /**
      * Constructor
@@ -106,17 +109,28 @@ class ShopperStatistics implements ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['account_created'] = isset($data['account_created']) ? $data['account_created'] : null;
-        $this->container['sales_total_count'] = isset($data['sales_total_count']) ? $data['sales_total_count'] : null;
-        $this->container['sales_total_amount'] = isset($data['sales_total_amount']) ? $data['sales_total_amount'] : null;
-        $this->container['sales_avg_amount'] = isset($data['sales_avg_amount']) ? $data['sales_avg_amount'] : null;
-        $this->container['sales_max_amount'] = isset($data['sales_max_amount']) ? $data['sales_max_amount'] : null;
-        $this->container['refunds_total_amount'] = isset($data['refunds_total_amount']) ? $data['refunds_total_amount'] : null;
-        $this->container['previous_chargeback'] = isset($data['previous_chargeback']) ? $data['previous_chargeback'] : null;
-        $this->container['currency'] = isset($data['currency']) ? $data['currency'] : null;
-        $this->container['last_login'] = isset($data['last_login']) ? $data['last_login'] : null;
-        $this->container['has_previous_purchases'] = isset($data['has_previous_purchases']) ? $data['has_previous_purchases'] : null;
-        $this->container['fraud_check_result'] = isset($data['fraud_check_result']) ? $data['fraud_check_result'] : null;
+        $this->container['account_created'] = isset($data['account_created'])
+            ? $data['account_created'] : null;
+        $this->container['sales_total_count'] = isset($data['sales_total_count'])
+            ? $data['sales_total_count'] : null;
+        $this->container['sales_total_amount'] = isset($data['sales_total_amount'])
+            ? $data['sales_total_amount'] : null;
+        $this->container['sales_avg_amount'] = isset($data['sales_avg_amount'])
+            ? $data['sales_avg_amount'] : null;
+        $this->container['sales_max_amount'] = isset($data['sales_max_amount'])
+            ? $data['sales_max_amount'] : null;
+        $this->container['refunds_total_amount'] = isset($data['refunds_total_amount'])
+            ? $data['refunds_total_amount'] : null;
+        $this->container['previous_chargeback'] = isset($data['previous_chargeback'])
+            ? $data['previous_chargeback'] : null;
+        $this->container['currency'] = isset($data['currency'])
+            ? $data['currency'] : null;
+        $this->container['last_login'] = isset($data['last_login'])
+            ? $data['last_login'] : null;
+        $this->container['has_previous_purchases'] = isset($data['has_previous_purchases'])
+            ? $data['has_previous_purchases'] : null;
+        $this->container['fraud_check_result'] = isset($data['fraud_check_result'])
+            ? $data['fraud_check_result'] : null;
     }
 
     public static function zipTypes()
@@ -145,11 +159,11 @@ class ShopperStatistics implements ArrayAccess
      */
     public function getFraudCheckResultAllowableValues()
     {
-        return array(
+        return [
             self::FRAUD_CHECK_RESULT_PASS,
             self::FRAUD_CHECK_RESULT_FAIL,
             self::FRAUD_CHECK_RESULT_UNKNOWN,
-        );
+        ];
     }
 
     /**
@@ -159,13 +173,13 @@ class ShopperStatistics implements ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalid_properties = array();
+        $invalid_properties = [];
         $allowed_values = CommonUtil::isValidCurrency($this->container['currency']);
         if (!$allowed_values['valid']) {
             $invalid_properties[] = $allowed_values['message'];
         }
 
-        $allowed_values = array("pass", "fail", "unknown");
+        $allowed_values = ["pass", "fail", "unknown"];
         if (!in_array($this->container['fraud_check_result'], $allowed_values)) {
             $invalid_properties[] = "invalid value for 'fraud_check_result', must be one of 'pass', 'fail', 'unknown'.";
         }
@@ -186,13 +200,12 @@ class ShopperStatistics implements ArrayAccess
         if (!$allowed_values['valid']) {
             return false;
         }
-        $allowed_values = array("pass", "fail", "unknown");
+        $allowed_values = ["pass", "fail", "unknown"];
         if (!in_array($this->container['fraud_check_result'], $allowed_values)) {
             return false;
         }
         return true;
     }
-
 
     /**
      * Gets account_created
@@ -424,9 +437,10 @@ class ShopperStatistics implements ArrayAccess
      */
     public function setFraudCheckResult($fraud_check_result)
     {
-        $allowed_values = array('pass', 'fail', 'unknown');
+        $allowed_values = ['pass', 'fail', 'unknown'];
         if (!is_null($fraud_check_result) && (!in_array($fraud_check_result, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'fraud_check_result', must be one of 'pass', 'fail', 'unknown'");
+            throw new \InvalidArgumentException("Invalid value for 'fraud_check_result', "
+            . "must be one of 'pass', 'fail', 'unknown'");
         }
         $this->container['fraud_check_result'] = $fraud_check_result;
 
@@ -485,7 +499,10 @@ class ShopperStatistics implements ArrayAccess
     public function __toString()
     {
         if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+            return json_encode(
+                \Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this),
+                JSON_PRETTY_PRINT
+            );
         }
 
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($this));

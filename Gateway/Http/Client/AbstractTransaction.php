@@ -2,16 +2,12 @@
 
 namespace Zip\ZipPayment\Gateway\Http\Client;
 
-use Magento\Payment\Gateway\Http\ClientInterface;
 use \Zip\ZipPayment\MerchantApi\Lib\Configuration;
 
 /**
- * @category  Zipmoney
- * @package   Zipmoney_ZipPayment
  * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link      http://www.zipmoney.com.au/
+ * @link      https://zip.co
  */
 class AbstractTransaction
 {
@@ -23,8 +19,7 @@ class AbstractTransaction
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
         array $data = []
-    )
-    {
+    ) {
         $this->_encryptor = $encryptor;
         $this->_payloadHelper = $payloadHelper;
         $this->_logger = $logger;
@@ -37,6 +32,8 @@ class AbstractTransaction
         $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey())
             ->setApiKeyPrefix('Authorization', 'Bearer')
             ->setEnvironment($this->_config->getEnvironment())
-            ->setPlatform("Magento/" . $this->_helper->getMagentoVersion() . "Zip_ZipPayment/" . $this->_helper->getExtensionVersion());
+            ->setPlatform("Magento/" . $this->_helper->getMagentoVersion()
+                . "Zip_ZipPayment/"
+                . $this->_helper->getExtensionVersion());
     }
 }
