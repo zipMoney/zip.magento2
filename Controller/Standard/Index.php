@@ -2,6 +2,8 @@
 
 namespace Zip\ZipPayment\Controller\Standard;
 
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+
 /**
  * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
@@ -24,8 +26,8 @@ class Index extends AbstractStandard
 
             // Get the redirect url
             if ($redirectUrl = $this->_checkout->getRedirectUrl()) {
-
-                if ($this->_config->isInContextCheckout()) {
+                $currencyCode = $this->_getCurrencyCode();
+                if ($this->_config->isInContextCheckout() && $currencyCode != CommonUtil::CURRENCY_USD) {
                     $redirectUrl .= '&embedded=true';
                 }
                 $this->_logger->info(sprintf(__('Successful to get redirect url [ %s ] '), $redirectUrl));
