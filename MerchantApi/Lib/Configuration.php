@@ -159,7 +159,7 @@ class Configuration
      *
      * @var boolean True if the certificate should be validated, false otherwise.
      */
-    protected $sslVerification = false;
+    protected $sslVerification = true;
 
     /**
      * Curl proxy host
