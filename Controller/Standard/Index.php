@@ -27,7 +27,7 @@ class Index extends AbstractStandard
             // Get the redirect url
             if ($redirectUrl = $this->_checkout->getRedirectUrl()) {
                 $currencyCode = $this->_getCurrencyCode();
-                if ($this->_config->isInContextCheckout() && $currencyCode != CommonUtil::CURRENCY_USD) {
+                if ($this->_config->isInContextCheckout() && $currencyCode == CommonUtil::CURRENCY_NZD) {
                     $redirectUrl .= '&embedded=true';
                 }
                 $this->_logger->info(sprintf(__('Successful to get redirect url [ %s ] '), $redirectUrl));
