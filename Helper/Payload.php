@@ -828,6 +828,7 @@ class Payload extends AbstractHelper
         $chargeReq->setAmount((float)$grand_total)
             ->setCurrency($currency)
             ->setOrder($this->getOrderDetails(new ChargeOrder))
+            ->setReference($order->getIncrementId())
             ->setMetadata($this->getMetadata())
             ->setCapture($this->_config->isCharge())
             ->setAuthority($this->getAuthority());
