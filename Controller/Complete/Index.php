@@ -93,8 +93,10 @@ class Index extends AbstractStandard
                 try {
                     // Create the Order
                     $order = $this->_charge->placeOrder();
-
-                    $this->_charge->charge();
+                    // if is charge true then call charge for capture
+                    if ($this->_config->isCharge()) {
+                        $this->_charge->charge();
+                    }
 
                     // update order status when successfully paid fix bug
                     // all order is pending deal to order and payment are async

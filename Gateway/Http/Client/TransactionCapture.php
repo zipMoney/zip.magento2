@@ -36,14 +36,14 @@ class TransactionCapture extends AbstractTransaction implements ClientInterface
     {
         $request = $transferObject->getBody();
         $payload = $request['payload'];
-        $zip_charge_id = $request['zip_charge_id'];
+        $zip_checkout_id = $request['zip_checkout_id'];
 
         $response = null;
 
         try {
 
             $charge = $this->_service->chargesCapture(
-                $zip_charge_id,
+                $zip_checkout_id,
                 $payload,
                 $this->_helper->generateIdempotencyKey()
             );

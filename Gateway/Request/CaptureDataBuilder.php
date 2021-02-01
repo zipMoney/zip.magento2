@@ -38,8 +38,8 @@ class CaptureDataBuilder extends AbstractDataBuilder
         $payment = $paymentDO->getPayment();
 
         $order = $payment->getOrder();
-
-        $payload = $this->_payloadHelper->getCapturePayload($order, $amount);
+        $captureAmount = $this->getMultiCurrencyAmount($payment, $amount);
+        $payload = $this->_payloadHelper->getCapturePayload($order, $captureAmount);
 
         $this->_logger->debug("Capture Request:- " . $this->_helper->jsonEncode($payload));
 
@@ -49,7 +49,9 @@ class CaptureDataBuilder extends AbstractDataBuilder
 
         $return['payload'] = $payload;
         $return['txn_id'] = $payment->getLastTransId();
-        $return['zip_charge_id'] = $payment->getLastTransId();
+        $addtionalPaymentInfo = $payment->getAdditionalInformation();
+        $checkout_id = $addtionalPaymentInfo['zip_checkout_id'];
+        $return['zip_checkout_id'] = $checkout_id;
 
         return $return;
     }

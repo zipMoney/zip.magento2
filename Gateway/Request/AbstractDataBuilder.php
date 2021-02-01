@@ -39,4 +39,27 @@ abstract class AbstractDataBuilder implements BuilderInterface
         $this->_logger = $logger;
         $this->_order = $order;
     }
+
+    public function getMultiCurrencyAmount($payment, $baseAmount)
+    {
+        $order = $payment->getOrder();
+        $grandTotal = $order->getGrandTotal();
+        $baseGrandTotal = $order->getBaseGrandTotal();
+
+        $rate = $order->getBaseToOrderRate();
+        if ($rate == 0) {
+            $rate = 1;
+        }
+
+        // Full refund, ignore currency rate in case it changed
+        if ($baseAmount == $baseGrandTotal) {
+            return $grandTotal;
+        } elseif (is_numeric($rate)) {
+            // Partial refund, consider currency rate but don't refund more than the original amount
+            return min(round($baseAmount * $rate,2), $grandTotal);
+        } else {
+            // Not a multicurrency refund
+            return $baseAmount;
+        }
+    }
 }
