@@ -93,7 +93,6 @@ class Index extends AbstractStandard
                 try {
                     // Create the Order
                     $order = $this->_charge->placeOrder();
-
                     $this->_charge->charge();
 
                     // update order status when successfully paid fix bug

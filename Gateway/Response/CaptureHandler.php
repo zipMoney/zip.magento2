@@ -36,7 +36,6 @@ class CaptureHandler implements HandlerInterface
         $paymentDO = $handlingSubject['payment'];
         /** @var $payment \Magento\Sales\Model\Order\Payment */
         $payment = $paymentDO->getPayment();
-
         $payment->setTransactionId($response['api_response']->getId());
         $payment->setIsTransactionClosed(false);
     }
