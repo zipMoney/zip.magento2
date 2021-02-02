@@ -165,7 +165,7 @@ class Charge extends AbstractCheckout
                 $this->_orderPaymentRepository->save($payment);
             }
 
-            $this->_chargeResponse($charge, false);
+            $this->_chargeResponse($charge, $this->_config->isCharge());
         } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
 
@@ -191,8 +191,12 @@ class Charge extends AbstractCheckout
                 /*
                  * Capture Payment
                  */
-                $this->_capture($charge->getId(), $isAuthAndCapture);
-
+                if ($charge->getCapturedAmount()>0) {
+                    $this->_capture($charge->getId(), $isAuthAndCapture);
+                }
+                if ($charge->getCapturedAmount() <= 0){
+                    $this->_authorise($charge->getId());
+                }
                 break;
             case 'authorised':
                 /*
