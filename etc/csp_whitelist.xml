@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="img-src">
+            <values>
+                <value id="zip_analytics" type="host">t.zip.co</value>
+                <value id="zip_static" type="host">static.zipmoney.com.au</value>
+            </values>
+        </policy>
+        <policy id="script-src">
+            <values>
+                <value id="zip_static" type="host">static.zipmoney.com.au</value>
+				<value id="zip_co" type="host">zip.co</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+				<value id="zip_co" type="host">zip.co</value>
+                <value id="sandbox_zip_co" type="host">sandbox.zip.co</value>
+                <value id="zipmoney" type="host">zipmoney.com.au</value>
+                <value id="sandbox_zipmoney" type="host">sandbox.zipmoney.com.au</value>
+                <value id="checkout_uk" type="host">checkout.gb.zip.co</value>
+                <value id="checkout_quadpay" type="host">checkout.quadpay.com</value>
+                <value id="checkout_sandbox_quadpay" type="host">checkout-sandbox.quadpay.com</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>
