@@ -188,22 +188,15 @@ class Charge extends AbstractCheckout
         switch ($charge->getState()) {
             case 'captured':
             case 'approved':
+            case 'authorised':
                 /*
                  * Capture Payment
                  */
-                if ($charge->getCapturedAmount()>0) {
-                    $this->_capture($charge->getId(), $isAuthAndCapture);
-                }
-                if ($charge->getCapturedAmount() <= 0){
+                if ($this->_config->isCharge()) {
+                    $this->_capture($charge->getId(), false);
+                }else{
                     $this->_authorise($charge->getId());
                 }
-                break;
-            case 'authorised':
-                /*
-                 * Authorise Payment
-                 */
-                $this->_authorise($charge->getId());
-
                 break;
             default:
                 # code...
