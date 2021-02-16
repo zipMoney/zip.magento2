@@ -91,8 +91,7 @@ class Charge extends AbstractCheckout
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi $chargesApi,
         array $data = []
-    )
-    {
+    ) {
         $this->_quoteManagement = $cartManagement;
         $this->_accountManagement = $accountManagement;
         $this->_messageManager = $messageManager;
