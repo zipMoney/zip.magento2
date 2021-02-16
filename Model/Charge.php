@@ -91,7 +91,8 @@ class Charge extends AbstractCheckout
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi $chargesApi,
         array $data = []
-    ) {
+    )
+    {
         $this->_quoteManagement = $cartManagement;
         $this->_accountManagement = $accountManagement;
         $this->_messageManager = $messageManager;
@@ -188,22 +189,15 @@ class Charge extends AbstractCheckout
         switch ($charge->getState()) {
             case 'captured':
             case 'approved':
+            case 'authorised':
                 /*
                  * Capture Payment
                  */
-                if ($charge->getCapturedAmount()>0) {
-                    $this->_capture($charge->getId(), $isAuthAndCapture);
-                }
-                if ($charge->getCapturedAmount() <= 0){
+                if ($this->_config->isCharge()) {
+                    $this->_capture($charge->getId(), false);
+                } else {
                     $this->_authorise($charge->getId());
                 }
-                break;
-            case 'authorised':
-                /*
-                 * Authorise Payment
-                 */
-                $this->_authorise($charge->getId());
-
                 break;
             default:
                 # code...
@@ -606,12 +600,12 @@ class Charge extends AbstractCheckout
         if ($confirmationStatus === \Magento\Customer\Model\AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
             $url = $this->_customerUrl->getEmailConfirmationUrl($customer->getEmail());
             $this->_messageManager->addSuccess(
-                // @codingStandardsIgnoreStart
+            // @codingStandardsIgnoreStart
                 __(
                     'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
                     $url
                 )
-                // @codingStandardsIgnoreEnd
+            // @codingStandardsIgnoreEnd
             );
         } else {
             $this->_getCustomerSession()->loginById($customer->getId());
