@@ -56,7 +56,7 @@ abstract class AbstractDataBuilder implements BuilderInterface
             return $grandTotal;
         } elseif (is_numeric($rate)) {
             // Partial refund, consider currency rate but don't refund more than the original amount
-            return min(round($baseAmount * $rate,2), $grandTotal);
+            return min(round($baseAmount * $rate, 2), $grandTotal);
         } else {
             // Not a multicurrency refund
             return $baseAmount;
