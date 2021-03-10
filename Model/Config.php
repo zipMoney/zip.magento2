@@ -497,7 +497,8 @@ class Config implements ConfigInterface
      */
     public function isInContextCheckout()
     {
-        return $this->getConfigData(self::PAYMENT_ZIPMONEY_INCONTEXT_CHECKOUT);
+        //return $this->getConfigData(self::PAYMENT_ZIPMONEY_INCONTEXT_CHECKOUT);
+        return false;  //iframe checking is disable until zip checkout js support iframe for all browser
     }
 
     /**
