@@ -34,7 +34,6 @@ class Index extends AbstractStandard
             $this->_logger->debug($this->getRequest()->getRequestUri());
             $checkoutId = $this->getRequest()->getParam('checkoutId');
             $result = $this->getRequest()->getParam('result');
-            $iframe = $this->getRequest()->getParam('iframe', null);
 
             $this->_logger->debug(__("Result:- %s", $result));
             // Is result valid ?
@@ -51,6 +50,7 @@ class Index extends AbstractStandard
 
             // as AU stack already handle iframe in redirect
 //            iframe checking is disable until we fix zip checkout js issue to support iframe for all browse
+//            $iframe = $this->getRequest()->getParam('iframe', null);
 //            if ($iframe && $this->_getCurrencyCode() !== CommonUtil::CURRENCY_AUD) {
 //                /** @var Page $page */
 //                $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
