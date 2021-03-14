@@ -68,11 +68,6 @@
                     <label>Display Widget Mode</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\DisplayWidget</source_model>
                 </field>
-                <field id="incontext_checkout" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>In-Context Checkout</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[In-Context (Iframe) Checkout may not work on some browsers.]]></comment>
-                </field>
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1"
                        showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Payment from Applicable Countries</label>
