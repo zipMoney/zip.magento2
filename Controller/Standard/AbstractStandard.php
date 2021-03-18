@@ -243,8 +243,13 @@ abstract class AbstractStandard extends Action
             $this->_logger->error(__("Session Quote doesnot exist."));
             $use_checkout_api_quote = true;
         } elseif ($checkout_id != $zipMoneyCheckoutId) {
-            $this->_logger->error(__("Checkout Id doesnot match with the session quote."));
-            $use_checkout_api_quote = true;
+            // iframe redirect does not have au prefix for AU stack
+            if ($checkout_id != 'au-'.$zipMoneyCheckoutId) {
+                $this->_logger->error(__("Checkout Id doesnot match with the session quote."));
+                $use_checkout_api_quote = true;
+            } else {
+                return $sessionQuote;
+            }
         } else {
             return $sessionQuote;
         }
