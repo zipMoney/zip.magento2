@@ -51,7 +51,7 @@ class Index extends AbstractStandard
             // as AU stack already handle iframe in redirect
             $inContextCheckout = $this->_config->isInContextCheckout();
             $iframe = $this->getRequest()->getParam('iframe', null);
-            if ($iframe && $this->_getCurrencyCode() !== CommonUtil::CURRENCY_AUD && $inContextCheckout) {
+            if ($iframe && $this->_getCurrencyCode() != CommonUtil::CURRENCY_AUD && $inContextCheckout) {
                 /** @var Page $page */
                 $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
                 /** @var Template $block */

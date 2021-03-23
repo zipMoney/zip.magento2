@@ -29,22 +29,22 @@
                     <label>Title</label>
                 </field>
                 <field id="environment" translate="label" type="select" sortOrder="3" showInDefault="1"
-                       showInWebsite="1" showInStore="0">
+                       showInWebsite="1" showInStore="1">
                     <label>Environment</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\Environment</source_model>
                 </field>
                 <field id="merchant_public_key" translate="label" type="text" sortOrder="4" showInDefault="1"
-                       showInWebsite="1" showInStore="0">
+                       showInWebsite="1" showInStore="1">
                     <label>Public Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="merchant_private_key" translate="label" type="text" sortOrder="5" showInDefault="1"
-                       showInWebsite="1" showInStore="0">
+                       showInWebsite="1" showInStore="1">
                     <label>Private Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="check_validity" translate="label" type="button" sortOrder="6" showInDefault="1"
-                       showInWebsite="1" showInStore="0">
+                       showInWebsite="1" showInStore="1">
                     <frontend_model>Zip\ZipPayment\Block\System\Config\HealthCheck</frontend_model>
                 </field>
                 <field id="widget_region" translate="label" type="select" sortOrder="7" showInDefault="1"
@@ -53,7 +53,7 @@
                     <source_model>Zip\ZipPayment\Model\Config\Source\Region</source_model>
                 </field>
                 <field id="payment_action" translate="label" type="select" sortOrder="8" showInDefault="1"
-                       showInWebsite="1" showInStore="0">
+                       showInWebsite="1" showInStore="1">
                     <label>Capture Method</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\PaymentAction</source_model>
                     <comment>Some regions might only support capture method</comment>
@@ -68,6 +68,12 @@
                     <label>Display Widget Mode</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\DisplayWidget</source_model>
                 </field>
+                <field id="incontext_checkout" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>In-Context Checkout</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[In-Context (Iframe) Checkout may not work on some browsers. This feature only work for AU region. Other region it will redirect to zip for payment.]]></comment>
+                </field>
+
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1"
                        showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Payment from Applicable Countries</label>

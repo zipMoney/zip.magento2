@@ -4,6 +4,7 @@ namespace Zip\ZipPayment\Model;
 
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 class Config implements ConfigInterface
 {
@@ -497,7 +498,11 @@ class Config implements ConfigInterface
      */
     public function isInContextCheckout()
     {
-        return false;  //iframe checking is disable until zip checkout js support iframe for all browser
+        $currentCurrencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
+        if ($currentCurrencyCode != CommonUtil::CURRENCY_AUD){
+            return false;
+        }
+        return $this->getConfigData(self::PAYMENT_ZIPMONEY_INCONTEXT_CHECKOUT);
     }
 
     /**
