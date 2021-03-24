@@ -78,4 +78,19 @@ class RootEl extends AbstractAdvert implements CatalogBlock\ShortcutInterface
     {
         return $this->_alias;
     }
+
+    /**
+     * Render the block if needed
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        foreach ($this->_supportedWidgetTypes as $widgetType) {
+            if ($this->_configShow($widgetType, $this->getPageType())) {
+                return parent::_toHtml();
+            }
+        }
+        return '';
+    }
 }
