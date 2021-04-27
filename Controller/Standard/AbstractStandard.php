@@ -449,7 +449,7 @@ abstract class AbstractStandard extends Action
         $quote = $this->_getQuote();
 
         if (!$quote->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Quote doesnot exist'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Quote does not exist'));
         }
 
         if (!$quote->hasItems() || $quote->getHasError()) {
@@ -507,7 +507,7 @@ abstract class AbstractStandard extends Action
         $quote = $this->_getQuote();
 
         if (!$quote->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Quote doesnot exist'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Quote does not exist'));
         }
 
         if (!$quote->hasItems() || $quote->getHasError()) {

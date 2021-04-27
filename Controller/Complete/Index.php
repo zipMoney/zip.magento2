@@ -44,7 +44,7 @@ class Index extends AbstractStandard
 
             if (!$checkoutId) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('The checkoutId doesnot exist in the querystring.')
+                    __('The checkoutId does not exist in the querystring.')
                 );
             }
 
