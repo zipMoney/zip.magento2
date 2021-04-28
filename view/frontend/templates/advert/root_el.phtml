@@ -14,6 +14,8 @@
     zip_widget_min_price = '<?= /* @noEscape */ $block->getOrderTotalMinimum();?>';
     // widget display inline if this value is true otherwise it will display iframe
     zip_widget_display_inline = '<?= $block->escapeHtml($block->isDisplayInlineWidget());?>';
+    // if this value is set then it will show the translated content. language like es/en etc
+    zip_widget_language = '<?= $block->escapeHtml(strtolower($block->getLanguageCode()));?>';
     // product price for dynamic widget
 <?php if ($block->getPageType() == 'cart'): ?>
     zip_widget_cart_price = <?= /* @noEscape */ $block->getCartTotal();?>;
