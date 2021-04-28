@@ -271,6 +271,11 @@ class Config implements ConfigInterface
      */
     protected $_messageManager;
 
+    /**
+     * @var \Magento\Framework\Locale\Resolver
+     */
+    protected $_locale;
+
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -278,7 +283,8 @@ class Config implements ConfigInterface
         \Magento\Config\Model\ResourceModel\Config $resourceConfig,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Zip\ZipPayment\Helper\Logger $logger
+        \Zip\ZipPayment\Helper\Logger $logger,
+        \Magento\Framework\Locale\Resolver $locale
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
@@ -287,6 +293,7 @@ class Config implements ConfigInterface
         $this->_cacheTypeList = $cacheTypeList;
         $this->_messageManager = $messageManager;
         $this->_urlBuilder = $urlBuilder;
+        $this->_locale = $locale;
 
         $this->setStoreId($this->_storeManager->getStore()->getId());
     }
@@ -661,5 +668,11 @@ class Config implements ConfigInterface
         );
 
         return $value;
+    }
+
+    public function getLanguageCode()
+    {
+        $currentLanguageCode = substr($this->_locale->getLocale(), 0, strpos($this->_locale->getLocale(), '_'));
+        return $currentLanguageCode;
     }
 }

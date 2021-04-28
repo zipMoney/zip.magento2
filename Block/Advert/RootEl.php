@@ -46,6 +46,11 @@ class RootEl extends AbstractAdvert implements CatalogBlock\ShortcutInterface
         return $this->_config->getRegion();
     }
 
+    public function getLanguageCode()
+    {
+        return $this->_config->getLanguageCode();
+    }
+
     public function getOrderTotalMinimum()
     {
         return $this->_config->getOrderTotalMinimum();
