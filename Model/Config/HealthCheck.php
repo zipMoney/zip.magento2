@@ -35,6 +35,10 @@ class HealthCheck
         'us' => 'United States',
         'uk' => 'United Kingdom',
         'za' => 'South Africa',
+        'ca' => 'Canada',
+        'ae' => 'United Arab Emirate',
+        'mx' => 'Mexico',
+        'sa' => 'Saudi Arabia',
     ];
 
     /**
