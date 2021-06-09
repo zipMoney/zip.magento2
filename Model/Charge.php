@@ -153,7 +153,12 @@ class Charge extends AbstractCheckout
             if (!$charge->getState() || !$charge->getId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid Charge'));
             }
-
+            if ($charge->getAmount() != $this->_order->getGrandTotal()) {
+                $messageWithAmount = $this->_helper->__("Charge Amount is not same as Order amount. Charge amount:- %s and order amount :-%s", $charge->getAmount(),$this->_order->getGrandTotal());
+                $this->_logger->debug($messageWithAmount);
+                $this->_helper->cancelOrder($this->_order, $messageWithAmount);
+                throw new \Magento\Framework\Exception\LocalizedException(__('Could not process the payment.'));
+            }
             $this->_logger->debug($this->_helper->__("Charge State:- %s", $charge->getState()));
 
             if ($charge->getId()) {
