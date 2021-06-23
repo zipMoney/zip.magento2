@@ -26,6 +26,7 @@ class CommonUtil
     const MEXICO = 'mx';
     const CZECH_REPUBLIC = 'cz';
     const POLAND = 'pl';
+    const UNITED_ARAB_EMIRATES = 'ae';
 
     // Zip widget will display inside the iframe
     const IFRAME = 'iframe';
@@ -79,6 +80,7 @@ class CommonUtil
             ['value' => self::MEXICO, 'label' => __('Mexico')],
             ['value' => self::CZECH_REPUBLIC, 'label' => __('Czech Republic')],
             ['value' => self::POLAND, 'label' => __('Poland')],
+            ['value' => self::UNITED_ARAB_EMIRATES, 'label' => __('United Arab Emirates')],
         ];
     }
 
