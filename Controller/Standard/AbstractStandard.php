@@ -242,7 +242,7 @@ abstract class AbstractStandard extends Action
         if (!$sessionQuote) {
             $this->_logger->error(__("Session Quote does not exist."));
             $use_checkout_api_quote = true;
-        } elseif ($checkout_id != $zipMoneyCheckoutId && $checkout_id != 'au-'.$zipMoneyCheckoutId) {
+        } elseif ($checkout_id != $zipMoneyCheckoutId && $checkout_id != 'au-' . $zipMoneyCheckoutId) {
             $this->_logger->error(__("Checkout Id does not match with the session quote."));
             $use_checkout_api_quote = true;
         } else {
@@ -293,10 +293,12 @@ abstract class AbstractStandard extends Action
                 ->addFieldToFilter("entity_id", $quoteId)
                 ->getFirstItem();
             // update checkout id by latest checckout id in payment additional data.
-            $additionalPaymentInfo = $this->_quote->getPayment()->getAdditionalInformation();
-            $additionalPaymentInfo['zip_checkout_id'] = $zip_checkout_id;
-            $this->_quote->getPayment()->setAdditionalInformation($additionalPaymentInfo);
-            $this->_quoteRepository->save($this->_quote);
+            if ($this->_quote) {
+                $additionalPaymentInfo = $this->_quote->getPayment()->getAdditionalInformation();
+                $additionalPaymentInfo['zip_checkout_id'] = $zip_checkout_id;
+                $this->_quote->getPayment()->setAdditionalInformation($additionalPaymentInfo);
+                $this->_quoteRepository->save($this->_quote);
+            }
             return $this->_quote;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_logger->error($e->getMessage());
@@ -540,8 +542,10 @@ abstract class AbstractStandard extends Action
      */
     protected function _isResultValid()
     {
-        if (!$this->getRequest()->getParam('result') ||
-            !in_array($this->getRequest()->getParam('result'), $this->_validResults)) {
+        if (
+            !$this->getRequest()->getParam('result') ||
+            !in_array($this->getRequest()->getParam('result'), $this->_validResults)
+        ) {
             $this->_logger->error(__("Invalid Result"));
             return false;
         }
