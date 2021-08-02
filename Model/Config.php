@@ -506,7 +506,7 @@ class Config implements ConfigInterface
     public function isInContextCheckout()
     {
         $currentCurrencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
-        if ($currentCurrencyCode != CommonUtil::CURRENCY_AUD){
+        if ($currentCurrencyCode != CommonUtil::CURRENCY_AUD) {
             return false;
         }
         return $this->getConfigData(self::PAYMENT_ZIPMONEY_INCONTEXT_CHECKOUT);
