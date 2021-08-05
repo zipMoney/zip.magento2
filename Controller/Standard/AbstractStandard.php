@@ -244,6 +244,7 @@ abstract class AbstractStandard extends Action
             $use_checkout_api_quote = true;
         } elseif ($checkout_id != $zipMoneyCheckoutId && $checkout_id != 'au-' . $zipMoneyCheckoutId) {
             $this->_logger->error(__("Checkout Id does not match with the session quote."));
+            $this->_logger->debug(__("Sesion Checkout Id: %s and Zip callback Checkout Id:  %s.", $checkout_id, $zipMoneyCheckoutId));
             $use_checkout_api_quote = true;
         } else {
             return $sessionQuote;
