@@ -10,18 +10,17 @@
 */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
             <zippayment>
                 <debug>1</debug>
                 <active>1</active>
                 <model>ZipMoneyGatewayFacade</model>
-                <title>Zip - Own it now, pay later</title>
+                <title>Zip now, pay later</title>
                 <widget_region>au</widget_region>
-                <merchant_private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
-                <merchant_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <merchant_private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <merchant_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <order_status>processing</order_status>
                 <display_widget_mode>iframe</display_widget_mode>
                 <min_order_total>1</min_order_total>
