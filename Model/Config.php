@@ -210,7 +210,7 @@ class Config implements ConfigInterface
      *
      * @const
      */
-    const PAYMENT_METHOD_LOGO_ZIP = "https://zip.co/static/assets/default/product-widget/img/primary-zip.svg";
+    const PAYMENT_METHOD_LOGO_ZIP = "https://static.zipmoney.com.au/logo/25px/zip.png";
 
     /**
      * Error Codes Map
