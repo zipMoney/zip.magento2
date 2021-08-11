@@ -91,6 +91,9 @@ class RootEl extends AbstractAdvert implements CatalogBlock\ShortcutInterface
      */
     protected function _toHtml()
     {
+        if ($this->getPageType() == "checkout") {
+            return parent::_toHtml();
+        }
         foreach ($this->_supportedWidgetTypes as $widgetType) {
             if ($this->_configShow($widgetType, $this->getPageType())) {
                 return parent::_toHtml();

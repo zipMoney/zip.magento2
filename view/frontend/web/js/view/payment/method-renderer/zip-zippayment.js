@@ -121,6 +121,9 @@ define(
             },
             isActive: function () {
                 return true;
+            },
+            zipCheckoutTitle: function () {
+                Zip.Widget.render();
             }
         });
     }
