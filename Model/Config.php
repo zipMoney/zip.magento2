@@ -111,7 +111,7 @@ class Config implements ConfigInterface
     /**
      * Homepage banner html element selector
      */
-    const ADVERTS_HOMEPAGE_BANNER_SELECTOR= 'zip_advert/homepage/banner_selector';
+    const ADVERTS_HOMEPAGE_BANNER_SELECTOR = 'zip_advert/homepage/banner_selector';
 
     /**
      * Product Page Banner Active
