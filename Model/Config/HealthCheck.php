@@ -241,7 +241,7 @@ class HealthCheck
             $stores = $group->getStores();
             foreach ($stores as $store) {
                 if ($store->getIsActive() !== '1'
-                || $this->_config->isMethodActive($store->getStoreId()) !== true
+                    || $this->_config->isMethodActive($store->getStoreId()) !== true
                 ) {
                     continue;
                 }
