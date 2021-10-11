@@ -240,7 +240,7 @@ class HealthCheck
         foreach ($groups as $key => $group) {
             $stores = $group->getStores();
             foreach ($stores as $store) {
-                if ($store->getIsActive() !== '1' 
+                if ($store->getIsActive() !== '1'
                 || $this->_config->isMethodActive($store->getStoreId()) !== true
                 ) {
                     continue;
