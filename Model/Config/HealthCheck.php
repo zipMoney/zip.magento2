@@ -131,7 +131,7 @@ class HealthCheck
         } else {
             $curlObject->setConfig(
                 [
-                    'timeout' => 10
+                    'timeout' => 10,
                 ]
             );
 
@@ -185,7 +185,7 @@ class HealthCheck
                         foreach ($regions as $region) {
                             if ($region == 'uk') {
                                 $countryName = 'United Kingdom';
-                            } else if ($region == 'twisto') {
+                            } elseif ($region == 'twisto') {
                                 $countryName = 'Poland <br>';
                                 $countryName .= 'Czech Republic';
                             } else {
@@ -240,9 +240,8 @@ class HealthCheck
         foreach ($groups as $key => $group) {
             $stores = $group->getStores();
             foreach ($stores as $store) {
-                if (
-                    $store->getIsActive() !== '1'
-                    || $this->_config->isMethodActive($store->getStoreId()) !== true
+                if ($store->getIsActive() !== '1' 
+                || $this->_config->isMethodActive($store->getStoreId()) !== true
                 ) {
                     continue;
                 }
