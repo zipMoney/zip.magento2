@@ -61,6 +61,11 @@ class HealthCheck
     private $_zendUri;
 
     /**
+     * @var \Magento\Directory\Model\CountryFactory
+     */
+    private $_countryFactory;
+
+    /**
      * HealthCheck constructor.
      * @param \Zip\ZipPayment\Helper\Logger $logger
      * @param \Zip\ZipPayment\Helper\Data $helper
@@ -68,6 +73,7 @@ class HealthCheck
      * @param CurlFactory $curlFactory ,
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Zend\Uri\Uri $zendUri
+     * @param \Magento\Directory\Model\CountryFactory $countryFactory
      */
     public function __construct(
         \Zip\ZipPayment\Helper\Logger $logger,
@@ -75,7 +81,8 @@ class HealthCheck
         \Zip\ZipPayment\Model\Config $config,
         CurlFactory $curlFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Zend\Uri\Uri $zendUri
+        \Zend\Uri\Uri $zendUri,
+        \Magento\Directory\Model\CountryFactory $countryFactory
     ) {
         $this->_logger = $logger;
         $this->_helper = $helper;
@@ -83,6 +90,7 @@ class HealthCheck
         $this->_curlFactory = $curlFactory;
         $this->_storeManager = $storeManager;
         $this->_zendUri = $zendUri;
+        $this->_countryFactory = $countryFactory;
     }
 
     /**
@@ -123,7 +131,7 @@ class HealthCheck
         } else {
             $curlObject->setConfig(
                 [
-                    'timeout' => 10,
+                    'timeout' => 10
                 ]
             );
 
@@ -175,7 +183,16 @@ class HealthCheck
                     if ($regions) {
                         $regionList = 'Api is valid for below regions:<br>';
                         foreach ($regions as $region) {
-                            $regionList .= $this->_region[$region] . '<br>';
+                            if ($region == 'uk') {
+                                $countryName = 'United Kingdom';
+                            } else if ($region == 'twisto') {
+                                $countryName = 'Poland <br>';
+                                $countryName .= 'Czech Republic';
+                            } else {
+                                $country = $this->_countryFactory->create()->loadByCode($region);
+                                $countryName = $country->getName();
+                            }
+                            $regionList .= $countryName . '<br>';
                         }
                         $this->appendItem(self::STATUS_OK, $regionList);
                     }
@@ -223,7 +240,8 @@ class HealthCheck
         foreach ($groups as $key => $group) {
             $stores = $group->getStores();
             foreach ($stores as $store) {
-                if ($store->getIsActive() !== '1'
+                if (
+                    $store->getIsActive() !== '1'
                     || $this->_config->isMethodActive($store->getStoreId()) !== true
                 ) {
                     continue;
