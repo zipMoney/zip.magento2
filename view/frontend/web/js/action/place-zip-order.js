@@ -21,6 +21,9 @@ define(
             messageContainer: null,
             initialize: function (paymentData) {
                 this.paymentData = paymentData;
+                if (!Zip.Checkout && self.Zip.Checkout) {
+                    Zip.Checkout = self.Zip.Checkout;
+                 }
                 Zip.Checkout.init({
                     redirect: window.checkoutConfig.payment.zippayment.inContextCheckoutEnabled ? 0 : 1,
                     checkoutUri: window.checkoutConfig.payment.zippayment.checkoutUri,
