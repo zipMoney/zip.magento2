@@ -51,7 +51,7 @@ define(
                 /** Checkout for guest and registered customer. */
 
                 try {
-                    storage.get(
+                    storage.post(
                         window.checkoutConfig.payment.zippayment.checkoutUri
                     ).done(function (data) {
                         resolve({
