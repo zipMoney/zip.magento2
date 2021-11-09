@@ -37,7 +37,7 @@ class Region implements \Magento\Framework\Option\ArrayInterface
             $countryCode = strtolower($country->getTwoLetterAbbreviation());
             if (in_array($countryCode, $this->_availbaleCountries)){
                 $specificCountries[] = [
-                    'value' => strtolower($country->getTwoLetterAbbreviation()),
+                    'value' => $countryCode,
                     'label' => $country->getFullNameEnglish()
                 ];
             }
