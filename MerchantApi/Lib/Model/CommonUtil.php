@@ -11,7 +11,11 @@ namespace Zip\ZipPayment\MerchantApi\Lib\Model;
 
 class CommonUtil
 {
-
+    // currencies
+    const CURRENCY_AUD = 'AUD';
+    const CURRENCY_NZD = 'NZD';
+    const CURRENCY_GBP = 'GBP';
+    const CURRENCY_USD = 'USD';
 
     // Zip widget will display inside the iframe
     const IFRAME = 'iframe';
