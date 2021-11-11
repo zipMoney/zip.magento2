@@ -12,13 +12,9 @@ class Region implements \Magento\Framework\Option\ArrayInterface
     protected $countryInformationAcquirer;
 
     public function __construct(
- 
         \Magento\Directory\Api\CountryInformationAcquirerInterface $countryInformationAcquirer
-   
     ) {
-   
-           $this->countryInformationAcquirer = $countryInformationAcquirer;
-   
+        $this->countryInformationAcquirer = $countryInformationAcquirer;
     }
 
     /**
