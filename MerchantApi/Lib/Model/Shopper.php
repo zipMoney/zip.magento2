@@ -383,6 +383,9 @@ class Shopper implements ArrayAccess
     public function setGender($gender)
     {
         $allowed_values = ['Male', 'Female', 'Other'];
+        if (!is_null($gender)) {
+            $gender = ucfirst(strtolower($gender));
+        }
         if (!is_null($gender) && (!in_array($gender, $allowed_values))) {
             throw new \InvalidArgumentException("Invalid value for 'gender', must be one of 'Male', 'Female', 'Other'");
         }
