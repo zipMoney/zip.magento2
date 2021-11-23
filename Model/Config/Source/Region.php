@@ -8,7 +8,7 @@ namespace Zip\ZipPayment\Model\Config\Source;
  */
 class Region implements \Magento\Framework\Option\ArrayInterface
 {
-    protected $_availableCountries = array("au","gb","mx","nz","ca","us","ae","sg","za");
+    protected $_availableCountries = ["au","gb","mx","nz","ca","us","ae","sg","za"];
     protected $countryInformationAcquirer;
 
     public function __construct(
@@ -31,7 +31,7 @@ class Region implements \Magento\Framework\Option\ArrayInterface
  
         foreach ($countries as $country) {
             $countryCode = strtolower($country->getTwoLetterAbbreviation());
-            if (in_array($countryCode, $this->_availableCountries)){
+            if (in_array($countryCode, $this->_availableCountries)) {
                 $specificCountries[] = [
                     'value' => $countryCode,
                     'label' => $country->getFullNameEnglish()
@@ -41,7 +41,7 @@ class Region implements \Magento\Framework\Option\ArrayInterface
         // you can use array_column() instead of the above code
         $label = array_column($specificCountries, 'label');
         // Sort the country with label ascending
-        array_multisort( $label, SORT_ASC, $specificCountries);
+        array_multisort($label, SORT_ASC, $specificCountries);
         return $specificCountries;
     }
 }
