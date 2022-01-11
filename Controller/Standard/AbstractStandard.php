@@ -238,7 +238,9 @@ abstract class AbstractStandard extends Action
         $use_checkout_api_quote = false;
         if ($sessionQuote) {
             $addtionalPaymentInfo = $sessionQuote->getPayment()->getAdditionalInformation();
-            $checkout_id = $addtionalPaymentInfo['zip_checkout_id'];
+            if (array_key_exists('zip_checkout_id', $addtionalPaymentInfo)) {
+                $checkout_id = $addtionalPaymentInfo['zip_checkout_id'];
+            }
         }
         // Return Session Quote
         if (!$sessionQuote) {
