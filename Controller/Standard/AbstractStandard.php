@@ -240,19 +240,20 @@ abstract class AbstractStandard extends Action
             $addtionalPaymentInfo = $sessionQuote->getPayment()->getAdditionalInformation();
             if (array_key_exists('zip_checkout_id', $addtionalPaymentInfo)) {
                 $checkout_id = $addtionalPaymentInfo['zip_checkout_id'];
+                if ($checkout_id != $zipMoneyCheckoutId && $checkout_id != 'au-' . $zipMoneyCheckoutId) {
+                    $this->_logger->error(__("Checkout Id does not match with the session quote."));
+                } else {
+                    return $sessionQuote;
+                }
+            } else {
+                $this->_logger->error(__("Checkout Id does not exist in the session quote."));
             }
-        }
-        // Return Session Quote
-        if (!$sessionQuote) {
-            $this->_logger->error(__("Session Quote does not exist."));
-            $use_checkout_api_quote = true;
-        } elseif (!$checkout_id || ($checkout_id != $zipMoneyCheckoutId && $checkout_id != 'au-' . $zipMoneyCheckoutId)) {
-            $this->_logger->error(__("Checkout Id does not match with the session quote."));
             $use_checkout_api_quote = true;
         } else {
-            return $sessionQuote;
+            // Return Session Quote
+            $this->_logger->error(__("Session Quote does not exist."));
+            $use_checkout_api_quote = true;
         }
-
         //Retrurn DB Quote
         if ($use_checkout_api_quote) {
             $checkoutApiQuote = $this->_getQuoteByUsingCheckoutApi($zipMoneyCheckoutId);
