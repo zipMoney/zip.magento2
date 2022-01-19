@@ -15,7 +15,7 @@
         <payment>
             <zippayment>
                 <debug>1</debug>
-                <active>1</active>
+                <active>0</active>
                 <model>ZipMoneyGatewayFacade</model>
                 <title>Zip now, pay later</title>
                 <widget_region>au</widget_region>
