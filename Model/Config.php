@@ -317,7 +317,7 @@ class Config implements ConfigInterface
      * @param int $storeId
      * @return bool
      */
-    public function isMethodActive($method, $storeId = null)
+    public function isMethodActive($storeId = null)
     {
         if (!isset($storeId)) {
             $storeId = $this->_storeId;
