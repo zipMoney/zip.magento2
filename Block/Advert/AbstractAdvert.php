@@ -133,8 +133,11 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
      */
     protected function _configShow($widget, $page)
     {
-        $configPath = $this->_getConfigPath($widget, $page);
-        return $this->_config->getConfigData($configPath);
+        if ($this->_config->isMethodActive()) {
+            $configPath = $this->_getConfigPath($widget, $page);
+            return $this->_config->getConfigData($configPath);
+        }
+        return false;
     }
 
     /**
