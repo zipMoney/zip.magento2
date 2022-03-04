@@ -52,7 +52,7 @@ define(
 
                 try {
                     storage.post(
-                        window.checkoutConfig.payment.zippayment.checkoutUri
+                        window.checkoutConfig.payment.zippayment.checkoutUri, payload, false
                     ).done(function (data) {
                         resolve({
                             data: {redirect_uri: data.redirect_uri}
