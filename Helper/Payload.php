@@ -114,6 +114,11 @@ class Payload extends AbstractHelper
      */
     protected $_isVirtual = true;
 
+    /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    protected $_productMetadata;
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
@@ -129,7 +134,8 @@ class Payload extends AbstractHelper
         \Zip\ZipPayment\Model\Config $config,
         \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection $transactionCollection,
         \Zip\ZipPayment\Helper\Logger $logger,
-        \Zip\ZipPayment\Helper\Data $helper
+        \Zip\ZipPayment\Helper\Data $helper,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata
     ) {
         parent::__construct($context);
 
@@ -148,6 +154,7 @@ class Payload extends AbstractHelper
         $this->_quoteFactory = $quoteFactory;
         $this->_urlBuilder = $context->getUrlBuilder();
         $this->_helper = $helper;
+        $this->_productMetadata = $productMetadata;
     }
 
     /**
@@ -774,8 +781,12 @@ class Payload extends AbstractHelper
      */
     public function getMetadata()
     {
-        $metadata = new Metadata;
-
+        // object not working must use array
+        $version = $this->_productMetadata->getVersion();
+        $metadata['platform'] = 'Magento 2';
+        $metadata['platform_version'] = $version;
+        $metadata['plugin'] = 'zip-zippayment';
+        $metadata['plugin_version'] = $this->_config::VERSION;
         return $metadata;
     }
 

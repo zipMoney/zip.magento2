@@ -9,6 +9,10 @@ use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 class Config implements ConfigInterface
 {
     /**
+     * plugin version 
+     */
+    const VERSION = '1.1.11';
+    /**
      * Method Code name in magento
      *
      * @const
