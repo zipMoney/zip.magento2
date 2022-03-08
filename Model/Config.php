@@ -8,10 +8,7 @@ use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 class Config implements ConfigInterface
 {
-    /**
-     * plugin version 
-     */
-    const VERSION = '1.1.11';
+    const MODULE_NAME = 'Zip_ZipPayment';
     /**
      * Method Code name in magento
      *
@@ -280,6 +277,8 @@ class Config implements ConfigInterface
      */
     protected $_locale;
 
+    protected $_moduleList;
+
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -288,7 +287,8 @@ class Config implements ConfigInterface
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Zip\ZipPayment\Helper\Logger $logger,
-        \Magento\Framework\Locale\Resolver $locale
+        \Magento\Framework\Locale\Resolver $locale,
+        \Magento\Framework\Module\ModuleListInterface $moduleList
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
@@ -298,6 +298,7 @@ class Config implements ConfigInterface
         $this->_messageManager = $messageManager;
         $this->_urlBuilder = $urlBuilder;
         $this->_locale = $locale;
+        $this->_moduleList = $moduleList;
 
         $this->setStoreId($this->_storeManager->getStore()->getId());
     }
@@ -678,5 +679,14 @@ class Config implements ConfigInterface
     {
         $currentLanguageCode = substr($this->_locale->getLocale(), 0, strpos($this->_locale->getLocale(), '_'));
         return $currentLanguageCode;
+    }
+
+    /**
+     * get module version
+     */
+    public function getVersion()
+    {
+        return $this->_moduleList
+            ->getOne(self::MODULE_NAME)['setup_version'];
     }
 }

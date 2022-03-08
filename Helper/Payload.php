@@ -786,7 +786,7 @@ class Payload extends AbstractHelper
         $metadata['platform'] = 'Magento 2';
         $metadata['platform_version'] = $version;
         $metadata['plugin'] = 'zip-zippayment';
-        $metadata['plugin_version'] = $this->_config::VERSION;
+        $metadata['plugin_version'] = $this->_config->getVersion();
         return $metadata;
     }
 
