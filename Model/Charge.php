@@ -283,18 +283,6 @@ class Charge extends AbstractCheckout
 
         // Invoice
         $invoice = $payment->getCreatedInvoice();
-
-        if ($invoice) {
-
-            $this->_order->addStatusHistoryComment(
-                $this->_helper->__(
-                    'Notified customer about invoice #%s.',
-                    $invoice->getIncrementId()
-                )
-            )->setIsCustomerNotified(true);
-
-            $this->_orderRepository->save($this->_order);
-        }
     }
 
     /**
@@ -352,17 +340,7 @@ class Charge extends AbstractCheckout
 
         $this->_logger->info($this->_helper->__("Payment Authorised"));
 
-        $this->_order->setStatus(self::STATUS_MAGENTO_AUTHORIZED);
-
         $this->_orderRepository->save($this->_order);
-
-        if ($this->_order->getCanSendNewEmailFlag()) {
-            try {
-                $this->_orderSender->send($this->_order);
-            } catch (\Exception $e) {
-                $this->_logger->critical($e);
-            }
-        }
     }
 
     /**

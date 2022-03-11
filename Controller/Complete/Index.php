@@ -98,7 +98,11 @@ class Index extends AbstractStandard
 
                     // update order status when successfully paid fix bug
                     // all order is pending deal to order and payment are async
-                    $orderState = \Magento\Sales\Model\Order::STATE_PROCESSING;
+                    if ($this->_config->isCharge()) {
+                        $orderState = \Magento\Sales\Model\Order::STATE_PROCESSING;
+                    } else {
+                        $orderState = \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT;
+                    }
                     $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
                     $this->_logger->debug("Order captured setting order state: "
                         . $orderState . " status: " . $orderStatus);
