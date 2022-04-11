@@ -87,8 +87,18 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
             "environment" => $this->_config->getEnvironment(),
             "title" => $this->_config->getTitle(),
             "inContextCheckoutEnabled" => (bool)$this->_config->isInContextCheckout(),
-            "iframe" => $this->_config->isInContextCheckout()
+            "iframe" => $this->_config->isInContextCheckout(),
+            "isTokenisationEnabled" => $this->_config->isTokenisationEnabled(),
+            "isCustomerWantTokenisation" => $this->_isCustomerSelectedTokenisationBefore()
         ];
         return $config;
+    }
+
+    /**
+     * check database customer before selected tokenisation
+     */
+    protected function _isCustomerSelectedTokenisationBefore()
+    {
+        return false;
     }
 }
