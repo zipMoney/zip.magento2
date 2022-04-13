@@ -114,10 +114,10 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
 
     protected function _canCustomerSeeTokenisationOption()
     {
-        return $this->_config->isTokenisationEnabled() && $this->_isCustomerLogin();
+        return $this->_config->isTokenisationEnabled() && $this->_isCustomerLoggedin();
     }
 
-    protected function _isCustomerLogin()
+    protected function _isCustomerLoggedin()
     {
         if ($this->_customerSession->isLoggedIn()) {
             return true;
