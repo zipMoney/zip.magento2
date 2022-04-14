@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author    Zip Plugin Team <integrations@zip.co>
+ * @copyright 2020 Zip Co Limited
+ * @link      http://zip.co
+ */
+
 namespace Zip\ZipPayment\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
@@ -59,10 +65,17 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     protected $_customerSession;
 
     /**
+     * @var \Zip\ZipPayment\Model\TokenisationFactory
+     */
+    protected $_tokenisationFactory;
+
+
+    /**
      * @param ResolverInterface $localeResolver
      * @param CurrentCustomer $currentCustomer
      * @param PaymentHelper $paymentHelper
      * @param Session $customerSession
+     * @param \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory
      */
     public function __construct(
         ResolverInterface $localeResolver,
@@ -70,7 +83,8 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
         PaymentHelper $paymentHelper,
         Config $config,
         \Zip\ZipPayment\Helper\Logger $logger,
-        Session $customerSession
+        Session $customerSession,
+        \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory
     ) {
         $this->localeResolver = $localeResolver;
         $this->currentCustomer = $currentCustomer;
@@ -78,6 +92,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
         $this->_config = $config;
         $this->_logger = $logger;
         $this->_customerSession = $customerSession;
+        $this->_tokenisationFactory = $tokenFactory->create();
     }
 
     /**
@@ -105,10 +120,16 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     }
 
     /**
-     * check database customer before selected tokenisation
+     * check database customer already has token
      */
     protected function _isCustomerSelectedTokenisationBefore()
     {
+        if ($this->_customerSession->isLoggedIn()) {
+            $this->_tokenisationFactory->load($this->_customerSession->getCustomerId(), 'customer_id');
+            if ($this->_tokenisationFactory->getCustomerToken()) {
+                return true;
+            }
+        }
         return false;
     }
 
