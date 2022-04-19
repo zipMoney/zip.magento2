@@ -39,7 +39,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     8,
                     ['unsigned' => true, 'nullable' => false],
-                    'customer ID'
+                    'Customer ID'
                 )->addColumn(
                     'customer_token',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
