@@ -129,14 +129,16 @@ class Charge extends AbstractCheckout
      *
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Charge
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @param bool $token
      */
-    public function charge()
+    public function charge($token)
     {
         if (!$this->_order || !$this->_order->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The order does not exist.'));
         }
 
-        $payload = $this->_payloadHelper->getChargePayload($this->_order);
+
+        $payload = $this->_payloadHelper->getChargePayload($this->_order, $token);
 
         $this->_logger->debug("Charge Payload:- " . $this->_helper->jsonEncode($payload));
 

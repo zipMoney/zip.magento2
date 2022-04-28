@@ -14,6 +14,7 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Model\Session;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Zip\ZipPayment\Model\Config;
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 /**
  * @author    Zip Plugin Team <integrations@zip.co>
@@ -69,6 +70,11 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     protected $_tokenisationFactory;
 
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
 
     /**
      * @param ResolverInterface $localeResolver
@@ -76,6 +82,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      * @param PaymentHelper $paymentHelper
      * @param Session $customerSession
      * @param \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         ResolverInterface $localeResolver,
@@ -84,7 +91,8 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
         Config $config,
         \Zip\ZipPayment\Helper\Logger $logger,
         Session $customerSession,
-        \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory
+        \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->localeResolver = $localeResolver;
         $this->currentCustomer = $currentCustomer;
@@ -93,6 +101,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
         $this->_logger = $logger;
         $this->_customerSession = $customerSession;
         $this->_tokenisationFactory = $tokenFactory->create();
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -114,7 +123,8 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
             "inContextCheckoutEnabled" => (bool)$this->_config->isInContextCheckout(),
             "iframe" => $this->_config->isInContextCheckout(),
             "isTokenisationEnabled" => $this->_canCustomerSeeTokenisationOption(),
-            "isCustomerWantTokenisation" => $this->_isCustomerSelectedTokenisationBefore()
+            "isCustomerWantTokenisation" => $this->_isCustomerSelectedTokenisationBefore(),
+            "isRedirect" => $this->_isRedirect(),
         ];
         return $config;
     }
@@ -124,6 +134,10 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     protected function _isCustomerSelectedTokenisationBefore()
     {
+        $currentCurrencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
+        if ($currentCurrencyCode != CommonUtil::CURRENCY_AUD) {
+            return false;
+        }
         if ($this->_customerSession->isLoggedIn()) {
             $this->_tokenisationFactory->load($this->_customerSession->getCustomerId(), 'customer_id');
             if ($this->_tokenisationFactory->getCustomerToken()) {
@@ -144,5 +158,10 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
             return true;
         }
         return false;
+    }
+
+    protected function _isRedirect()
+    {
+        return !$this->_config->isInContextCheckout() || ($this->_canCustomerSeeTokenisationOption() && $this->_isCustomerSelectedTokenisationBefore());
     }
 }
