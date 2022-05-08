@@ -66,10 +66,11 @@ class Checkout extends AbstractCheckout
      * Create quote in Zip side if not existed, and request for redirect url
      *
      * @param \Magento\ $quote
+     * @param bool $token
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function start()
+    public function start($token = false)
     {
         if (!$this->_quote || !$this->_quote->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The quote does not exist.'));
@@ -115,7 +116,7 @@ class Checkout extends AbstractCheckout
          */
         //$this->_quoteRepository->save($this->_quote);
 
-        $request = $this->_payloadHelper->getCheckoutPayload($this->_quote);
+        $request = $this->_payloadHelper->getCheckoutPayload($this->_quote, $token);
 
         $this->_logger->debug("Checkout Request:- " . $this->_payloadHelper->jsonEncode($request));
 

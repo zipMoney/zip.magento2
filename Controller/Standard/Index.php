@@ -22,9 +22,36 @@ class Index extends AbstractStandard
         try {
             $this->_logger->info("Starting Checkout");
             // Do the checkout
-            $this->_initCheckout()->start();
-
+            $token = false;
+            if ($this->_customerSession->isLoggedIn()) {
+                $rawData =  $this->_jsonHelper->jsonDecode($this->getRequest()->getContent());
+                if (!empty($rawData)) {
+                    if ($rawData['is_customer_want_tokenisation']) {
+                        $token = $rawData['is_customer_want_tokenisation'];
+                    }
+                    if (!$rawData['is_customer_want_tokenisation']) {
+                        $this->_removeCustomerToken();
+                    }
+                }
+            }
             // Get the redirect url
+            if (filter_var($token, FILTER_VALIDATE_BOOLEAN) && $this->_isCustomerSelectedTokenisationBefore()) {
+                $redirect_url = $this->_urlBuilder->getUrl(
+                    'zippayment/complete',
+                    [
+                        'checkoutId' => 'checkoutid',
+                        'result' => self::CHECKOUT_STATUS_APPROVED,
+                        'token' => true,
+                        'iframe' => $this->_config->isInContextCheckout(),
+                    ]
+                );
+                $data = [
+                    'redirect_uri' => $redirect_url,
+                    'message' => __('Redirecting for charge.')
+                ];
+                return $this->_sendResponse($data, \Magento\Framework\Webapi\Response::HTTP_OK);
+            }
+            $this->_initCheckout()->start($token);
             if ($redirectUrl = $this->_checkout->getRedirectUrl()) {
                 $currencyCode = $this->_getCurrencyCode();
                 if ($this->_config->isInContextCheckout() && $currencyCode == CommonUtil::CURRENCY_NZD) {

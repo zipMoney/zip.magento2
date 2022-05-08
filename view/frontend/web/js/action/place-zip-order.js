@@ -25,7 +25,7 @@ define(
                     Zip.Checkout = self.Zip.Checkout;
                  }
                 Zip.Checkout.init({
-                    redirect: window.checkoutConfig.payment.zippayment.inContextCheckoutEnabled ? 0 : 1,
+                    redirect: window.checkoutConfig.payment.zippayment.isRedirect ? window.checkoutConfig.payment.zippayment.inContextCheckoutEnabled ? $('#place-order-tokenisation').is(":checked") && 1 : 1 : 0,
                     checkoutUri: window.checkoutConfig.payment.zippayment.checkoutUri,
                     redirectUri: window.checkoutConfig.payment.zippayment.redirectUri,
                     onComplete: this.onComplete.bind(this),
@@ -36,7 +36,7 @@ define(
             onComplete: function (response) {
                 if (response.state == "approved" || response.state == "referred") {
                     customerData.invalidate(['cart']);
-                    location.href = window.checkoutConfig.payment.zippayment.redirectUri + "?result=" + response.state + "&checkoutId=" + response.checkoutId;
+                    location.href = window.checkoutConfig.payment.zippayment.redirectUri + "?result=" + response.state + "&checkoutId=" + response.checkoutId+"&token=" + $('#place-order-tokenisation').is(":checked");
                 } else {
                     fullScreenLoader.stopLoader();
                 }
@@ -52,7 +52,9 @@ define(
 
                 try {
                     storage.post(
-                        window.checkoutConfig.payment.zippayment.checkoutUri
+                        window.checkoutConfig.payment.zippayment.checkoutUri,JSON.stringify({
+                            is_customer_want_tokenisation: $('#place-order-tokenisation').is(":checked")
+                        }), false
                     ).done(function (data) {
                         resolve({
                             data: {redirect_uri: data.redirect_uri}
