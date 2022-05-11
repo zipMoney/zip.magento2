@@ -46,7 +46,7 @@ class RefundDataBuilder extends AbstractDataBuilder
         );
         $this->_logger->debug(
             "Refund Request:- "
-            . $this->_helper->jsonEncode($payload)
+                . $this->_logger->sanitizePrivateData($payload)
         );
 
         if (!$payment instanceof OrderPaymentInterface) {

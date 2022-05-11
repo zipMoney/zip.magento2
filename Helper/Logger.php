@@ -24,7 +24,7 @@ class Logger extends AbstractHelper
         6 => 200, // 'INFO' ,
         7 => 100, // 'DEBUG'
     ];
-
+    protected $_privateDataKeys = null;
     /**
      * Logs the info message to the logfile
      *
@@ -135,5 +135,56 @@ class Logger extends AbstractHelper
     public function emergency($message, $storeId = null)
     {
         $this->_log($message, ZipMoneyLogger::EMERGENCY);
+    }
+
+    /**
+     * hide the customer privacy data from our log
+     * such as phone, address, email, lastname, dob
+     */
+    protected function sanitizeArrData($debugData)
+    {
+        $privateData = $this->getPrivateData();
+        if (is_array($debugData) && !empty($privateData)) {
+            foreach ($debugData as $key => $val) {
+                if (is_array($val)) {
+                    $debugData[$key] = $this->sanitizeArrData($debugData[$key]);
+                } elseif (in_array($key, $this->getPrivateData()) && !is_numeric($key)) {
+                    $debugData[$key] = '****';
+                } elseif (stristr($val, 'Authorization: Bearer') !== false) {
+                    $debugData[$key] = '****';
+                }
+            }
+        }
+
+        return $debugData;
+    }
+
+    /**
+     * Need to protect privacy here before we logging
+     */
+    public function getPrivateData()
+    {
+        return array(
+            'line1',
+            'line2',
+            'last_name',
+            'phone',
+            'email',
+            'birth_date',
+            'value'
+        );
+    }
+
+    public function sanitizePrivateData($debug)
+    {
+        if ((is_string($debug) || is_object(json_decode($debug)) || is_array(json_decode($debug, true))) && !empty($debug)) {
+            $json = json_decode($debug, true);
+            if (is_array($json)) {
+                return json_encode($this->sanitizeArrData($json));
+            }
+        } elseif (is_array($debug)) {
+            return $this->sanitizeArrData($debug);
+        }
+        return $debug;
     }
 }

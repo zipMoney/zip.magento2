@@ -403,7 +403,7 @@ abstract class AbstractStandard extends Action
             $this->renderLayout();
             $this->_logger->info(__('Successful to redirect to referred page.'));
         } catch (\Exception $e) {
-            $this->_logger->error(json_encode($this->getRequest()->getParams()));
+            $this->_logger->error($this->_logger->sanitizePrivateData($this->getRequest()->getParams()));
             $this->_logger->error($e->getMessage());
             $this->_getCheckoutSession()->addError($this->__('An error occurred during redirecting to referred page.'));
         }
@@ -424,7 +424,7 @@ abstract class AbstractStandard extends Action
             $this->renderLayout();
             $this->_logger->info(__('Successful to redirect to error page.'));
         } catch (\Exception $e) {
-            $this->_logger->error(json_encode($this->getRequest()->getParams()));
+            $this->_logger->error($this->_logger->sanitizePrivateData($this->getRequest()->getParams()));
             $this->_getCheckoutSession()->addError(__('An error occurred during redirecting to error page.'));
         }
     }

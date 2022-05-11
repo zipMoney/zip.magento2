@@ -48,8 +48,7 @@ class TransactionCapture extends AbstractTransaction implements ClientInterface
                 $this->_helper->generateIdempotencyKey()
             );
             $response = ["api_response" => $charge];
-            $this->_logger->debug("Capture Charge Response:- " . $this->_helper->jsonEncode($charge));
-
+            $this->_logger->debug("Capture Charge Response:- " . $this->_logger->sanitizePrivateData($charge));
         } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
 
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
