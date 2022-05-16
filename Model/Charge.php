@@ -140,13 +140,13 @@ class Charge extends AbstractCheckout
 
         $payload = $this->_payloadHelper->getChargePayload($this->_order, $token);
 
-        $this->_logger->debug("Charge Payload:- " . $this->_helper->jsonEncode($payload));
+        $this->_logger->debug("Charge Payload:- " . $this->_logger->sanitizePrivateData($payload));
 
         try {
             $charge = $this->getApi()
                 ->chargesCreate($payload, $this->genIdempotencyKey());
 
-            $this->_logger->debug("Charge Response:- " . $this->_helper->jsonEncode($charge));
+            $this->_logger->debug("Charge Response:- " . $this->_logger->sanitizePrivateData($charge));
 
             if (isset($charge->error)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Could not create the charge'));

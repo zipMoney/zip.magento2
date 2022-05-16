@@ -56,7 +56,7 @@ class TransactionRefund extends AbstractTransaction implements ClientInterface
         try {
             $refund = $this->_service->refundsCreate($payload, $this->_helper->generateIdempotencyKey());
             $response = ["api_response" => $refund];
-            $this->_logger->debug("Refund Response:- " . $this->_helper->jsonEncode($refund));
+            $this->_logger->debug("Refund Response:- " . $this->_logger->sanitizePrivateData($refund));
         } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
             $response['message'] = $message;
