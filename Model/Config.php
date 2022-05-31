@@ -381,6 +381,8 @@ class Config implements ConfigInterface
             $storeId = $this->_storeId;
         }
 
+        $key = $key ?? '';
+
         $underscored = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $key));
 
         $path = "payment/" . self::METHOD_CODE . "/" . $underscored;
