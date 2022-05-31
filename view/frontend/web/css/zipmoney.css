@@ -25,3 +25,6 @@
     padding: 10px 0px 10px 33px;
     margin-top: 20px;
 }
+img.payment-icon.zip-checkout-icon {
+    vertical-align: text-bottom !important;
+}
