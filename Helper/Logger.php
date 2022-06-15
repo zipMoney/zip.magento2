@@ -164,7 +164,7 @@ class Logger extends AbstractHelper
      */
     public function getPrivateData()
     {
-        return array(
+        return [
             'line1',
             'line2',
             'last_name',
@@ -172,7 +172,7 @@ class Logger extends AbstractHelper
             'email',
             'birth_date',
             'value'
-        );
+        ];
     }
 
     public function sanitizePrivateData($debug)

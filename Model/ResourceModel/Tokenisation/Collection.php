@@ -12,7 +12,6 @@ namespace Zip\ZipPayment\Model\ResourceModel\Tokenisation;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
-
 class Collection extends AbstractCollection
 {
     const ZIP_CUSTOMER_TOKEN_TABLE_NAME = 'zip_customer_token';

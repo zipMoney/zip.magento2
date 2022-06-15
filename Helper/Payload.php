@@ -899,7 +899,7 @@ class Payload extends AbstractHelper
 
     /**
      * Prepares the Token payload
-     * 
+     *
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateTokenRequest
      */
     public function getTokenPayload()
