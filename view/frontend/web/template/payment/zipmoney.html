@@ -23,6 +23,10 @@
                 <!-- ko i18n: 'Learn More?' --><!-- /ko -->
             </a>
         </div>
+        <div class="col-mp mp-12" data-bind="visible: isTokenisationActive()">
+            <input type="checkbox" name="tokenisation" data-bind="checked: isCustomerWantTokenisation, attr: {id: 'place-order-tokenisation'}"/>
+            <label data-bind="attr: {for: 'place-order-tokenisation'}"><span data-bind="i18n: 'Save Zip for future purchases'"></span></label>
+        </div>
 
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->

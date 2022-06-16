@@ -37,6 +37,7 @@ define(
             defaults: {
                 template: 'Zip_ZipPayment/payment/zipmoney'
             },
+            isCustomerWantTokenisation: window.checkoutConfig.payment.zippayment.isCustomerWantTokenisation,
             initChildren: function () {
                 this.messageContainer = new Messages();
                 this.createMessagesComponent();
@@ -124,7 +125,11 @@ define(
             },
             zipCheckoutTitle: function () {
                 Zip.Widget.render();
+            },
+            isTokenisationActive: function () {
+                return  window.checkoutConfig.payment.zippayment.isTokenisationEnabled;
             }
+
         });
     }
 );

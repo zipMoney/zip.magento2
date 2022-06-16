@@ -129,22 +129,24 @@ class Charge extends AbstractCheckout
      *
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Charge
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @param bool $token
      */
-    public function charge()
+    public function charge($token)
     {
         if (!$this->_order || !$this->_order->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The order does not exist.'));
         }
 
-        $payload = $this->_payloadHelper->getChargePayload($this->_order);
 
-        $this->_logger->debug("Charge Payload:- " . $this->_helper->jsonEncode($payload));
+        $payload = $this->_payloadHelper->getChargePayload($this->_order, $token);
+
+        $this->_logger->debug("Charge Payload:- " . $this->_logger->sanitizePrivateData($payload));
 
         try {
             $charge = $this->getApi()
                 ->chargesCreate($payload, $this->genIdempotencyKey());
 
-            $this->_logger->debug("Charge Response:- " . $this->_helper->jsonEncode($charge));
+            $this->_logger->debug("Charge Response:- " . $this->_logger->sanitizePrivateData($charge));
 
             if (isset($charge->error)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Could not create the charge'));

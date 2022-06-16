@@ -34,6 +34,7 @@ class Index extends AbstractStandard
             $this->_logger->debug($this->getRequest()->getRequestUri());
             $checkoutId = $this->getRequest()->getParam('checkoutId');
             $result = $this->getRequest()->getParam('result');
+            $token = $this->getRequest()->getParam('token', null);
 
             $this->_logger->debug(__("Result:- %s", $result));
             // Is result valid ?
@@ -62,7 +63,8 @@ class Index extends AbstractStandard
                 $block->setData('state', $result);
                 $url = $this->_urlBuilder->getUrl('zippayment/complete')
                     . '?checkoutId=' . $checkoutId
-                    . '&result=' . $result;
+                    . '&result=' . $result
+                    . '&token=' . $token;
                 $block->setData('redirectUrl', $url);
                 /** @var \Magento\Framework\App\Response $response */
                 $response = $this->getResponse();
@@ -70,7 +72,7 @@ class Index extends AbstractStandard
             }
 
             // Set the customer quote
-            $this->_setCustomerQuote();
+            $this->_setCustomerQuote($token);
             // Initialise the charge
             $this->_initCharge();
             // Set quote to the chekout model
@@ -94,7 +96,7 @@ class Index extends AbstractStandard
                 try {
                     // Create the Order
                     $order = $this->_charge->placeOrder();
-                    $this->_charge->charge();
+                    $this->_charge->charge($token);
 
                     // update order status when successfully paid fix bug
                     // all order is pending deal to order and payment are async

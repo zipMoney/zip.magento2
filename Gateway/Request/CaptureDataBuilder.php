@@ -41,7 +41,7 @@ class CaptureDataBuilder extends AbstractDataBuilder
         $captureAmount = $this->getMultiCurrencyAmount($payment, $amount);
         $payload = $this->_payloadHelper->getCapturePayload($order, $captureAmount);
 
-        $this->_logger->debug("Capture Request:- " . $this->_helper->jsonEncode($payload));
+        $this->_logger->debug("Capture Request:- " . $this->_logger->sanitizePrivateData($payload));
 
         if (!$payment instanceof OrderPaymentInterface) {
             throw new \LogicException('Order payment should be provided.');

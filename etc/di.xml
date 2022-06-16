@@ -9,8 +9,7 @@
 * @link        https://zip.co
 */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <!-- DI Config For external zipMoney Merchant API -->
     <virtualType name="ZipMoneyGatewayFacade" type="Magento\Payment\Model\Method\Adapter">
@@ -25,6 +24,8 @@
     </virtualType>
     <!-- CheckoutsApi -->
     <virtualType name="checkoutsApi" type="\Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi"></virtualType>
+    <!-- TokensApi -->
+    <virtualType name="tokensApi" type="\Zip\ZipPayment\MerchantApi\Lib\Api\TokensApi"></virtualType>
     <!-- ChargesApi -->
     <virtualType name="chargesApi" type="\Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi"></virtualType>
     <!-- RefundsApi -->
@@ -37,6 +38,11 @@
         </arguments>
     </type>
 
+    <type name="Zip\ZipPayment\Model\Token">
+        <arguments>
+            <argument name="tokensApi" xsi:type="object">tokensApi</argument>
+        </arguments>
+    </type>
 
     <type name="Zip\ZipPayment\Model\Charge">
         <arguments>

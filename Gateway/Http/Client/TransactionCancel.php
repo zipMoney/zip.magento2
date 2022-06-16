@@ -51,8 +51,7 @@ class TransactionCancel extends AbstractTransaction implements ClientInterface
         try {
             $cancel = $this->_service->chargesCancel($zip_charge_id, $this->_helper->generateIdempotencyKey());
             $response = ["api_response" => $cancel];
-            $this->_logger->debug("Cancel Response:- " . $this->_helper->jsonEncode($cancel));
-
+            $this->_logger->debug("Cancel Response:- " . $this->_logger->sanitizePrivateData($cancel));
         } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
 

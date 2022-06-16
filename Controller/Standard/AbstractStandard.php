@@ -4,6 +4,7 @@ namespace Zip\ZipPayment\Controller\Standard;
 
 use \Magento\Framework\App\Action\Action;
 use \Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi;
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 /**
  * @category  Zip
@@ -15,12 +16,14 @@ use \Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi;
 abstract class AbstractStandard extends Action
 {
     const CHECKOUT_ID_KEY = 'id';
+    const CHECKOUT_STATUS_APPROVED = 'approved';
     /**
      * Common Route
      *
      * @const
      */
     const ZIPMONEY_STANDARD_ROUTE = "zippayment/standard";
+    const ZIPMONEY_COMPLETE_ROUTE = "zippayment/complete";
     /**
      * Error Route
      *
@@ -159,6 +162,16 @@ abstract class AbstractStandard extends Action
      */
     protected $_pageFactory;
 
+    /**
+     * @var \Zip\ZipPayment\Model\TokenisationFactory
+     */
+    protected $_tokenisationFactory;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $pageFactory,
@@ -175,7 +188,9 @@ abstract class AbstractStandard extends Action
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
-        \Zip\ZipPayment\Model\Checkout\Factory $checkoutFactory
+        \Zip\ZipPayment\Model\Checkout\Factory $checkoutFactory,
+        \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_pageFactory = $pageFactory;
         $this->_checkoutSession = $checkoutSession;
@@ -194,6 +209,8 @@ abstract class AbstractStandard extends Action
         $this->_checkoutFactory = $checkoutFactory;
         $this->_messageManager = $context->getMessageManager();
         $this->_config = $config;
+        $this->_tokenisationFactory = $tokenFactory->create();
+        $this->_storeManager = $storeManager;
 
         parent::__construct($context);
     }
@@ -203,10 +220,10 @@ abstract class AbstractStandard extends Action
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function _setCustomerQuote()
+    public function _setCustomerQuote($token = false)
     {
         // Retrieve a valid quote
-        if ($quote = $this->_retrieveQuote()) {
+        if ($quote = $this->_retrieveQuote($token)) {
 
             // Verify that the customer is a valid customer of the quote
             $this->_verifyCustomerForQuote($quote);
@@ -231,9 +248,12 @@ abstract class AbstractStandard extends Action
      *
      * @return \Magento\Quote\Model\Quote
      */
-    protected function _retrieveQuote()
+    protected function _retrieveQuote($token = false)
     {
         $sessionQuote = $this->_getCheckoutSession()->getQuote();
+        if (filter_var($token, FILTER_VALIDATE_BOOLEAN) && $sessionQuote) {
+            return $sessionQuote;
+        }
         $zipMoneyCheckoutId = $this->getRequest()->getParam('checkoutId');
         $use_checkout_api_quote = false;
         if ($sessionQuote) {
@@ -383,7 +403,7 @@ abstract class AbstractStandard extends Action
             $this->renderLayout();
             $this->_logger->info(__('Successful to redirect to referred page.'));
         } catch (\Exception $e) {
-            $this->_logger->error(json_encode($this->getRequest()->getParams()));
+            $this->_logger->error($this->_logger->sanitizePrivateData($this->getRequest()->getParams()));
             $this->_logger->error($e->getMessage());
             $this->_getCheckoutSession()->addError($this->__('An error occurred during redirecting to referred page.'));
         }
@@ -404,7 +424,7 @@ abstract class AbstractStandard extends Action
             $this->renderLayout();
             $this->_logger->info(__('Successful to redirect to error page.'));
         } catch (\Exception $e) {
-            $this->_logger->error(json_encode($this->getRequest()->getParams()));
+            $this->_logger->error($this->_logger->sanitizePrivateData($this->getRequest()->getParams()));
             $this->_getCheckoutSession()->addError(__('An error occurred during redirecting to error page.'));
         }
     }
@@ -603,5 +623,29 @@ abstract class AbstractStandard extends Action
     protected function _getCurrencyCode()
     {
         return $this->_getQuote()->getQuoteCurrencyCode();
+    }
+
+    /**
+     * check database customer already has token
+     */
+    protected function _isCustomerSelectedTokenisationBefore()
+    {
+        $this->_tokenisationFactory->load($this->_customerSession->getCustomerId(), 'customer_id');
+        if ($this->_tokenisationFactory->getCustomerToken()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * remove token from the database
+     */
+    protected function _removeCustomerToken()
+    {
+        $currentCurrencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
+        if ($currentCurrencyCode == CommonUtil::CURRENCY_AUD && $this->_customerSession->isLoggedIn()) {
+            $this->_tokenisationFactory->load($this->_customerSession->getCustomerId(), 'customer_id');
+            $this->_tokenisationFactory->delete();
+        }
     }
 }

@@ -6,8 +6,10 @@ use \Magento\Framework\App\Helper\AbstractHelper;
 use \Magento\Checkout\Model\Type\Onepage;
 use \Magento\Sales\Model\Order;
 use \Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequest as CheckoutRequest;
+use \Zip\ZipPayment\MerchantApi\Lib\Model\CreateTokenRequest as TokenRequest;
 use \Zip\ZipPayment\MerchantApi\Lib\Model\CreateChargeRequest as ChargeRequest;
 use \Zip\ZipPayment\MerchantApi\Lib\Model\CreateRefundRequest as RefundRequest;
+use \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutFeaturesTokenisation as Tokenisation;
 use \Zip\ZipPayment\MerchantApi\Lib\Model\CaptureChargeRequest;
 use \Zip\ZipPayment\MerchantApi\Lib\Model\Shopper;
 use \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder;
@@ -20,6 +22,7 @@ use \Zip\ZipPayment\MerchantApi\Lib\Model\OrderItem;
 use \Zip\ZipPayment\MerchantApi\Lib\Model\ShopperStatistics;
 use \Zip\ZipPayment\MerchantApi\Lib\Model\Metadata;
 use \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration;
+use Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutFeatures;
 
 /**
  * @author    Zip Plugin Team <integrations@zip.co>
@@ -119,6 +122,33 @@ class Payload extends AbstractHelper
      */
     protected $_productMetadata;
 
+    /**
+     * Token mode type
+     *
+     * @var string
+     */
+    protected $_tokenModel = \Zip\ZipPayment\Model\Token::class;
+
+    /**
+     * @var \Zip\ZipPayment\Model\Token
+     */
+    protected $_token;
+
+    /**
+     * @var \Magento\Framework\Encryption\EncryptorInterface
+     */
+    protected $_encryptor;
+
+    /**
+     * @var \Zip\ZipPayment\Model\TokenisationFactory
+     */
+    protected $_tokenisationFactory;
+
+    /**
+     * @var \Magento\Paypal\Model\Express\Checkout\Factory
+     */
+    protected $_checkoutFactory;
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
@@ -135,7 +165,10 @@ class Payload extends AbstractHelper
         \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection $transactionCollection,
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
-        \Magento\Framework\App\ProductMetadataInterface $productMetadata
+        \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
     ) {
         parent::__construct($context);
 
@@ -155,15 +188,19 @@ class Payload extends AbstractHelper
         $this->_urlBuilder = $context->getUrlBuilder();
         $this->_helper = $helper;
         $this->_productMetadata = $productMetadata;
+        $this->_tokenisationFactory = $tokenFactory->create();
+        $this->_encryptor = $encryptor;
+        $this->_checkoutFactory = $checkoutFactory;
     }
 
     /**
      * Prepares the checkout payload
      *
      * @param \Magento\Quote\Model\Quote $quote
+     * @param bool $token
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequest
      */
-    public function getCheckoutPayload($quote)
+    public function getCheckoutPayload($quote, $token = false)
     {
         $checkoutReq = new CheckoutRequest();
 
@@ -173,7 +210,10 @@ class Payload extends AbstractHelper
             ->setShopper($this->getShopper())
             ->setOrder($this->getOrderDetails(new CheckoutOrder))
             ->setMetadata($this->getMetadata())
-            ->setConfig($this->getCheckoutConfiguration());
+            ->setConfig($this->getCheckoutConfiguration($token));
+        if (filter_var($token, FILTER_VALIDATE_BOOLEAN)) {
+            $checkoutReq->setFeatures($this->getTokenisationFeature());
+        }
         return $checkoutReq;
     }
 
@@ -791,21 +831,36 @@ class Payload extends AbstractHelper
     }
 
     /**
+     * Returns the Tokenisation feature
+     *
+     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutFeatures
+     */
+    public function getTokenisationFeature()
+    {
+        $feature = new CheckoutFeatures;
+        $tokenisation = new Tokenisation;
+        $tokenisation->setRequired(true);
+        $feature->setTokenisation($tokenisation);
+
+        return $feature;
+    }
+
+    /**
      * Returns the checkoutconfiguration
      *
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration
      */
-    public function getCheckoutConfiguration()
+    public function getCheckoutConfiguration($token = false)
     {
         $checkout_config = new CheckoutConfiguration();
         $inContextCheckout = $this->_config->isInContextCheckout();
-        $redirect_url = $this->_urlBuilder->getUrl('zippayment/complete', ['_secure' => true]);
+        $redirect_url = $this->_urlBuilder->getUrl('zippayment/complete', ['_secure' => true, '_query' => ['token' => $token]]);
         if ($inContextCheckout) {
             $redirect_url = $this->_urlBuilder->getUrl(
                 'zippayment/complete',
                 [
                     '_secure' => true,
-                    '_query' => ['iframe' => 1]
+                    '_query' => ['iframe' => 1, 'token' => $token]
                 ]
             );
         }
@@ -820,7 +875,7 @@ class Payload extends AbstractHelper
      * @param \Magento\Sales\Model\Order $order
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateChargeRequest
      */
-    public function getChargePayload($order)
+    public function getChargePayload($order, $token)
     {
         $chargeReq = new ChargeRequest();
 
@@ -837,27 +892,56 @@ class Payload extends AbstractHelper
             ->setReference($order->getIncrementId())
             ->setMetadata($this->getMetadata())
             ->setCapture($this->_config->isCharge())
-            ->setAuthority($this->getAuthority());
+            ->setAuthority($this->getAuthority($token));
 
         return $chargeReq;
     }
 
     /**
-     * Returns the authority
+     * Prepares the Token payload
      *
+     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateTokenRequest
+     */
+    public function getTokenPayload()
+    {
+        $tokenReq = new TokenRequest();
+        $tokenReq->setAuthority($this->getAuthority());
+
+        return $tokenReq;
+    }
+    /**
+     * Returns the authority
+     * @param bool $token
      * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Authority
      */
-    public function getAuthority()
+    public function getAuthority($token = false)
     {
-        $quoteId = $this->getOrder()->getQuoteId();
+        $authority = new Authority();
+        $authorityValue = '';
+        $authorityType = $authority::TYPE_CHECKOUT_ID;
+        if (filter_var($token, FILTER_VALIDATE_BOOLEAN)) {
+            // check customer already has token
+            $this->_tokenisationFactory->load($this->_customerSession->getCustomerId(), 'customer_id');
+            if (!$this->_tokenisationFactory->getCustomerToken()) {
+                $this->_initToken();
+                $tokenResponse = $this->_token->createToken();
+                // save token to the database
+                $this->_tokenisationFactory->setCustomerToken($this->_encryptor->encrypt($tokenResponse->getValue()));
+                $this->_tokenisationFactory->setCustomerId($this->_customerSession->getCustomerId());
+                $this->_tokenisationFactory->save();
+            }
+            $authorityType = $authority::TYPE_ACCOUNT_TOKEN;
+            $authorityValue = $this->_encryptor->decrypt($this->_tokenisationFactory->getCustomerToken());
 
-        $quote = $this->_quoteFactory->create()->load($quoteId);
-        $addtionalPaymentInfo = $quote->getPayment()->getAdditionalInformation();
-        $checkout_id = $addtionalPaymentInfo['zip_checkout_id'];
-        //$checkout_id = $quote->getZipmoneyCheckoutId();
-        $authority = new Authority;
-        $authority->setType('checkout_id')
-            ->setValue($checkout_id);
+            // implement create token
+        } else {
+            $quoteId = $this->getOrder()->getQuoteId();
+            $quote = $this->_quoteFactory->create()->load($quoteId);
+            $addtionalPaymentInfo = $quote->getPayment()->getAdditionalInformation();
+            $authorityValue = $addtionalPaymentInfo['zip_checkout_id'];
+        }
+        $authority->setType($authorityType)
+            ->setValue($authorityValue);
 
         return $authority;
     }
@@ -919,5 +1003,17 @@ class Payload extends AbstractHelper
     public function jsonEncode($object)
     {
         return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($object));
+    }
+
+    /**
+     * Instantiate Charge Model
+     *
+     * @return Zipmoney_ZipPayment_Model_Standard_Checkout
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function _initToken()
+    {
+        return $this->_token = $this->_checkoutFactory
+            ->create($this->_tokenModel);
     }
 }

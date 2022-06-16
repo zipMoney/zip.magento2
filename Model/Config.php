@@ -89,6 +89,13 @@ class Config implements ConfigInterface
     const PAYMENT_ZIPMONEY_INCONTEXT_CHECKOUT = 'incontext_checkout';
 
     /**
+     * Incontext Checkout
+     *
+     * @const
+     */
+    const PAYMENT_ZIPMONEY_ENABLE_TOKENISATION = 'enable_tokenisation';
+
+    /**
      * Minimum Order Total
      *
      * @const
@@ -517,6 +524,21 @@ class Config implements ConfigInterface
             return false;
         }
         return $this->getConfigData(self::PAYMENT_ZIPMONEY_INCONTEXT_CHECKOUT);
+    }
+
+    /**
+     * Check if enable_tokenisation is active
+     *
+     * @return bool
+     */
+    public function isTokenisationEnabled()
+    {
+        $currentCurrencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
+        if ($currentCurrencyCode != CommonUtil::CURRENCY_AUD) {
+            return false;
+        }
+
+        return (bool) $this->getConfigData(self::PAYMENT_ZIPMONEY_ENABLE_TOKENISATION);
     }
 
     /**
