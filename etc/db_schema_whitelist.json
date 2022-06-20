@@ -1,0 +1,16 @@
+{
+    "zip_customer_token": {
+        "column": {
+            "id": true,
+            "customer_id": true,
+            "customer_token": true
+        },
+        "index": {
+            "ZIP_CUSTOMER_TOKEN_CUSTOMER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ZIP_CUSTOMER_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
+    }
+}
