@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="zip_customer_token" resource="default" engine="innodb" comment="zip_customer_token">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+    <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Customer ID"/>
+    <column xsi:type="varchar" name="customer_token" nullable="false" length="255" comment="Customer Token"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="ZIP_CUSTOMER_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="zip_customer_token" column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <index referenceId="ZIP_CUSTOMER_TOKEN_CUSTOMER_ID" indexType="btree">
+      <column name="customer_id"/>
+    </index>
+  </table>
+</schema>
