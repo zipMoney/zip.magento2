@@ -18,8 +18,7 @@ jobs:
         username: ${{ secrets.AWX_USER }}
         password: ${{ secrets.AWX_PASSWORD }}
         customHeaders: '{"Content-Type": "application/x-www-form-urlencoded"}'
-        data: token=afb302575b10acc306bcb6f3ea9686&ref=main
+        data: token=$GITLAB_TOKEN&ref=main
     - name: Show Response
       run: |
-        echo ${{ steps.myRequest.outputs.response }}
         echo ${{ fromJson(steps.myRequest.outputs.response).web_url }}
