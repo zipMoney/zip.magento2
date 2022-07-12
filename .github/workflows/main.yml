@@ -1,0 +1,22 @@
+name: CI
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run E2e Tests
+      id: myRequest
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: 'https://gitlab.com/api/v4/projects/36851785/trigger/pipeline'
+        method: 'POST'
+        customHeaders: '{"Content-Type": "application/x-www-form-urlencoded"}'
+        data: token=${{ secrets.GITLAB_TOKEN }}&ref=main
+    - name: Show Response
+      run: |
+        echo ${{ fromJson(steps.myRequest.outputs.response).web_url }}
