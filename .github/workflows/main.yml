@@ -1,3 +1,10 @@
+name: CI
+on:
+  push:
+    branches: [ "master", "feature/trigger-e2e-tests" ]
+  pull_request:
+    branches: [ "master", "feature/trigger-e2e-tests" ]
+  workflow_dispatch:
 jobs:
   deployment:
     runs-on: ubuntu-latest
