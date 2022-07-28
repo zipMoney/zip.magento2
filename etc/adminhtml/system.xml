@@ -13,9 +13,12 @@
     <system>
         <section id="payment">
             <group id="zippayment" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Zip - Own it now, pay later</label>
-                <attribute type="expanded">1</attribute>
+                <comment>
+                    <![CDATA[<div class="zipmoney-payment-logo"></div><div class="zipmoney-payment-text">Connect Zip to your Magento checkout to provide customers with a seamless buy now, pay later shopping experience.
+                        Seamless Refunds, Daily Settlement, No Fraud Risk, Simple and Ethical Pricing</div>]]>
+                </comment>
                 <fieldset_css>zipmoney-section</fieldset_css>
+                <frontend_model>Zip\ZipPayment\Block\System\Config\Fieldset\Payment</frontend_model>
                 <!--  Basic Settings -->
                 <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable</label>
@@ -39,16 +42,19 @@
                 <field id="check_validity" translate="label" type="button" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Zip\ZipPayment\Block\System\Config\HealthCheck</frontend_model>
                 </field>
-                <field id="enable_tokenisation" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="widget_region" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Region for Widget</label>
+                    <source_model>Zip\ZipPayment\Model\Config\Source\Region</source_model>
+                </field>
+                <field id="enable_tokenisation" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Tokenisation</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>
-                        <![CDATA[This feature only available in Australia. Tokenisation enables fast checkouts for returning Zip users to one or more merchant websites, without the need to login to Zip.]]>
+                        <![CDATA[Tokenisation allows a seamless one-click checkout experience for returning Zip customers, removing the need to redirect and complete a Zip login after their first purchase. (Australia only)]]>
                     </comment>
-                </field>
-                <field id="widget_region" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Region for Widget</label>
-                    <source_model>Zip\ZipPayment\Model\Config\Source\Region</source_model>
+                    <depends>
+                        <field id="*/zippayment/widget_region">au</field>
+                    </depends>
                 </field>
                 <field id="payment_action" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Capture Method</label>
@@ -69,6 +75,9 @@
                     <comment>
                         <![CDATA[In-Context (Iframe) Checkout may not work on some browsers. This feature only work for AU region. Other region it will redirect to zip for payment.]]>
                     </comment>
+                    <depends>
+                        <field id="*/zippayment/widget_region">au</field>
+                    </depends>
                 </field>
 
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
@@ -108,12 +117,18 @@
                                 <![CDATA[Example HTML element selector is .sections .nav-sections. Keep it empty for displaying in default location.]]>
                             </comment>
                         </field>
+                        <depends>
+                            <field id="*/zippayment/widget_region">au</field>
+                        </depends>
                     </group>
                     <group id="productpage" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Product Page</label>
                         <field id="banner" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Display Strip Banner</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <depends>
+                                <field id="*/zippayment/widget_region">au</field>
+                            </depends>
                         </field>
                         <field id="banner_selector" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Strip Banner Element selector</label>
@@ -121,6 +136,9 @@
                             <comment>
                                 <![CDATA[Example HTML element selector is .sections .nav-sections. Keep it empty for displaying in default location.]]>
                             </comment>
+                            <depends>
+                                <field id="*/zippayment/widget_region">au</field>
+                            </depends>
                         </field>
                         <field id="widget" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Display Widget</label>
@@ -128,7 +146,7 @@
                         </field>
                         <field id="widget_selector" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Product Widget Element selector</label>
-                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <tooltip>The product widget will break down the price of the item and display a minimum weekly repayment or divide the price by 4 and show the customer an equal price breakdown</tooltip>
                             <comment>
                                 <![CDATA[Example HTML element selector is .product-info-price. Keep it empty for displaying in default location.]]>
                             </comment>
@@ -139,7 +157,7 @@
                         </field>
                         <field id="tagline_selector" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Tagline Element selector</label>
-                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <tooltip>The tagline does not show any price breakdown or minimum repayments. A tagline will show a static message of ‘Own it now, pay later</tooltip>
                             <comment>
                                 <![CDATA[Example HTML element selector is .product-options-bottom. Keep it empty for displaying in default location.]]>
                             </comment>
@@ -150,6 +168,9 @@
                         <field id="banner" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Display Strip Banner</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <depends>
+                                <field id="*/zippayment/widget_region">au</field>
+                            </depends>
                         </field>
                         <field id="banner_selector" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Strip Banner Element selector</label>
@@ -157,6 +178,9 @@
                             <comment>
                                 <![CDATA[Example HTML element selector is .sections .nav-sections. Keep it empty for displaying in default location.]]>
                             </comment>
+                            <depends>
+                                <field id="*/zippayment/widget_region">au</field>
+                            </depends>
                         </field>
                         <field id="widget" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Display Widget</label>
@@ -164,7 +188,7 @@
                         </field>
                         <field id="widget_selector" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Cart Widget Element selector</label>
-                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <tooltip>The cart widget will break down the price of the item and display a minimum weekly repayment or divide the price by 4 and show the customer an equal price breakdown</tooltip>
                             <comment>
                                 <![CDATA[Example HTML element selector is #cart-totals. Keep it empty for displaying in default location.]]>
                             </comment>
@@ -175,7 +199,7 @@
                         </field>
                         <field id="tagline_selector" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Tagline Element selector</label>
-                            <tooltip>Enter HTML element selector to insert widget in any places</tooltip>
+                            <tooltip>The tagline does not show any price breakdown or minimum repayments. A tagline will show a static message of ‘Own it now, pay later</tooltip>
                             <comment>
                                 <![CDATA[Example HTML element selector is .cart-summary. Keep it empty for displaying in default location.]]>
                             </comment>
