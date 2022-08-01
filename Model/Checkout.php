@@ -138,7 +138,6 @@ class Checkout extends AbstractCheckout
 
             $this->_redirectUrl = $checkout->getUri();
         } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
-            $this->_logger->debug("Errors:- " . $this->_logger->sanitizePrivateData($e->getResponseBody()));
             $this->_logger->debug("Errors:- " . $this->_logger->sanitizePrivateData($e->getCode()));
             $this->_logger->debug("Errors:- " . $this->_logger->sanitizePrivateData($e->getResponseObject()));
             throw new \Magento\Framework\Exception\LocalizedException(
