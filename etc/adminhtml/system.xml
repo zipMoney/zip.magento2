@@ -218,6 +218,9 @@
                                 <![CDATA[Example HTML element selector is .sections .nav-sections. Keep it empty for displaying in default location.]]>
                             </comment>
                         </field>
+                        <depends>
+                            <field id="*/zippayment/widget_region">au</field>
+                        </depends>
                     </group>
                 </group>
             </group>
