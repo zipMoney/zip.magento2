@@ -540,8 +540,7 @@ class Charge extends AbstractCheckout
         $hasDefaultBilling = (bool)$customer->getDefaultBilling();
         $hasDefaultShipping = (bool)$customer->getDefaultShipping();
 
-        if (
-            $shipping && !$shipping->getSameAsBilling() &&
+        if ($shipping && !$shipping->getSameAsBilling() &&
             (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())
         ) {
             $shippingAddress = $shipping->exportCustomerAddress();
@@ -596,12 +595,12 @@ class Charge extends AbstractCheckout
         if ($confirmationStatus === \Magento\Customer\Model\AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
             $url = $this->_customerUrl->getEmailConfirmationUrl($customer->getEmail());
             $this->_messageManager->addSuccess(
-                // @codingStandardsIgnoreStart
+            // @codingStandardsIgnoreStart
                 __(
                     'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
                     $url
                 )
-                // @codingStandardsIgnoreEnd
+            // @codingStandardsIgnoreEnd
             );
         } else {
             $this->_getCustomerSession()->loginById($customer->getId());
