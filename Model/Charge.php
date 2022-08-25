@@ -6,6 +6,7 @@ use Magento\Checkout\Model\Type\Onepage;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Sales\Model\Order;
 use Zip\ZipPayment\Model\Checkout\AbstractCheckout;
+use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
 
 /**
  * @author    Zip Plugin Team <integration@zip.co>
@@ -66,6 +67,15 @@ class Charge extends AbstractCheckout
     protected $_dataObjectHelper;
 
     /**
+     * @var \Zip\ZipPayment\Model\TokenisationFactory
+     */
+    protected $_tokenisationFactory;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+
+    /**
      * Set quote and config instances
      *
      * @param array $params
@@ -90,6 +100,8 @@ class Charge extends AbstractCheckout
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
         \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi $chargesApi,
+        \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->_quoteManagement = $cartManagement;
@@ -103,6 +115,8 @@ class Charge extends AbstractCheckout
         $this->_objectCopyService = $objectCopyService;
         $this->_dataObjectHelper = $dataObjectHelper;
         $this->_api = $chargesApi;
+        $this->_tokenisationFactory = $tokenFactory->create();
+        $this->_storeManager = $storeManager;
 
         parent::__construct(
             $customerSession,
@@ -170,7 +184,9 @@ class Charge extends AbstractCheckout
             $this->_chargeResponse($charge, $this->_config->isCharge());
         } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
-
+            if ($e->getCode() == 403 && filter_var($token, FILTER_VALIDATE_BOOLEAN)) {
+                $this->_removeCustomerToken();
+            }
             // Cancel the order
             $this->_helper->cancelOrder($this->_order, $apiError);
             throw new \Magento\Framework\Exception\LocalizedException(__($message));
@@ -590,5 +606,17 @@ class Charge extends AbstractCheckout
             $this->_getCustomerSession()->loginById($customer->getId());
         }
         return $this;
+    }
+
+    /**
+     * remove token from the database
+     */
+    protected function _removeCustomerToken()
+    {
+        $currentCurrencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
+        if ($currentCurrencyCode == CommonUtil::CURRENCY_AUD && $this->_customerSession->isLoggedIn()) {
+            $this->_tokenisationFactory->load($this->_customerSession->getCustomerId(), 'customer_id');
+            $this->_tokenisationFactory->delete();
+        }
     }
 }
