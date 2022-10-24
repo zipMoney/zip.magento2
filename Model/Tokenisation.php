@@ -11,6 +11,8 @@ class Tokenisation extends \Magento\Framework\Model\AbstractModel implements \Ma
 
     public function getIdentities()
     {
-        return [$this->getId()];
+        if (!is_null($this->getId())) {
+            return [$this->getId()];
+        }
     }
 }
