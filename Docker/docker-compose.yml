@@ -23,7 +23,7 @@ services:
       - MAGENTO_DATABASE_NAME=zip_magento
       - MAGENTO_DATABASE_PASSWORD=test1234
       - MAGENTO_USERNAME=admin
-      - MAGENTO_PASSWORD=P@ssw0rd
+      - MAGENTO_PASSWORD=test1234
       - ELASTICSEARCH_HOST=elasticsearch
       - ELASTICSEARCH_PORT_NUMBER=9200
       - ALLOW_EMPTY_PASSWORD=yes
