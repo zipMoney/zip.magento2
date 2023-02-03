@@ -1,42 +1,55 @@
 version: '2'
 services:
   mariadb:
-    image: docker.io/bitnami/mariadb:10.4
+    image: mariadb:10.4
     environment:
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_USER=bn_magento
       - MARIADB_DATABASE=bitnami_magento
+      - MARIADB_PASSWORD=test1234
+      - MARIADB_ROOT_PASSWORD=test1234
     volumes:
-      - 'mariadb_data:/bitnami/mariadb'
+      - '.docker/mariadb_data:/bitnami/mariadb'
+
   magento:
-    image: bitnami/magento:${MAGENTO_TAG}
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     ports:
-      - '80:8080'
-      - '443:8443'
+      - '8080:8080'
+      - '8443:8443'
     environment:
+      - BITNAMI_DEBUG=yes
       - MAGENTO_HOST=localhost
+      - MAGENTO_EXTERNAL_HTTP_PORT_NUMBER=8080
+      - MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER=8443
       - MAGENTO_DATABASE_HOST=mariadb
       - MAGENTO_DATABASE_PORT_NUMBER=3306
       - MAGENTO_DATABASE_USER=bn_magento
       - MAGENTO_DATABASE_NAME=bitnami_magento
+      - MAGENTO_DATABASE_PASSWORD=test1234
       - ELASTICSEARCH_HOST=elasticsearch
       - ELASTICSEARCH_PORT_NUMBER=9200
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
+      - MAGE_REPO_PUBLIC_KEY=$MAGE_REPO_PUBLIC_KEY
+      - MAGE_REPO_PRIVATE_KEY=$MAGE_REPO_PRIVATE_KEY
+      - ZIPMONEY_SANDBOX_PUBLIC_KEY=$ZIPMONEY_SANDBOX_PUBLIC_KEY
+      - ZIPMONEY_SANDBOX_PRIVATE_KEY=$ZIPMONEY_SANDBOX_PRIVATE_KEY
     volumes:
-      - 'magento_data:/bitnami/magento'
+      - '.docker/magento_data:/bitnami/magento'
+      - '..:/bitnami/magento-zip'
     depends_on:
       - mariadb
       - elasticsearch
+
   elasticsearch:
-    image: docker.io/bitnami/elasticsearch:7
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.8
     volumes:
-      - 'elasticsearch_data:/bitnami/elasticsearch/data'
-volumes:
-  mariadb_data:
-    driver: local
-  magento_data:
-    driver: local
-  elasticsearch_data:
-    driver: local
+      - '.docker/elasticsearch_data:/usr/share/elasticsearch/data'
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2G -Xmx2G"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
