@@ -1,44 +1,14 @@
-version: '2'
+version: '3'
 services:
   mariadb:
     image: mariadb:10.4
     environment:
-      - MARIADB_USER=bn_magento
-      - MARIADB_DATABASE=bitnami_magento
-      - MARIADB_PASSWORD=test1234
-      - MARIADB_ROOT_PASSWORD=test1234
+      - MARIADB_USER=$MAGENTO_DATABASE_USER
+      - MARIADB_DATABASE=$MAGENTO_DATABASE_NAME
+      - MARIADB_PASSWORD=$MAGENTO_DATABASE_PASSWORD
+      - MARIADB_ROOT_PASSWORD=$MAGENTO_DATABASE_PASSWORD
     volumes:
       - '.docker/mariadb_data:/bitnami/mariadb'
-
-  magento:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    ports:
-      - '8080:8080'
-      - '8443:8443'
-    environment:
-      - BITNAMI_DEBUG=yes
-      - MAGENTO_HOST=localhost
-      - MAGENTO_EXTERNAL_HTTP_PORT_NUMBER=8080
-      - MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER=8443
-      - MAGENTO_DATABASE_HOST=mariadb
-      - MAGENTO_DATABASE_PORT_NUMBER=3306
-      - MAGENTO_DATABASE_USER=bn_magento
-      - MAGENTO_DATABASE_NAME=bitnami_magento
-      - MAGENTO_DATABASE_PASSWORD=test1234
-      - ELASTICSEARCH_HOST=elasticsearch
-      - ELASTICSEARCH_PORT_NUMBER=9200
-      - MAGE_REPO_PUBLIC_KEY=$MAGE_REPO_PUBLIC_KEY
-      - MAGE_REPO_PRIVATE_KEY=$MAGE_REPO_PRIVATE_KEY
-      - ZIPMONEY_SANDBOX_PUBLIC_KEY=$ZIPMONEY_SANDBOX_PUBLIC_KEY
-      - ZIPMONEY_SANDBOX_PRIVATE_KEY=$ZIPMONEY_SANDBOX_PRIVATE_KEY
-    volumes:
-      - '.docker/magento_data:/bitnami/magento'
-      - '..:/bitnami/magento-zip'
-    depends_on:
-      - mariadb
-      - elasticsearch
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.8
@@ -46,10 +16,70 @@ services:
       - '.docker/elasticsearch_data:/usr/share/elasticsearch/data'
     environment:
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms2G -Xmx2G"
       - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms2G -Xmx2G"
     ulimits:
       memlock:
         soft: -1
         hard: -1
+
+  # Note: This image purely exists to install and build Magento. The primary reason we separated out CLI and FPM
+  # are because:
+  # 1) Cannot mount Zip plugin properly before composer has installed because then /app/app/code directory wouldn't be empty
+  #    and composer would refuse installation. PS: Mounting to a separate directory and symlinking doesn't work either, 
+  #    since Magento keeps throwing an error that templates are outside Magento's root. The solution was to have a separate image
+  #    which copies the plugin files into module directory after composer has setup Magento, installs the module, deletes the module
+  #    then transfer the files into the Web VM where the plugin is directly mounted from the source files. 
+  # 2) It is way faster on macOS to build within a Docker VM then move the files to outside FS for persistance then it is
+  #    to install the files on a mounted folder. 
+  php-cli-magento:
+    build: ./php-cli-magento
+    env_file:
+      - './.env'
+    volumes:
+      - '.docker/magento:/app-dest'
+      - '~/.composer:/composer'
+      - '..:/magento-zip'
+      - '/magento-zip/Docker'
+      - '/magento-zip/.git'
+    depends_on:
+      - mariadb
+      - elasticsearch
+
+  # Serves Magento using PHP-FPM
+  php-fpm-magento:
+    build: ./php-fpm-magento
+    ports:
+      - 9000:9000
+    env_file:
+      - './.env'
+    volumes:
+      - '.docker/magento:/app'
+      - '..:/app/app/code/Zip/ZipPayment'
+      - '/app/app/code/Zip/ZipPayment/.git'
+      - '/app/app/code/Zip/ZipPayment/Docker'
+    depends_on:
+      - mariadb
+      - elasticsearch
+      - php-cli-magento
+
+  nginx:
+    build: ./nginx
+    depends_on:
+      - php-fpm-magento
+    ports:
+      - 80:80
+      - 8080:8080
+    environment:
+      - FPM_HOST=php-fpm-magento
+    restart: unless-stopped
+    volumes:
+      - '.docker/magento:/app'
+
+  mailhog:
+    hostname: $MAGENTO_HOST
+    image: 'mailhog/mailhog:latest'
+    ports:
+      - '1025:1025'
+      - '8025:8025'
 
