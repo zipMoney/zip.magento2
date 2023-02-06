@@ -1,4 +1,5 @@
-FROM php:8.1.1-cli
+ARG PHP_VERSION=8.1.1
+FROM php:${PHP_VERSION}-cli
 
 ARG MAGENTO_ROOT=/app
 
@@ -85,7 +86,6 @@ RUN pecl install -o -f \
   raphf \
   redis \
   xdebug-3.1.2 \
-  xmlrpc-1.0.0RC3 \
   yaml
 
 RUN curl -L https://packages.blackfire.io/gpg.key | gpg --dearmor > blackfire.io-archive-keyring.gpg \

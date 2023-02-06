@@ -1,7 +1,7 @@
 version: '3'
 services:
   mariadb:
-    image: mariadb:10.4
+    image: mariadb:$MARIADB_VERSION
     environment:
       - MARIADB_USER=$MAGENTO_DATABASE_USER
       - MARIADB_DATABASE=$MAGENTO_DATABASE_NAME
@@ -11,7 +11,7 @@ services:
       - '.docker/mariadb_data:/bitnami/mariadb'
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.8
+    image: docker.elastic.co/elasticsearch/elasticsearch:$ELASTICSEARCH_VERSION
     volumes:
       - '.docker/elasticsearch_data:/usr/share/elasticsearch/data'
     environment:
@@ -33,22 +33,29 @@ services:
   # 2) It is way faster on macOS to build within a Docker VM then move the files to outside FS for persistance then it is
   #    to install the files on a mounted folder. 
   php-cli-magento:
-    build: ./php-cli-magento
+    build:
+      context: ./php-cli-magento
+      args:
+        PHP_VERSION: ${PHP_VERSION}
     env_file:
       - './.env'
     volumes:
-      - '.docker/magento:/app-dest'
-      - '~/.composer:/composer'
+      - '.docker/magento:/app'
       - '..:/magento-zip'
       - '/magento-zip/Docker'
       - '/magento-zip/.git'
+
+      - '~/.composer:/composer'
     depends_on:
       - mariadb
       - elasticsearch
 
   # Serves Magento using PHP-FPM
   php-fpm-magento:
-    build: ./php-fpm-magento
+    build:
+      context: ./php-fpm-magento
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.1.1}
     ports:
       - 9000:9000
     env_file:

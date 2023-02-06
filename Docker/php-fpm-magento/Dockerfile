@@ -1,3 +1,4 @@
+ARG PHP_VERSION=8.1.1
 FROM golang:1.15 AS builder
 
 RUN if [ $(uname -m) = "x86_64" ]; then mailhog_arch="amd64"; else mailhog_arch="arm64"; fi \
@@ -9,7 +10,7 @@ RUN if [ $(uname -m) = "x86_64" ]; then mailhog_arch="amd64"; else mailhog_arch=
     && go get . \
     && GOOS=linux GOARCH=${mailhog_arch} go build -o mhsendmail .
 
-FROM php:8.1.1-fpm
+FROM php:${PHP_VERSION}-fpm
 
 ARG MAGENTO_ROOT=/app
 
@@ -99,7 +100,6 @@ RUN pecl install -o -f \
   raphf \
   redis \
   xdebug-3.1.2 \
-  xmlrpc-1.0.0RC3 \
   yaml
 
 RUN curl -L https://packages.blackfire.io/gpg.key | gpg --dearmor > blackfire.io-archive-keyring.gpg \
