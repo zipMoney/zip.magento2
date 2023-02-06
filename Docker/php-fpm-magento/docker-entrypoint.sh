@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 [ "$DEBUG" = "true" ] && set -x
 

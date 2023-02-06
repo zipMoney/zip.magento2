@@ -40,7 +40,7 @@ services:
     env_file:
       - './.env'
     volumes:
-      - '.docker/magento:/app'
+      - '.docker/magento:/app-dest'
       - '..:/magento-zip'
       - '/magento-zip/Docker'
       - '/magento-zip/.git'
