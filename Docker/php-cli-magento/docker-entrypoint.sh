@@ -26,7 +26,7 @@ if [ ! -f "/app-dest/composer.json" ]; then
 
     echo "Running composer install"
 
-    composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition .
+    composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition . ${MAGENTO_VERSION}
 
     echo "Running setup for Magento" 
 
@@ -47,6 +47,7 @@ if [ ! -f "/app-dest/composer.json" ]; then
         "--search-engine" "elasticsearch7"
         "--elasticsearch-host" "${ELASTICSEARCH_HOST}"
         "--elasticsearch-port" "${ELASTICSEARCH_PORT}"
+        "--key" "${MAGENTO_ENCRYPTION_KEY}"
     )
 
     php bin/magento setup:install "${install_flags[@]}"
