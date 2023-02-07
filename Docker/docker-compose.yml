@@ -8,12 +8,12 @@ services:
       - MARIADB_PASSWORD=$MAGENTO_DATABASE_PASSWORD
       - MARIADB_ROOT_PASSWORD=$MAGENTO_DATABASE_PASSWORD
     volumes:
-      - '.docker/mariadb_data:/bitnami/mariadb'
+      - 'mariadb:/var/lib/mysql'
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:$ELASTICSEARCH_VERSION
     volumes:
-      - '.docker/elasticsearch_data:/usr/share/elasticsearch/data'
+      - 'elasticsearch:/usr/share/elasticsearch/data'
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -40,12 +40,11 @@ services:
     env_file:
       - './.env'
     volumes:
-      - '.docker/magento:/app-dest'
+      - 'magento:/app-dest'
       - '..:/magento-zip'
       - '/magento-zip/Docker'
       - '/magento-zip/.git'
-
-      - '~/.composer:/composer'
+      - 'composer:/composer'
     depends_on:
       - mariadb
       - elasticsearch
@@ -61,7 +60,7 @@ services:
     env_file:
       - './.env'
     volumes:
-      - '.docker/magento:/app'
+      - 'magento:/app'
       - '..:/app/app/code/Zip/ZipPayment'
       - '/app/app/code/Zip/ZipPayment/.git'
       - '/app/app/code/Zip/ZipPayment/Docker'
@@ -72,16 +71,14 @@ services:
 
   nginx:
     build: ./nginx
-    depends_on:
-      - php-fpm-magento
     ports:
-      - 80:80
-      - 8080:8080
+      - 7000:80
+      - 7080:8080
     environment:
       - FPM_HOST=php-fpm-magento
     restart: unless-stopped
     volumes:
-      - '.docker/magento:/app'
+      - 'magento:/app'
 
   mailhog:
     hostname: $MAGENTO_HOST
@@ -90,3 +87,8 @@ services:
       - '1025:1025'
       - '8025:8025'
 
+volumes:
+  mariadb:
+  elasticsearch:
+  magento:
+  composer:
