@@ -1,4 +1,5 @@
 version: '3'
+name: zip-magento2
 services:
   mariadb:
     image: mariadb:$MARIADB_VERSION
