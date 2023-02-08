@@ -71,9 +71,12 @@ services:
 
   nginx:
     build: ./nginx
+    depends_on:
+      - php-fpm-magento
     ports:
-      - 7000:80
-      - 7080:8080
+      - 8000:80
+      - 8080:8080
+      - 9001:9001
     environment:
       - FPM_HOST=php-fpm-magento
     restart: unless-stopped

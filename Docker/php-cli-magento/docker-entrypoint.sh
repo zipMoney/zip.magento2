@@ -48,6 +48,9 @@ if [ ! -f "/app-dest/composer.json" ]; then
         "--elasticsearch-host" "${ELASTICSEARCH_HOST}"
         "--elasticsearch-port" "${ELASTICSEARCH_PORT}"
         "--key" "${MAGENTO_ENCRYPTION_KEY}"
+        "--language" "en_AU"
+        "--currency" "AUD"
+        "--timezone" "Australia/Sydney"
     )
 
     php bin/magento setup:install "${install_flags[@]}"
