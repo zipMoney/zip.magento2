@@ -76,7 +76,6 @@ services:
     ports:
       - 8000:80
       - 8080:8080
-      - 9001:9001
     environment:
       - FPM_HOST=php-fpm-magento
     restart: unless-stopped
