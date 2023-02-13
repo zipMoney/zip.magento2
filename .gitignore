@@ -1,4 +1,3 @@
 .idea/*
-Docker/.docker
 .DS_Store
-Docker/.env
+Docker/
