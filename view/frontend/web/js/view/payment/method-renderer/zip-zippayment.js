@@ -57,7 +57,7 @@ define(
                     this.selectPaymentMethod();
 
                     setPaymentMethodAction(this.messageContainer)
-                        .success(function () {
+                        .done(function () {
                             placeZipOrderAction(self.getData(), self.messageContainer)
                         });
                     return true;
@@ -78,7 +78,7 @@ define(
                     this.selectPaymentMethod();
 
                     setPaymentMethodAction(this.messageContainer)
-                        .success(function () {
+                        .done(function () {
                             placeZipOrderAction(self.getData(), self.messageContainer)
                         });
                     return true;
