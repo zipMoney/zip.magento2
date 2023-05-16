@@ -4,6 +4,7 @@ namespace Zip\ZipPayment\Block\Advert;
 
 use Zip\ZipPayment\Model\Config;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use \Magento\Framework\Currency;
 
 /**
  * @category  Zip
@@ -118,7 +119,7 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $currency = $objectManager->get(\Magento\Directory\Model\Currency::class);
-        return $currency->format($price, ['display' => \Zend_Currency::NO_SYMBOL], false);
+        return $currency->format($price, ['display' => Currency::NO_SYMBOL], false);
     }
 
     public function getCurrencySymbol()

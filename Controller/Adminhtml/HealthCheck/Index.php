@@ -50,10 +50,10 @@ class Index extends \Magento\Backend\App\Action
         $apiKey = $this->getRequest()->getParam('apikey');
         $publicKey = $this->getRequest()->getParam('publickey');
         $environment = $this->getRequest()->getParam('env');
-        if (preg_match('/^[\*]+$/m', $apiKey)) {
+        if (preg_match('/^[\*]+$/m', $apiKey ?? '')) {
             $apiKey = null;
         }
-        if (preg_match('/^[\*]+$/m', $publicKey)) {
+        if (preg_match('/^[\*]+$/m', $publicKey ?? '')) {
             $publicKey = null;
         }
         $environmentList = $this->getEnvironmentList();
