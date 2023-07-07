@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-.zipmoney-section .zipmoney-payment-logo {background: url("https://static.zipmoney.com.au/integrations-plugins/Magento_Zip_Logo.svg")  no-repeat 0 0% / 18rem auto;
+.zipmoney-section .zipmoney-payment-logo {background: url("https://static.zip.co/integrations-plugins/Magento_Zip_Logo.svg")  no-repeat 0 0% / 18rem auto;
     height: 100px; width: auto; padding-left: 20rem; display:inline-block; vertical-align: middle;}
 .zipmoney-section .button-container {float: right;}
 .zipmoney-section .zipmoney-payment-text { display: inline-block; vertical-align: middle; width: 50%}
