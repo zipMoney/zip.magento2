@@ -4,7 +4,7 @@ namespace Zip\ZipPayment\Model\Config;
 
 use Magento\Framework\HTTP\Adapter\Curl;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
-use Zend_Http_Client;
+use Laminas\Http\Request;
 
 /**
  * Admin Model of health check
@@ -158,7 +158,7 @@ class HealthCheck
                     $url = $apiConfig->getHost() . '/checkouts/' . $checkoutId;
                     $isAuEndpoint = true;
                 }
-                $curlObject->write(Zend_Http_Client::GET, $url, '1.1', $headers);
+                $curlObject->write(Request::METHOD_GET, $url, '1.1', $headers);
                 $response = $curlObject->read();
                 $sslVerified = $curlObject->getInfo(CURLINFO_SSL_VERIFYRESULT) == 0;
                 $httpCode = (int)$curlObject->getInfo(CURLINFO_HTTP_CODE);
