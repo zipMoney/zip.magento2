@@ -15,6 +15,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
  */
 abstract class AbstractDataBuilder implements BuilderInterface
 {
+    protected $_logger;
     /**
      * @var \Zip\ZipPayment\Helper\Payload
      */

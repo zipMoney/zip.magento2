@@ -3,6 +3,7 @@
 namespace Zip\ZipPayment\Helper;
 
 use \Magento\Framework\App\Helper\AbstractHelper;
+use Zip\ZipPayment\MerchantApi\Lib\ApiException;
 
 /**
  * @author    Zip Plugin Team <integration@zip.co>
@@ -107,8 +108,8 @@ class Data extends AbstractHelper
             }
 
             $this->_logger->debug($logMessage);
-
-            return [$apiError, $message, $logMessage];
+            return implode(' ', [$apiError, $message, $logMessage]); //changed due to warning - Return value is expected to be 'string', 'array' returned
+            #return [$apiError, $message, $logMessage];
         }
         return null;
     }

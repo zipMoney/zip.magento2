@@ -991,6 +991,7 @@ class Payload extends AbstractHelper
         $order = $this->getOrder();
 
         $captureChargeReq->setAmount((float)$amount);
+	$captureChargeReq->setCaptureIsPartial(true);
 
         return $captureChargeReq;
     }
