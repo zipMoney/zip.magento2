@@ -26,7 +26,8 @@ class CaptureChargeRequest implements ArrayAccess
      * @var string[]
      */
     protected static $zipTypes = [
-        'amount' => 'float'
+	'amount' => 'float',
+        'is_partial_capture' => 'boolean'
     ];
 
     /**
@@ -34,7 +35,8 @@ class CaptureChargeRequest implements ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'amount' => 'amount'
+        'amount' => 'amount',
+        'is_partial_capture' => 'is_partial_capture'
     ];
 
     /**
@@ -42,7 +44,8 @@ class CaptureChargeRequest implements ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'amount' => 'setAmount'
+        'amount' => 'setAmount',
+        'is_partial_capture' => 'setCaptureIsPartial'
     ];
 
     /**
@@ -50,7 +53,8 @@ class CaptureChargeRequest implements ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'amount' => 'getAmount'
+        'amount' => 'getAmount',
+        'is_partial_capture' => 'getCaptureIsPartial'
     ];
 
     /**
@@ -66,6 +70,7 @@ class CaptureChargeRequest implements ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['amount'] = isset($data['amount']) ? $data['amount'] : null;
+        $this->container['is_partial_capture'] = false;
     }
 
     public static function zipTypes()
@@ -147,6 +152,27 @@ class CaptureChargeRequest implements ArrayAccess
         }
 
         $this->container['amount'] = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Gets is_partial_capture
+     * @return boolean
+     */
+    public function getCaptureIsPartial()
+    {
+        return $this->container['is_partial_capture'];
+    }
+
+    /**
+     * Sets is_partial_capture
+     * @param boolean $isCapturePartial
+     * @return $this
+     */
+    public function setCaptureIsPartial($isCapturePartial)
+    {
+        $this->container['is_partial_capture'] = $isCapturePartial;
 
         return $this;
     }

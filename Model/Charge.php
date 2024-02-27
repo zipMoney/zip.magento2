@@ -80,6 +80,13 @@ class Charge extends AbstractCheckout
      *
      * @param array $params
      */
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+
+    protected $_storeManager;
+
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,

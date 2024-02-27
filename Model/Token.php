@@ -25,6 +25,18 @@ class Token extends AbstractCheckout
      *
      * @param array $params
      */
+
+    protected $_quoteManagement;
+    protected $_accountManagement;
+    protected $_messageManager;
+    protected $_customerRepository;
+    protected $_customerUrl;
+    protected $_orderSender;
+    protected $_orderRepository;
+    protected $_orderPaymentRepository;
+    protected $_objectCopyService;
+    protected $_dataObjectHelper;
+ 
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,

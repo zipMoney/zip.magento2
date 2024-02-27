@@ -11,6 +11,13 @@ use \Zip\ZipPayment\MerchantApi\Lib\Configuration;
  */
 class AbstractTransaction
 {
+
+    protected $_encryptor;
+    protected $_payloadHelper;
+    protected $_logger;
+    protected $_helper;
+    protected $_config;
+
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
