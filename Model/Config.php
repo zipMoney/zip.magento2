@@ -286,6 +286,11 @@ class Config implements ConfigInterface
 
     protected $_moduleList;
 
+    /**
+     * @var \Magento\Framework\Registry
+     */
+    private $_urlBuilder;
+
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,

@@ -56,7 +56,7 @@ class HealthCheck
      */
     private $_curlFactory;
     /**
-     * @var \Zend\Uri\Uri
+     * @var \Laminas\Uri\Uri
      */
     private $_zendUri;
 
@@ -72,7 +72,7 @@ class HealthCheck
      * @param \Zip\ZipPayment\Model\Config $config
      * @param CurlFactory $curlFactory ,
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Zend\Uri\Uri $zendUri
+     * @param \Laminas\Uri\Uri $zendUri
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      */
     public function __construct(
@@ -81,7 +81,7 @@ class HealthCheck
         \Zip\ZipPayment\Model\Config $config,
         CurlFactory $curlFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Zend\Uri\Uri $zendUri,
+        \Laminas\Uri\Uri $zendUri,
         \Magento\Directory\Model\CountryFactory $countryFactory
     ) {
         $this->_logger = $logger;
