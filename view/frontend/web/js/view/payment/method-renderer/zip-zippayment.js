@@ -26,6 +26,7 @@ define(
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/payment/additional-validators',
         'mage/storage',
+        'zipMoneyWidgetJs',
         'zipMoneyCheckoutJs'
     ],
     function (Component, placeZipOrderAction, setPaymentMethodAction, Messages, ko, quote, $, errorProcessor, fullScreenLoader, additionalValidators, storage) {
