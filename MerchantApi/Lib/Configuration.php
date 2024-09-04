@@ -85,8 +85,8 @@ class Configuration
      * @var array
      */
     protected $supportedEnvironments = [
-       CommonUtil::SANDBOX => ["host" => "https://global-api.sand.au.edge.zip.co/merchant"],
-       CommonUtil::PRODUCTION => ["host" => 'https://global-api.prod.au.edge.zip.co/merchant']
+       CommonUtil::SANDBOX => ["host" => "https://api.sandbox.zip.co/merchant"],
+       CommonUtil::PRODUCTION => ["host" => 'https://api.zip.co/merchant']
     ];
 
     /**
