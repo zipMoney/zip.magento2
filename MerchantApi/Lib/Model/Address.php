@@ -336,8 +336,12 @@ class Address implements ArrayAccess
      * @param string $state The state or province
      * @return $this
      */
-    public function setState($state)
+    public function setState(string $state)
     {
+        if (empty($state)) {
+            return $this;
+        }
+
         if ((strlen($state) > 50)) {
             throw new \InvalidArgumentException('Invalid length for $state when calling Address, '
             . 'must be smaller than or equal to 50.');
