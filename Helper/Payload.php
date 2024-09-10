@@ -504,7 +504,7 @@ class Payload extends AbstractHelper
             if ($address->getRegionId()) {
                 $reqAddress->setState($address->getRegionCode());
             } else {
-                $reqAddress->setState($address->getRegion());
+                $reqAddress->setState((string)$address->getRegion());
             }
 
             return $reqAddress;
