@@ -177,14 +177,14 @@ class Logger extends AbstractHelper
 
     public function sanitizePrivateData($debug)
     {
-        if ((is_string($debug) || is_object(json_decode($debug)) || is_array(json_decode($debug, true))) && !empty($debug)) {
+        if (is_scalar($debug) || is_array(json_decode($debug, true))) {
             $json = json_decode($debug, true);
             if (is_array($json)) {
                 return json_encode($this->sanitizeArrData($json));
             }
         } elseif (is_array($debug)) {
-            return $this->sanitizeArrData($debug);
+            return json_encode($this->sanitizeArrData($debug));
         }
-        return $debug;
+        return (string) $debug;
     }
 }
