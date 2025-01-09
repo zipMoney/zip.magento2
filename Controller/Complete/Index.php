@@ -49,28 +49,6 @@ class Index extends AbstractStandard
                 );
             }
 
-            // as AU stack already handle iframe in redirect
-            $inContextCheckout = $this->_config->isInContextCheckout();
-            $iframe = $this->getRequest()->getParam('iframe', null);
-            if ($iframe && $this->_getCurrencyCode() != CommonUtil::CURRENCY_AUD && $inContextCheckout) {
-                /** @var Page $page */
-                $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-                /** @var Template $block */
-                $layout = $page->getLayout();
-                $block = $layout->createBlock(\Magento\Framework\View\Element\Template::class)
-                    ->setTemplate('Zip_ZipPayment::iframe/iframe_js.phtml');
-                $block->setData('checkoutId', $checkoutId);
-                $block->setData('state', $result);
-                $url = $this->_urlBuilder->getUrl('zippayment/complete')
-                    . '?checkoutId=' . $checkoutId
-                    . '&result=' . $result
-                    . '&token=' . $token;
-                $block->setData('redirectUrl', $url);
-                /** @var \Magento\Framework\App\Response $response */
-                $response = $this->getResponse();
-                return $response->setBody($block->toHtml());
-            }
-
             // Set the customer quote
             $this->_setCustomerQuote($token);
             // Initialise the charge

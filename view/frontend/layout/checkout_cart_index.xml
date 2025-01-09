@@ -29,17 +29,6 @@
             </block>
         </referenceContainer>
 
-
-        <referenceContainer name="checkout.cart.totals.container">
-            <block class="Zip\ZipPayment\Block\Advert\Tagline"
-                   name="product.info.addtocart.additional.zipmoney.carttagline" template="advert/tagline.phtml">
-                <arguments>
-                    <argument name="page_type" xsi:type="string">cart</argument>
-                </arguments>
-            </block>
-        </referenceContainer>
-
-
         <referenceContainer name="checkout.cart.methods">
             <block class="Zip\ZipPayment\Block\Advert\Widget"
                    name="product.info.addtocart.additional.zipmoney.productimage" template="advert/widget.phtml">

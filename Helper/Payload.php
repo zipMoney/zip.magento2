@@ -853,17 +853,7 @@ class Payload extends AbstractHelper
     public function getCheckoutConfiguration($token = false)
     {
         $checkout_config = new CheckoutConfiguration();
-        $inContextCheckout = $this->_config->isInContextCheckout();
         $redirect_url = $this->_urlBuilder->getUrl('zippayment/complete', ['_secure' => true, '_query' => ['token' => $token]]);
-        if ($inContextCheckout) {
-            $redirect_url = $this->_urlBuilder->getUrl(
-                'zippayment/complete',
-                [
-                    '_secure' => true,
-                    '_query' => ['iframe' => 1, 'token' => $token]
-                ]
-            );
-        }
         $checkout_config->setRedirectUri($redirect_url);
 
         return $checkout_config;
