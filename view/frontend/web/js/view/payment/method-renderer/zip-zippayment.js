@@ -12,7 +12,6 @@
 /*global define*/
 
 var isLive = (window.checkoutConfig.payment.zippayment.environment == "production");
-var inContextCheckoutEnabled = window.checkoutConfig.payment.zippayment.inContextCheckoutEnabled;
 
 define(
     ['Magento_Checkout/js/view/payment/default',

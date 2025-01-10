@@ -38,15 +38,5 @@
                 </arguments>
             </block>
         </referenceContainer>
-
-        <referenceContainer name="product.info.addtocart.additional">
-            <block class="Zip\ZipPayment\Block\Advert\Tagline"
-                   name="product.info.addtocart.additional.zipmoney.producttagline" template="advert/tagline.phtml">
-                <arguments>
-                    <argument name="page_type" xsi:type="string">product</argument>
-                </arguments>
-            </block>
-        </referenceContainer>
-
     </body>
 </page>

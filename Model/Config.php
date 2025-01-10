@@ -86,13 +86,6 @@ class Config implements ConfigInterface
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_INCONTEXT_CHECKOUT = 'incontext_checkout';
-
-    /**
-     * Incontext Checkout
-     *
-     * @const
-     */
     const PAYMENT_ZIPMONEY_ENABLE_TOKENISATION = 'enable_tokenisation';
 
     /**
@@ -184,34 +177,6 @@ class Config implements ConfigInterface
      * @const
      */
     const ADVERTS_CART_IMAGE_SELECTOR = 'zip_advert/cartpage/widget_selector';
-
-    /**
-     * Cart Page Tagline Active
-     *
-     * @const
-     */
-    const ADVERTS_PRODUCT_TAGLINE_ACTIVE = 'zip_advert/productpage/tagline';
-
-    /**
-     * Cart Page Tagline html element selector
-     *
-     * @const
-     */
-    const ADVERTS_PRODUCT_TAGLINE_SELECTOR = 'zip_advert/productpage/tagline_selector';
-
-    /**
-     * Cart Page Tagline Active
-     *
-     * @const
-     */
-    const ADVERTS_CART_TAGLINE_ACTIVE = 'zip_advert/cartpage/tagline';
-
-    /**
-     * Cart Page Tagline html element selector
-     *
-     * @const
-     */
-    const ADVERTS_CART_TAGLINE_SELECTOR = 'zip_advert/cartpage/tagline_selector';
 
     /**
      * Payment Method Logo Url
@@ -515,20 +480,6 @@ class Config implements ConfigInterface
     public function getMethodLogo()
     {
         return self::PAYMENT_METHOD_LOGO_ZIP;
-    }
-
-    /**
-     * Check if in-context checkout is active
-     *
-     * @return bool
-     */
-    public function isInContextCheckout()
-    {
-        $currentCurrencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
-        if ($currentCurrencyCode != CommonUtil::CURRENCY_AUD) {
-            return false;
-        }
-        return $this->getConfigData(self::PAYMENT_ZIPMONEY_INCONTEXT_CHECKOUT);
     }
 
     /**

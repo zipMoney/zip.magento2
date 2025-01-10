@@ -69,17 +69,6 @@
                     <label>Display Widget Mode</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\DisplayWidget</source_model>
                 </field>
-                <field id="incontext_checkout" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>In-Context Checkout</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>
-                        <![CDATA[In-Context (Iframe) Checkout may not work on some browsers. This feature only work for AU region. Other region it will redirect to zip for payment.]]>
-                    </comment>
-                    <depends>
-                        <field id="*/zippayment/widget_region">au</field>
-                    </depends>
-                </field>
-
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
@@ -151,17 +140,6 @@
                                 <![CDATA[Example HTML element selector is .product-info-price. Keep it empty for displaying in default location.]]>
                             </comment>
                         </field>
-                        <field id="tagline" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Display Tagline</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        </field>
-                        <field id="tagline_selector" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Tagline Element selector</label>
-                            <tooltip>The tagline does not show any price breakdown or minimum repayments. A tagline will show a static message of ‘Own it now, pay later</tooltip>
-                            <comment>
-                                <![CDATA[Example HTML element selector is .product-options-bottom. Keep it empty for displaying in default location.]]>
-                            </comment>
-                        </field>
                     </group>
                     <group id="cartpage" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Cart Page</label>
@@ -191,17 +169,6 @@
                             <tooltip>The cart widget will break down the price of the item and display a minimum weekly repayment or divide the price by 4 and show the customer an equal price breakdown</tooltip>
                             <comment>
                                 <![CDATA[Example HTML element selector is #cart-totals. Keep it empty for displaying in default location.]]>
-                            </comment>
-                        </field>
-                        <field id="tagline" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Display Tagline</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        </field>
-                        <field id="tagline_selector" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Tagline Element selector</label>
-                            <tooltip>The tagline does not show any price breakdown or minimum repayments. A tagline will show a static message of ‘Own it now, pay later</tooltip>
-                            <comment>
-                                <![CDATA[Example HTML element selector is .cart-summary. Keep it empty for displaying in default location.]]>
                             </comment>
                         </field>
                     </group>

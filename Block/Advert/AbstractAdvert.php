@@ -50,7 +50,7 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
     /**
      * @var array
      */
-    protected $_supportedWidgetTypes = ['widget', 'banner', 'tagline'];
+    protected $_supportedWidgetTypes = ['widget', 'banner'];
 
     /**
      * @var array
@@ -61,12 +61,6 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
             'product_selector' => Config::ADVERTS_PRODUCT_IMAGE_SELECTOR,
             'cart' => Config::ADVERTS_CART_IMAGE_ACTIVE,
             'cart_selector' => Config::ADVERTS_CART_IMAGE_SELECTOR
-        ],
-        'tagline' => [
-            'product' => Config::ADVERTS_PRODUCT_TAGLINE_ACTIVE,
-            'product_selector' => Config::ADVERTS_PRODUCT_TAGLINE_SELECTOR,
-            'cart' => Config::ADVERTS_CART_TAGLINE_ACTIVE,
-            'cart_selector' => Config::ADVERTS_CART_TAGLINE_SELECTOR
         ],
         'banner' => [
             'product' => Config::ADVERTS_PRODUCT_BANNER_ACTIVE,

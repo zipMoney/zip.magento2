@@ -120,8 +120,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
             "redirectUri" => $this->_config->getRedirectUrl(),
             "environment" => $this->_config->getEnvironment(),
             "title" => $this->_config->getTitle(),
-            "inContextCheckoutEnabled" => (bool)$this->_config->isInContextCheckout(),
-            "iframe" => $this->_config->isInContextCheckout(),
+            "iframe" => false,
             "isTokenisationEnabled" => $this->_canCustomerSeeTokenisationOption(),
             "isCustomerWantTokenisation" => $this->_isCustomerSelectedTokenisationBefore(),
             "isRedirect" => $this->_isRedirect(),
@@ -162,6 +161,6 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
 
     protected function _isRedirect()
     {
-        return !$this->_config->isInContextCheckout() || ($this->_canCustomerSeeTokenisationOption() && $this->_isCustomerSelectedTokenisationBefore());
+        return $this->_canCustomerSeeTokenisationOption() && $this->_isCustomerSelectedTokenisationBefore();
     }
 }

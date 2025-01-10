@@ -23,9 +23,9 @@ define(
                 this.paymentData = paymentData;
                 if (!Zip.Checkout && self.Zip.Checkout) {
                     Zip.Checkout = self.Zip.Checkout;
-                 }
+                }
                 Zip.Checkout.init({
-                    redirect: window.checkoutConfig.payment.zippayment.isRedirect ? window.checkoutConfig.payment.zippayment.inContextCheckoutEnabled ? $('#place-order-tokenisation').is(":checked") && 1 : 1 : 0,
+                    redirect: window.checkoutConfig.payment.zippayment.isRedirect ? false ? $('#place-order-tokenisation').is(":checked") && 1 : 1 : 0,
                     checkoutUri: window.checkoutConfig.payment.zippayment.checkoutUri,
                     redirectUri: window.checkoutConfig.payment.zippayment.redirectUri,
                     onComplete: this.onComplete.bind(this),
