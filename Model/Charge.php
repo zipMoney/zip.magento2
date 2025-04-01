@@ -170,10 +170,12 @@ class Charge extends AbstractCheckout
             $this->_logger->debug("Charge Response:- " . $this->_logger->sanitizePrivateData($charge));
 
             if (isset($charge->error)) {
+                $this->_logger->alert("Charge Response: wrong status. Charge error.");
                 throw new \Magento\Framework\Exception\LocalizedException(__('Could not create the charge'));
             }
 
             if (!$charge->getState() || !$charge->getId()) {
+                $this->_logger->alert("Charge Response: wrong status. Charge state.");
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid Charge'));
             }
 
@@ -189,14 +191,35 @@ class Charge extends AbstractCheckout
             }
 
             $this->_chargeResponse($charge, $this->_config->isCharge());
-        } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
-            list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
-            if ($e->getCode() == 403 && filter_var($token, FILTER_VALIDATE_BOOLEAN)) {
-                $this->_removeCustomerToken();
+        } catch (\Exception $e) {
+            $errorMessage = $cancelOrderMessage = "Unexpected behavior ." . $e->getMessage();
+            if (!$e instanceof \Zip\ZipPayment\MerchantApi\Lib\ApiException
+                || !$e instanceof \Magento\Framework\Exception\LocalizedException
+            ) {
+                $this->_logger->alert($errorMessage);
+                throw $e;
+            }
+
+            if ($e instanceof \Zip\ZipPayment\MerchantApi\Lib\ApiException) {
+                list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
+                if ($e->getCode() == 403 && filter_var($token, FILTER_VALIDATE_BOOLEAN)) {
+                    $this->_removeCustomerToken();
+                }
+                $errorMessage = __($message);
+                $cancelOrderMessage = $apiError;
+            }
+
+            if (isset($charge) && $charge->getId()) {
+                try {
+                    // Try to cancel the charge if we have it.
+                    $this->_api->chargesCancel($charge->getId());
+                } catch (\Exception $e) {
+                    // do nothing
+                }
             }
             // Cancel the order
-            $this->_helper->cancelOrder($this->_order, $apiError);
-            throw new \Magento\Framework\Exception\LocalizedException(__($message));
+            $this->_helper->cancelOrder($this->_order, $cancelOrderMessage);
+            throw new \Magento\Framework\Exception\LocalizedException($errorMessage);
         }
         return $charge;
     }

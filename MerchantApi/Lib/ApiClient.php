@@ -227,7 +227,7 @@ class ApiClient
         do {
 
             if ($count > 0 && $this->config->getRetryInterval() > 0) {
-                sleep($this->config->getRetryInterval());
+                sleep($this->config->getRetryInterval() * $count);
             }
 
             // Make the request
@@ -239,9 +239,11 @@ class ApiClient
             $count++;
             $msg = curl_error($curl);
 
-        } while (($count <= $num_retries) &&
-        ($response_info['http_code'] === 0 && empty($msg)) &&
-        !empty($headerParams['Idempotency-Key']));
+        } while (
+            ($count <= $num_retries)
+            && (in_array($response_info['http_code'], [0, 500, 502, 503, 504]) && empty($msg))
+            && !empty($headerParams['Idempotency-Key'])
+        );
 
         // Handle the response
         if ($response_info['http_code'] === 0) {
