@@ -101,9 +101,9 @@ class OrderItem implements ArrayAccess
 
     /**
      * Constructor
-     * @param mixed[] $data Associated array of property values initializing the model
+     * @param mixed[]|null $data Associated array of property values initializing the model
      */
-    public function __construct(array $data = null)
+    public function __construct(?array $data = null)
     {
         $this->container['name'] = isset($data['name']) ? $data['name'] : null;
         $this->container['amount'] = isset($data['amount']) ? $data['amount'] : null;
@@ -114,8 +114,7 @@ class OrderItem implements ArrayAccess
         $this->container['image_uri'] = isset($data['image_uri']) ? $data['image_uri'] : null;
         $this->container['item_uri'] = isset($data['item_uri']) ? $data['item_uri'] : null;
         $this->container['product_code'] = isset($data['product_code']) ? $data['product_code'] : null;
-        $this->container['additional_details'] = isset($data['additional_details'])
-            ? $data['additional_details'] : null;
+        $this->container['additional_details'] = isset($data['additional_details']) ? $data['additional_details'] : null;
     }
 
     public static function zipTypes()
