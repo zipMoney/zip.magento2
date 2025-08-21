@@ -29,7 +29,7 @@ class CheckoutsApi
      *
      * @param \Zip\ZipPayment\MerchantApi\Lib\ApiClient|null $apiClient The api client to use
      */
-    public function __construct(\Zip\ZipPayment\MerchantApi\Lib\ApiClient $apiClient = null)
+    public function __construct(?\Zip\ZipPayment\MerchantApi\Lib\ApiClient $apiClient = null)
     {
         if ($apiClient === null) {
             $apiClient = new ApiClient();

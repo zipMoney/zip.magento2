@@ -94,9 +94,9 @@ class Flightadditionaldetails implements ArrayAccess
 
     /**
      * Constructor
-     * @param mixed[] $data Associated array of property values initializing the model
+     * @param array|null $data Associated array of property values initializing the model
      */
-    public function __construct(array $data = null)
+    public function __construct(?array $data = null)
     {
         $this->container['departure_date'] = isset($data['departure_date']) ? $data['departure_date'] : null;
         $this->container['flight_number'] = isset($data['flight_number']) ? $data['flight_number'] : null;
