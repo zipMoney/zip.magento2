@@ -53,7 +53,7 @@ Note:- This extension is not yet available in the Magento Marketplace. This sect
 choose  Payment Methods when    it  expands.
 1. On   the Payment Methods page,   click   Other   Payment Methods so  it  expands.
 
-![Alt text](https://static.zipmoney.com.au/github-images/payment-section-2.jpg "Payment Section")
+![Alt text](https://static.zip.co/github-images/payment-section-2.jpg "Payment Section")
 
 1. Set Enable  to  Yes and a   title   for the payment method  “Zip"
 1. Enter the   Private Key and Public  Key.
@@ -67,7 +67,7 @@ choose  Payment Methods when    it  expands.
 
 ### Marketing Banners and Widgets Section
 
-![Alt text](https://static.zipmoney.com.au/github-images/marketing-section.png "Markting Banners and Widgets Section")
+![Alt text](https://static.zip.co/github-images/marketing-section.png "Markting Banners and Widgets Section")
 
 1. Scroll down  and expand  Marketing   Banners and Widgets section
 1. Expand   everything  and set all options to Yes/No as per your requirement.

@@ -5,13 +5,11 @@
         <policy id="img-src">
             <values>
                 <value id="zip_analytics" type="host">t.zip.co</value>
-                <value id="zip_static_old" type="host">static.zipmoney.com.au</value>
                 <value id="zip_static" type="host">static.zip.co</value>
             </values>
         </policy>
         <policy id="script-src">
             <values>
-                <value id="zip_static_old" type="host">static.zipmoney.com.au</value>
                 <value id="zip_static" type="host">static.zip.co</value>
 				<value id="zip_co" type="host">zip.co</value>
             </values>
