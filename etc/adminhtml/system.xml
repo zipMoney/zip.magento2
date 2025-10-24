@@ -78,6 +78,12 @@
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
+                <field id="exclude_categories" translate="label" type="multiselect" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Exclude Categories</label>
+                    <source_model>Zip\ZipPayment\Model\Config\Source\Category</source_model>
+                    <can_be_empty>1</can_be_empty>
+                    <comment>Please select the "direct category" of the product instead of the parent category.</comment>
+                </field>
                 <field id="min_order_total" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minimum Order Value</label>
                     <validate>validate-number validate-zero-or-greater</validate>
