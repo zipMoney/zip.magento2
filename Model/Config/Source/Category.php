@@ -7,13 +7,13 @@ class Category implements \Magento\Framework\Data\OptionSourceInterface
     private \Magento\Store\Model\StoreManagerInterface $storeManager;
     private \Magento\Framework\App\RequestInterface $request;
     private \Magento\Catalog\Helper\Category $categoryHelper;
-    private \Afterpay\Afterpay\Model\Config\CategorySourceRegistry $categorySourceRegistry;
+    private \Zip\ZipPayment\Model\Config\CategorySourceRegistry $categorySourceRegistry;
 
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Catalog\Helper\Category $categoryHelper,
-        \Afterpay\Afterpay\Model\Config\CategorySourceRegistry $categorySourceRegistry
+        \Zip\ZipPayment\Model\Config\CategorySourceRegistry $categorySourceRegistry
     ) {
         $this->storeManager = $storeManager;
         $this->request = $request;
