@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
-* Zip_ZipPayment Admin Interface definitions
+ * Zip_ZipPayment Admin Interface definitions
 *
 * @category    ZipMoney
 * @package     Zip_ZipPayment
@@ -81,8 +81,10 @@
                 <field id="exclude_categories" translate="label" type="multiselect" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Exclude Categories</label>
                     <source_model>Zip\ZipPayment\Model\Config\Source\Category</source_model>
+                    <config_path>payment/zippayment/exclude_categories</config_path>
                     <can_be_empty>1</can_be_empty>
-                    <comment>Please select the "direct category" of the product instead of the parent category.</comment>
+                    <comment>Please select the "direct category" of the product; child categories are not included.</comment>
+                    <tooltip>Select categories to exclude this payment method. Only products directly assigned to the selected categories are excluded — child (sub) categories are not automatically included. To exclude products in subcategories, select those subcategories explicitly.</tooltip>
                 </field>
                 <field id="min_order_total" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minimum Order Value</label>
