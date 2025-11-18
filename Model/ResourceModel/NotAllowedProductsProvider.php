@@ -28,7 +28,9 @@ class NotAllowedProductsProvider
             'cat.product_id'
         )->where($connection->prepareSqlCondition('cat.category_id', ['in' => $excludedCategoriesIds]));
 
-        return $connection->fetchCol($select);
+        return array_map(static function ($id): int {
+            return (int) $id;
+        }, $connection->fetchCol($select));
     }
 
     /**
