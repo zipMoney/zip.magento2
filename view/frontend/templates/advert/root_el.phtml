@@ -17,7 +17,7 @@
     // product price for dynamic widget
 <?php if ($block->getPageType() == 'cart'): ?>
     zip_widget_cart_price = <?= /* @noEscape */ $block->getCartTotal();?>;
-<?php endif;?>
+<?php endif?>
 <?php if ($block->getPageType() == 'product'): ?>
     zip_widget_product_price = <?= /* @noEscape */ $block->getProductPrice();?>;
 <?php endif; ?>
@@ -27,3 +27,17 @@
 <?php endif; ?>
 <?php endforeach; ?>
 </script>
+
+<?php
+// Render widget-config inline script using ViewModel from block
+$viewModel = $block->getWidgetConfigViewModel();
+if ($viewModel):
+?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Zip_ZipPayment/js/widget-config": <?= /* @noEscape */ $viewModel->getWidgetConfigJson() ?>
+    }
+}
+</script>
+<?php endif; ?>

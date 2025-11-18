@@ -1,0 +1,15 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Zip\ZipPayment\ViewModel\WidgetConfig $viewModel
+ */
+$viewModel = $block->getData('view_model');
+?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Zip_ZipPayment/js/widget-config": <?= /* @noEscape */ $viewModel->getWidgetConfigJson() ?>
+    }
+}
+</script>
+

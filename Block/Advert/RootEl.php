@@ -18,6 +18,35 @@ class RootEl extends AbstractAdvert implements CatalogBlock\ShortcutInterface
     const COUNTRY_CODE_PATH = 'general/country/default';
 
     /**
+     * @var \Zip\ZipPayment\ViewModel\WidgetConfig
+     */
+    protected $widgetConfigViewModel;
+
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Zip\ZipPayment\Model\Config $config,
+        \Magento\Framework\Registry $registry,
+        \Zip\ZipPayment\Helper\Logger $logger,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Zip\ZipPayment\ViewModel\WidgetConfig $widgetConfigViewModel,
+        array $data = []
+    ) {
+        parent::__construct($context, $config, $registry, $logger, $checkoutSession, $priceCurrency, $data);
+        $this->widgetConfigViewModel = $widgetConfigViewModel;
+    }
+
+    /**
+     * Get WidgetConfig ViewModel
+     *
+     * @return \Zip\ZipPayment\ViewModel\WidgetConfig
+     */
+    public function getWidgetConfigViewModel()
+    {
+        return $this->widgetConfigViewModel;
+    }
+
+    /**
      * Get merchant public key
      *
      * @return string

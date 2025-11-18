@@ -89,6 +89,13 @@ class Config implements ConfigInterface
     const PAYMENT_ZIPMONEY_ENABLE_TOKENISATION = 'enable_tokenisation';
 
     /**
+     * Exclude Categories
+     *
+     * @const
+     */
+    const PAYMENT_ZIPMONEY_EXCLUDE_CATEGORIES = 'exclude_categories';
+
+    /**
      * Minimum Order Total
      *
      * @const
@@ -401,6 +408,18 @@ class Config implements ConfigInterface
     public function getEnvironment($storeId = null)
     {
         return $this->getConfigData(self::PAYMENT_ZIPMONEY_ENVIRONMENT, $storeId);
+    }
+
+    /**
+     * Returns Exclude Categories
+     *
+     * @return array
+     */
+    public function getExcludeCategories($storeId = null): array
+    {
+        $excludeCategories = $this->getConfigData(self::PAYMENT_ZIPMONEY_EXCLUDE_CATEGORIES, $storeId);
+
+        return $excludeCategories ? explode(',', $excludeCategories) : [];
     }
 
     /**

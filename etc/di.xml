@@ -14,7 +14,7 @@
     <!-- DI Config For external zipMoney Merchant API -->
     <virtualType name="ZipMoneyGatewayFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="code" xsi:type="const">Zip\ZipPayment\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="code" xsi:type="const">\Zip\ZipPayment\Model\Ui\ConfigProvider::CODE</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">\Zip\ZipPayment\Block\Info</argument>
             <argument name="valueHandlerPool" xsi:type="object">ZipMoneyGatewayValueHandlerPool</argument>
@@ -108,6 +108,7 @@
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="country" xsi:type="string">ZipMoneyGatewayGlobalValidator</item>
+                <item name="quote_items" xsi:type="string">Zip\ZipPayment\Gateway\Validator\Method\NotAllowedProductsValidator</item>
             </argument>
         </arguments>
     </virtualType>
@@ -219,6 +220,23 @@
     <type name="\Zip\ZipPayment\Block\Info">
         <arguments>
             <argument name="config" xsi:type="object">ZipPaymentGatewayConfig</argument>
+        </arguments>
+    </type>
+
+    <!-- Payment checks mapping -->
+    <type name="Magento\Payment\Model\Checks\SpecificationFactory">
+        <arguments>
+            <argument name="mapping" xsi:type="array">
+                <item name="quote_items" xsi:type="object">Zip\ZipPayment\Model\Checks\CanUseForQuoteItems</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Payment\Model\MethodList">
+        <arguments>
+            <argument name="additionalChecks" xsi:type="array">
+                <item name="quote_items" xsi:type="string">quote_items</item>
+            </argument>
         </arguments>
     </type>
 
