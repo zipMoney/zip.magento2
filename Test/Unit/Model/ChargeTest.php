@@ -255,6 +255,110 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
         $this->_chargeModel->charge();
     }
 
+    /**
+     * @test
+     * @group Zipmoney_ZipPayment
+     *
+     * Regression for ZES-88: when the charge API fails (e.g. HTTP 402 "account is
+     * locked"), the Magento order must be cancelled instead of being left as
+     * 'pending'. Previously the catch block's guard used `||` and was always true,
+     * so it rethrew before ever reaching cancelOrder().
+     */
+    public function testChargeCancelsOrderWhenApiExceptionThrown()
+    {
+        $objManager = new ObjectManager($this);
+
+        $helperMock = $this->getMockBuilder(ZipMoneyDataHelper::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['handleException', 'cancelOrder'])
+            ->getMock();
+
+        $helperMock->expects(static::once())->method('handleException')
+            ->willReturn(['Account locked', 'The payment was declined by Zip.', 'log message']);
+
+        // The core assertion: the order gets cancelled exactly once on charge failure.
+        $helperMock->expects(static::once())->method('cancelOrder');
+
+        $chargesApiMock = $this->getMockBuilder(\Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class)
+            ->getMock();
+        $chargesApiMock->expects(static::any())->method('chargesCreate')
+            ->willThrowException(
+                new \Zip\ZipPayment\MerchantApi\Lib\ApiException('Account locked', 402)
+            );
+
+        $chargeModel = $objManager->getObject(
+            \Zip\ZipPayment\Model\Charge::class,
+            ['_helper' => $helperMock]
+        );
+        $chargeModel->setApi($chargesApiMock);
+
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->setMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderMock->expects(static::any())->method('getId')->willReturn(1);
+        $chargeModel->setOrder($orderMock);
+
+        $thrown = null;
+        try {
+            $chargeModel->charge(null);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $thrown = $e;
+        }
+
+        static::assertNotNull($thrown, 'charge() must rethrow a LocalizedException when the API fails');
+    }
+
+    /**
+     * @test
+     * @group Zipmoney_ZipPayment
+     *
+     * Complements ZES-88: a genuinely unexpected exception (neither ApiException
+     * nor LocalizedException) must be rethrown as-is, and the order must NOT be
+     * cancelled - that path is intentionally left to the caller.
+     */
+    public function testChargeRethrowsUnknownExceptionWithoutCancellingOrder()
+    {
+        $objManager = new ObjectManager($this);
+
+        $helperMock = $this->getMockBuilder(ZipMoneyDataHelper::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['handleException', 'cancelOrder'])
+            ->getMock();
+
+        // Neither handler is touched for an unknown exception type.
+        $helperMock->expects(static::never())->method('handleException');
+        $helperMock->expects(static::never())->method('cancelOrder');
+
+        $chargesApiMock = $this->getMockBuilder(\Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class)
+            ->getMock();
+        $chargesApiMock->expects(static::any())->method('chargesCreate')
+            ->willThrowException(new \RuntimeException('unexpected'));
+
+        $chargeModel = $objManager->getObject(
+            \Zip\ZipPayment\Model\Charge::class,
+            ['_helper' => $helperMock]
+        );
+        $chargeModel->setApi($chargesApiMock);
+
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->setMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderMock->expects(static::any())->method('getId')->willReturn(1);
+        $chargeModel->setOrder($orderMock);
+
+        $thrown = null;
+        try {
+            $chargeModel->charge(null);
+        } catch (\RuntimeException $e) {
+            $thrown = $e;
+        }
+
+        static::assertNotNull($thrown, 'charge() must rethrow an unknown exception unchanged');
+        static::assertSame('unexpected', $thrown->getMessage());
+    }
+
     public function testPlaceOrder()
     {
         $quoteMock = $this->getQuoteMock();
