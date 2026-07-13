@@ -194,7 +194,7 @@ class Charge extends AbstractCheckout
         } catch (\Exception $e) {
             $errorMessage = $cancelOrderMessage = "Unexpected behavior ." . $e->getMessage();
             if (!$e instanceof \Zip\ZipPayment\MerchantApi\Lib\ApiException
-                || !$e instanceof \Magento\Framework\Exception\LocalizedException
+                && !$e instanceof \Magento\Framework\Exception\LocalizedException
             ) {
                 $this->_logger->alert($errorMessage);
                 throw $e;

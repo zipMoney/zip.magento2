@@ -69,7 +69,7 @@ class Data extends AbstractHelper
      * Handles the api exception
      *
      * @param ApiException $e
-     * @return string
+     * @return array [$apiError, $message, $logMessage]
      */
     public function handleException($e)
     {
@@ -108,10 +108,9 @@ class Data extends AbstractHelper
             }
 
             $this->_logger->debug($logMessage);
-            return implode(' ', [$apiError, $message, $logMessage]); //changed due to warning - Return value is expected to be 'string', 'array' returned
-            #return [$apiError, $message, $logMessage];
+            return [$apiError, $message, $logMessage];
         }
-        return null;
+        return [null, null, null];
     }
 
     /**
