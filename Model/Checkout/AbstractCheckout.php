@@ -203,8 +203,11 @@ abstract class AbstractCheckout
      *
      * @return string
      */
-    public function genIdempotencyKey()
+    public function genIdempotencyKey($seed = null)
     {
+        if ($seed !== null) {
+            return hash('sha256', $seed);
+        }
         return uniqid();
     }
 
