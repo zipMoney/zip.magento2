@@ -152,7 +152,7 @@ class Charge extends AbstractCheckout
      * @throws \Magento\Framework\Exception\LocalizedException
      * @param bool $token
      */
-    public function charge($token)
+    public function charge($token, $checkoutId = null)
     {
         if (!$this->_order || !$this->_order->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The order does not exist.'));
@@ -165,7 +165,7 @@ class Charge extends AbstractCheckout
 
         try {
             $charge = $this->getApi()
-                ->chargesCreate($payload, $this->genIdempotencyKey());
+                ->chargesCreate($payload, $this->genIdempotencyKey($checkoutId));
 
             $this->_logger->debug("Charge Response:- " . $this->_logger->sanitizePrivateData($charge));
 

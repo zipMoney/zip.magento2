@@ -72,9 +72,14 @@ class Index extends AbstractStandard
                  * Create order Charge the customer using the checkout id
                  */
                 try {
+                    $lockKey = 'zip_checkout_processing_' . $checkoutId;
+                    if ($this->_checkoutSession->getData($lockKey)) {
+                        return $this->getResponse()->setRedirect($this->getSuccessUrl());
+                    }
+                    $this->_checkoutSession->setData($lockKey, true);
                     // Create the Order
                     $order = $this->_charge->placeOrder();
-                    $this->_charge->charge($token);
+                    $this->_charge->charge($token, $checkoutId);
 
                     // update order status when successfully paid fix bug
                     // all order is pending deal to order and payment are async
@@ -92,6 +97,7 @@ class Index extends AbstractStandard
                     // Redirect to success page
                     return $this->getResponse()->setRedirect($this->getSuccessUrl());
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                    $this->_checkoutSession->unsetData($lockKey);
                     $this->_messageManager->addErrorMessage($e->getMessage());
                     $this->_logger->debug($e->getMessage());
                 }
