@@ -76,3 +76,22 @@ choose  Payment Methods when    it  expands.
 ### Questions and feedback
 
 If you have any questions concerning this product or the implementation please contact integrations@zip.co for assistance.
+
+---
+
+## Try a change on the test store
+
+There is a Magento 2 store standing by that runs this module against Zip's
+sandbox, so you can click through a real checkout:
+
+| | |
+|---|---|
+| Shop | <https://zip-magento2-qa-store.dev.au.edge.zip.co/> |
+| Admin | <https://zip-magento2-qa-store.dev.au.edge.zip.co/admin> |
+
+**There is only one, and everyone shares it.** Putting your branch on it takes it
+away from whoever was using it.
+
+**→ [QA-STORE.md](QA-STORE.md)** — where to click, for your own branch or anyone
+else's, how to see which commit is on the store right now, the test product to
+check the module against, and the two mistakes that cost an afternoon.
