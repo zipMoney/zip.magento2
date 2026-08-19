@@ -6,7 +6,7 @@ use Magento\Checkout\Model\Type\Onepage;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Sales\Model\Order;
 use Zip\ZipPayment\Model\Checkout\AbstractCheckout;
-use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+use Zip\ZipPayment\Model\CommonUtil;
 
 /**
  * @author    Zip Plugin Team <integration@zip.co>
@@ -106,7 +106,7 @@ class Charge extends AbstractCheckout
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
-        \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi $chargesApi,
+        \zipMoney\Api\ChargesApi $chargesApi,
         \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []
@@ -148,7 +148,7 @@ class Charge extends AbstractCheckout
     /**
      * Charges the customer against the order
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Charge
+     * @return \zipMoney\Model\Charge
      * @throws \Magento\Framework\Exception\LocalizedException
      * @param bool $token
      */
@@ -193,14 +193,14 @@ class Charge extends AbstractCheckout
             $this->_chargeResponse($charge, $this->_config->isCharge());
         } catch (\Exception $e) {
             $errorMessage = $cancelOrderMessage = "Unexpected behavior ." . $e->getMessage();
-            if (!$e instanceof \Zip\ZipPayment\MerchantApi\Lib\ApiException
+            if (!$e instanceof \zipMoney\ApiException
                 && !$e instanceof \Magento\Framework\Exception\LocalizedException
             ) {
                 $this->_logger->alert($errorMessage);
                 throw $e;
             }
 
-            if ($e instanceof \Zip\ZipPayment\MerchantApi\Lib\ApiException) {
+            if ($e instanceof \zipMoney\ApiException) {
                 list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
                 if ($e->getCode() == 403 && filter_var($token, FILTER_VALIDATE_BOOLEAN)) {
                     $this->_removeCustomerToken();
@@ -227,9 +227,9 @@ class Charge extends AbstractCheckout
     /**
      * Handles the charge response and captures/authorises the charge based on state
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\Charge $charge
+     * @param \zipMoney\Model\Charge $charge
      * @param bool $isAuthAndCapture
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Charge
+     * @return \zipMoney\Model\Charge
      */
     protected function _chargeResponse($charge, $isAuthAndCapture)
     {
@@ -394,7 +394,7 @@ class Charge extends AbstractCheckout
     /**
      * Places the order.
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Charge
+     * @return \zipMoney\Model\Charge
      * @throws \Magento\Sales\Model\Order
      */
     public function placeOrder()

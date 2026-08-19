@@ -7,7 +7,7 @@
  * @author    Zip Plugin Team <integration@zip.co>
  */
 
-namespace Zip\ZipPayment\MerchantApi\Lib\Model;
+namespace Zip\ZipPayment\Model;
 
 class CommonUtil
 {

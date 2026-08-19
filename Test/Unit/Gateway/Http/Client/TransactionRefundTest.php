@@ -42,7 +42,7 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
         $config->expects(static::any())->method('getLogSetting')->willReturn(10);
 
         $this->_refundsApiMock = $this->getMockBuilder(
-            \Zip\ZipPayment\MerchantApi\Lib\Api\RefundsApi::class
+            \zipMoney\Api\RefundsApi::class
         )->getMock();
 
         $this->_clientMock = $objManager->getObject(
@@ -72,7 +72,7 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
 
     public function placeRequestDataProvider()
     {
-        $chargeResponse = new \Zip\ZipPayment\MerchantApi\Lib\Model\Charge;
+        $chargeResponse = new \zipMoney\Model\Charge;
 
         $chargeResponse->setId("112343");
         $chargeResponse->setState("refunded");

@@ -2,6 +2,51 @@
 
 All notable changes to the Zip Payment module for Magento 2 are documented in this file.
 
+## 1.2.14
+
+### Fixed
+- **ZES-91: fatal `TypeError` on PHP 8 when a non-string reached a length check.**
+  The bundled Merchant API library validated field lengths with bare `strlen()` and
+  `strtolower()` calls. PHP 8 stopped coercing those arguments, so passing an integer
+  — an order or cart id, for instance — into one of the Model setters threw a
+  `TypeError` and could take checkout down. All 60 call sites in `MerchantApi/` now
+  cast the value first. The cast is a no-op for values that are already strings, so
+  nothing changes for callers that work today.
+
+  Beyond the setters this also covers `listInvalidProperties()` and `valid()`, where
+  several `Address` checks (`line1`, `city`, `state`, `postal_code`, `country`) carry
+  no `is_null` guard and would otherwise reach `strlen(null)` — deprecated since PHP
+  8.1 — and `strlen($apiKey)` in `MerchantApi/Lib/Api/*`, where the key is null until
+  one is configured.
+
+  Matches `zipmoney/merchantapi-php` 1.0.21, which carries the same fix for the
+  plugins that pull the library through Composer.
+
+### Changed
+- **Brought two fixes back from `zipmoney/merchantapi-php` 1.0.22.** The bundled
+  library is a hard copy, so improvements made upstream do not arrive on their
+  own. A failed call now reports what Zip actually said — the message or details
+  from the response body — instead of a bare `[500] Error connecting to the API`,
+  which told the merchant nothing about why a payment was refused. And a
+  transport-level cURL failure no longer hands `substr()` a boolean; the
+  `http_code === 0` path turns it into a proper `ApiException` as intended.
+
+  Going the other way, the retry policy this module gained in ZES-49 — retrying
+  5xx and backing off between attempts — is now in the library too, so the
+  plugins that consume it through Composer are no longer behind this one.
+
+## 1.2.13
+
+### Fixed
+- **MIA-63: duplicate orders.** A session lock and a deterministic idempotency key
+  prevent the same checkout from creating more than one order.
+
+### Changed
+- A Composer lockfile is committed so dependency scanning (Aikido) has something to
+  read.
+- A pipeline job stands a branch of this repository up on the Magento QA store
+  (ZES-86).
+
 ## 1.2.12
 
 ### Fixed

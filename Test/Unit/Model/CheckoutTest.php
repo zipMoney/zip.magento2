@@ -65,7 +65,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $config->expects(static::any())->method('getLogSetting')->willReturn(10);
 
         $this->_checkoutsApiMock = $this->getMockBuilder(
-            \Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi::class
+            \zipMoney\Api\CheckoutsApi::class
         )->getMock();
 
         $this->_checkoutModel = $objManager->getObject(
@@ -78,7 +78,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
     public function testCheckoutStart()
     {
-        $checkoutResponse = new \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout;
+        $checkoutResponse = new \zipMoney\Model\Checkout;
 
         $quoteMock = $this->getQuoteMock();
 
@@ -164,7 +164,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     public function testCheckoutStartRaisesExceptionRedirectUrl()
     {
 
-        $checkout = new \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout;
+        $checkout = new \zipMoney\Model\Checkout;
         $return_url = "https://account.zipmoney.com.au/?ch=ch_f8h2sz09na";
         $checkout->error = new \stdClass;
 

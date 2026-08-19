@@ -21,7 +21,7 @@ class TransactionRefund extends AbstractTransaction implements ClientInterface
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
-        \Zip\ZipPayment\MerchantApi\Lib\Api\RefundsApi $refundsApi,
+        \zipMoney\Api\RefundsApi $refundsApi,
         array $data = []
     ) {
         parent::__construct($context, $encryptor, $payloadHelper, $logger, $helper, $config);
@@ -39,7 +39,7 @@ class TransactionRefund extends AbstractTransaction implements ClientInterface
         $storeId = isset($request['store_id']) ? $request['store_id'] : null;
         // reset API depend on payload
         $this->_logger->info("refund store id: " . $storeId);
-        $apiConfig = new \Zip\ZipPayment\MerchantApi\Lib\Configuration();
+        $apiConfig = new \zipMoney\Configuration();
         $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey($storeId))
             ->setApiKeyPrefix('Authorization', 'Bearer')
             ->setEnvironment($this->_config->getEnvironment($storeId))
@@ -49,7 +49,7 @@ class TransactionRefund extends AbstractTransaction implements ClientInterface
                 . "Zip_ZipPayment/"
                 . $this->_helper->getExtensionVersion()
             );
-        $this->_service->setApiClient(new \Zip\ZipPayment\MerchantApi\Lib\ApiClient($apiConfig));
+        $this->_service->setApiClient(new \zipMoney\ApiClient($apiConfig));
 
         $response = null;
 
@@ -57,7 +57,7 @@ class TransactionRefund extends AbstractTransaction implements ClientInterface
             $refund = $this->_service->refundsCreate($payload, $this->_helper->generateIdempotencyKey());
             $response = ["api_response" => $refund];
             $this->_logger->debug("Refund Response:- " . $this->_logger->sanitizePrivateData($refund));
-        } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
+        } catch (\zipMoney\ApiException $e) {
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
             $response['message'] = $message;
         } finally {

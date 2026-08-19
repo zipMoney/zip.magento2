@@ -56,7 +56,7 @@ class Token extends AbstractCheckout
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
-        \Zip\ZipPayment\MerchantApi\Lib\Api\TokensApi $tokenApi,
+        \zipMoney\Api\TokensApi $tokenApi,
         \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory
     ) {
         $this->_quoteManagement = $cartManagement;
@@ -87,7 +87,7 @@ class Token extends AbstractCheckout
     /**
      * Charges the customer against the order
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Token
+     * @return \zipMoney\Model\Token
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createToken()
@@ -95,7 +95,7 @@ class Token extends AbstractCheckout
         $payload = $this->_payloadHelper->getTokenPayload();
         try {
             $token = $this->getApi()->tokensCreate($payload, $this->genIdempotencyKey());
-        } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
+        } catch (\zipMoney\ApiException $e) {
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
 
             // Cancel the order

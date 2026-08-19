@@ -82,7 +82,7 @@ abstract class AbstractCheckout
         $this->_config = $config;
 
         // Configure API Credentials
-        $apiConfig = \Zip\ZipPayment\MerchantApi\Lib\Configuration::getDefaultConfiguration();
+        $apiConfig = \zipMoney\Configuration::getDefaultConfiguration();
 
         $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey())
             ->setApiKeyPrefix('Authorization', 'Bearer')

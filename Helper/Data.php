@@ -3,7 +3,7 @@
 namespace Zip\ZipPayment\Helper;
 
 use \Magento\Framework\App\Helper\AbstractHelper;
-use Zip\ZipPayment\MerchantApi\Lib\ApiException;
+use zipMoney\ApiException;
 
 /**
  * @author    Zip Plugin Team <integration@zip.co>
@@ -62,7 +62,7 @@ class Data extends AbstractHelper
      */
     public function jsonEncode($object)
     {
-        return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($object));
+        return json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($object));
     }
 
     /**
@@ -73,7 +73,7 @@ class Data extends AbstractHelper
      */
     public function handleException($e)
     {
-        if ($e instanceof \Zip\ZipPayment\MerchantApi\Lib\ApiException) {
+        if ($e instanceof \zipMoney\ApiException) {
             $apiError = '';
             $message = $this->__("Could not process the payment");
             switch ($e->getCode()) {

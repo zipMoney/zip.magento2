@@ -4,40 +4,58 @@ Zip gives customers the ability to shop now and pay later with no interest while
 
 ## Prerequisites
 
-- PHP 7 or above
+- PHP 8.1 or above
+- Composer
 - Configuration credentials
-- Composer (optional)
 
 ## Installation instructions
 
-### Install via SFTP or file upload
+The extension is a Composer package. It depends on Zip's PHP client library
+(`zipmoney/merchantapi-php`), which Composer installs for you — the extension
+does not carry a copy of it.
 
-- You need to download code from current repo
-- Put the current repo files into folder `/yourMagento2root/app/code/Zip/ZipPayment/`
-- Then follow the normal plugin installation below without the composer require command
+### Install using Composer (recommended)
 
-### Install using Composer
+From your Magento root:
 
-To install the extension via [Composer](http://getcomposer.org/), run
-
-- `cd <your Magento install dir>`
 - `composer require zip/magento2`
-- `php bin/magento module:status` (Check if Zip_ZipPayment module is disabled)
-- `php bin/magento module:enable Zip_ZipPayment` (enabled plugin if disabled)
+- `php bin/magento module:enable Zip_ZipPayment`
 - `php bin/magento setup:upgrade`
 - `php bin/magento setup:di:compile`
 - `php bin/magento setup:static-content:deploy`
 
-To upgrade Existing Modules
+`php bin/magento module:status` will tell you whether the module is already
+enabled.
+
+To upgrade:
 
 - `composer update zip/magento2`
+- `php bin/magento setup:upgrade`
 - `php bin/magento setup:di:compile`
-- `php bin/magento c:c`
+- `php bin/magento cache:clean`
 - `php bin/magento setup:static-content:deploy`
 
-### Install using Magento Component Manager
+### Install from the release archive
 
-Note:- This extension is not yet available in the Magento Marketplace. This section will be updated once it is released in the marketplace.
+For a store that cannot reach Composer — air-gapped, or where the extension is
+handed over as a file — download the archive attached to the
+[latest release](https://github.com/zipMoney/zip.magento2/releases). It already
+contains the Zip PHP library, so there is nothing further to install.
+
+- Unpack it into `/yourMagento2root/app/code/`, giving you
+  `app/code/Zip/ZipPayment/`
+- Then `module:enable`, `setup:upgrade`, `setup:di:compile` and
+  `setup:static-content:deploy` as above
+
+Do not use a plain checkout of this repository for that — it deliberately does
+not carry the library, and Magento never reads a module's `composer.json` when
+the module is dropped into `app/code`. Prefer Composer where you can: it keeps
+the extension and the library updatable together.
+
+### Install using Magento Marketplace
+
+Note:- This extension is not yet available in the Magento Marketplace. This
+section will be updated once it is released there.
 
 ## Configuration
 

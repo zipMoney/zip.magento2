@@ -36,7 +36,7 @@ class Checkout extends AbstractCheckout
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
-        \Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi $checkoutsApi,
+        \zipMoney\Api\CheckoutsApi $checkoutsApi,
         array $data = []
     ) {
         $this->_checkoutHelper = $checkoutHelper;
@@ -67,7 +67,7 @@ class Checkout extends AbstractCheckout
      *
      * @param \Magento\ $quote
      * @param bool $token
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Checkout
+     * @return \zipMoney\Model\Checkout
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function start($token = false)
@@ -137,7 +137,7 @@ class Checkout extends AbstractCheckout
             $this->_quoteRepository->save($this->_quote);
 
             $this->_redirectUrl = $checkout->getUri();
-        } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
+        } catch (\zipMoney\ApiException $e) {
             $this->_logger->debug("Errors:- " . $this->_logger->sanitizePrivateData($e->getCode()));
             $this->_logger->debug("Errors:- " . $this->_logger->sanitizePrivateData($e->getResponseObject()));
             throw new \Magento\Framework\Exception\LocalizedException(
