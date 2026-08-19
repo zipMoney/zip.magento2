@@ -14,7 +14,7 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Model\Session;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Zip\ZipPayment\Model\Config;
-use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+use Zip\ZipPayment\Model\CommonUtil;
 
 /**
  * @author    Zip Plugin Team <integrations@zip.co>

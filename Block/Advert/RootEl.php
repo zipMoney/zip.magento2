@@ -2,7 +2,7 @@
 
 namespace Zip\ZipPayment\Block\Advert;
 
-use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+use Zip\ZipPayment\Model\CommonUtil;
 use Magento\Catalog\Block as CatalogBlock;
 
 /**

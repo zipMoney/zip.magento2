@@ -1,1 +1,4 @@
 .idea/*
+
+# Composer-managed since the Zip library stopped being copied into the tree.
+/vendor/

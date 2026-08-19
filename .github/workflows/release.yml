@@ -1,0 +1,64 @@
+# Builds the archive for merchants who cannot run `composer require` against the
+# package — an air-gapped store, or a hand-over by file copy. Unlike a checkout
+# of this repository, the archive carries the Zip PHP library inside `vendor/`,
+# so dropping it into app/code needs no further steps.
+#
+# Merchants who can use Composer should not use this archive: `composer require
+# zip/magento2` resolves the same dependency into the store's own vendor/ and
+# keeps it updatable.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Install production dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Refuse to ship without the Zip library
+        # The whole point of this archive is that the dependency is inside it.
+        # Better to fail here than to hand a merchant a zip that fatals on the
+        # first checkout.
+        run: test -f vendor/zipmoney/merchantapi-php/lib/ApiClient.php
+
+      - name: Assemble the archive
+        run: |
+          set -eu
+          VERSION="${GITHUB_REF_NAME:-manual}"
+          STAGE="dist/Zip/ZipPayment"
+          mkdir -p "$STAGE"
+          # An allow list, not an exclude list: anything new in the repository
+          # stays out of the archive until someone adds it here on purpose.
+          for path in \
+            Block Controller Gateway Helper Logger Model ViewModel \
+            etc i18n view vendor \
+            registration.php composer.json LICENSE README.md CHANGELOG.md
+          do
+            cp -R "$path" "$STAGE/"
+          done
+          ( cd dist && zip -rq "../zip-zippayment-${VERSION}.zip" Zip )
+          unzip -l "zip-zippayment-${VERSION}.zip" | tail -1
+
+      - name: Attach the archive to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: zip-zippayment-*.zip
