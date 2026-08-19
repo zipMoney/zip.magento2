@@ -108,17 +108,17 @@ class OrderShippingTracking implements ArrayAccess
     {
         $invalid_properties = [];
 
-        if (!is_null($this->container['uri']) && (strlen($this->container['uri']) > 500)) {
+        if (!is_null($this->container['uri']) && (strlen((string)$this->container['uri']) > 500)) {
             $invalid_properties[] = "invalid value for 'uri', "
              . "the character length must be smaller than or equal to 500.";
         }
 
-        if (!is_null($this->container['number']) && (strlen($this->container['number']) > 120)) {
+        if (!is_null($this->container['number']) && (strlen((string)$this->container['number']) > 120)) {
             $invalid_properties[] = "invalid value for 'number', "
             . "the character length must be smaller than or equal to 120.";
         }
 
-        if (!is_null($this->container['carrier']) && (strlen($this->container['carrier']) > 120)) {
+        if (!is_null($this->container['carrier']) && (strlen((string)$this->container['carrier']) > 120)) {
             $invalid_properties[] = "invalid value for 'carrier', "
             . "the character length must be smaller than or equal to 120.";
         }
@@ -134,13 +134,13 @@ class OrderShippingTracking implements ArrayAccess
      */
     public function valid()
     {
-        if (strlen($this->container['uri']) > 500) {
+        if (strlen((string)$this->container['uri']) > 500) {
             return false;
         }
-        if (strlen($this->container['number']) > 120) {
+        if (strlen((string)$this->container['number']) > 120) {
             return false;
         }
-        if (strlen($this->container['carrier']) > 120) {
+        if (strlen((string)$this->container['carrier']) > 120) {
             return false;
         }
         return true;
@@ -162,7 +162,7 @@ class OrderShippingTracking implements ArrayAccess
      */
     public function setUri($uri)
     {
-        if (!is_null($uri) && (strlen($uri) > 500)) {
+        if (!is_null($uri) && (strlen((string)$uri) > 500)) {
             throw new \InvalidArgumentException('Invalid length for $uri when calling OrderShippingTracking, '
             . 'must be smaller than or equal to 500.');
         }
@@ -188,7 +188,7 @@ class OrderShippingTracking implements ArrayAccess
      */
     public function setNumber($number)
     {
-        if (!is_null($number) && (strlen($number) > 120)) {
+        if (!is_null($number) && (strlen((string)$number) > 120)) {
             throw new \InvalidArgumentException('Invalid length for $number when calling OrderShippingTracking, '
             . 'must be smaller than or equal to 120.');
         }
@@ -214,7 +214,7 @@ class OrderShippingTracking implements ArrayAccess
      */
     public function setCarrier($carrier)
     {
-        if (!is_null($carrier) && (strlen($carrier) > 120)) {
+        if (!is_null($carrier) && (strlen((string)$carrier) > 120)) {
             throw new \InvalidArgumentException('Invalid length for $carrier when calling OrderShippingTracking, '
             . 'must be smaller than or equal to 120.');
         }

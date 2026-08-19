@@ -118,7 +118,7 @@ class CheckoutOrder implements ArrayAccess
     {
         $invalid_properties = [];
 
-        if (!is_null($this->container['reference']) && (strlen($this->container['reference']) > 200)) {
+        if (!is_null($this->container['reference']) && (strlen((string)$this->container['reference']) > 200)) {
             $invalid_properties[] = "invalid value for 'reference', "
             . "the character length must be smaller than or equal to 200.";
         }
@@ -136,7 +136,7 @@ class CheckoutOrder implements ArrayAccess
         if ($this->container['shipping'] === null) {
             $invalid_properties[] = "'shipping' can't be null";
         }
-        if (!is_null($this->container['cart_reference']) && (strlen($this->container['cart_reference']) > 200)) {
+        if (!is_null($this->container['cart_reference']) && (strlen((string)$this->container['cart_reference']) > 200)) {
             $invalid_properties[] = "invalid value for 'cart_reference', "
             . "the character length must be smaller than or equal to 200.";
         }
@@ -153,7 +153,7 @@ class CheckoutOrder implements ArrayAccess
     public function valid()
     {
 
-        if (strlen($this->container['reference']) > 200) {
+        if (strlen((string)$this->container['reference']) > 200) {
             return false;
         }
         if ($this->container['amount'] === null) {
@@ -168,7 +168,7 @@ class CheckoutOrder implements ArrayAccess
         if ($this->container['shipping'] === null) {
             return false;
         }
-        if (strlen($this->container['cart_reference']) > 200) {
+        if (strlen((string)$this->container['cart_reference']) > 200) {
             return false;
         }
         return true;
@@ -190,7 +190,7 @@ class CheckoutOrder implements ArrayAccess
      */
     public function setReference($reference)
     {
-        if (!is_null($reference) && (strlen($reference) > 200)) {
+        if (!is_null($reference) && (strlen((string)$reference) > 200)) {
             throw new \InvalidArgumentException('invalid length for $reference when calling CheckoutOrder, '
             . 'must be smaller than or equal to 200.');
         }
@@ -304,7 +304,7 @@ class CheckoutOrder implements ArrayAccess
      */
     public function setCartReference($cart_reference)
     {
-        if (!is_null($cart_reference) && (strlen($cart_reference) > 200)) {
+        if (!is_null($cart_reference) && (strlen((string)$cart_reference) > 200)) {
             throw new \InvalidArgumentException('Invalid length for $cart_reference when calling CheckoutOrder, '
             . 'must be smaller than or equal to 200.');
         }
