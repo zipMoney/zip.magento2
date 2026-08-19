@@ -233,8 +233,18 @@ class ApiClient
             // Make the request
             $response = curl_exec($curl);
             $http_header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-            $http_header = $this->httpParseHeaders(substr($response, 0, $http_header_size));
-            $http_body = substr($response, $http_header_size);
+
+            // curl_exec() returns false on a transport-level failure (TLS, DNS,
+            // connection). There is no payload to parse, so guard substr() — it
+            // would otherwise be handed a boolean. The http_code === 0 handler
+            // below turns this into a proper ApiException.
+            if ($response === false) {
+                $http_header = [];
+                $http_body = '';
+            } else {
+                $http_header = $this->httpParseHeaders(substr($response, 0, $http_header_size));
+                $http_body = substr($response, $http_header_size);
+            }
             $response_info = curl_getinfo($curl);
             $count++;
             $msg = curl_error($curl);
@@ -277,7 +287,7 @@ class ApiClient
             }
 
             throw new ApiException(
-                "[" . $response_info['http_code'] . "] Error connecting to the API ($url)",
+                $this->generateErrorMessage(json_decode($http_body)),
                 $response_info['http_code'],
                 $http_header,
                 $data
@@ -285,6 +295,38 @@ class ApiClient
         }
 
         return [$data, $response_info['http_code'], $http_header];
+    }
+
+    /**
+     * Build a message from the error Zip returned, falling back to a generic one.
+     *
+     * Zip answers a declined or rejected call with either error.message or a list
+     * in error.details. Without this the merchant only ever saw the HTTP status,
+     * which says nothing about why the payment did not go through.
+     *
+     * @param mixed $response Decoded response body
+     *
+     * @return string
+     */
+    protected function generateErrorMessage($response)
+    {
+        $errorMessage = "An error occurred while processing payment";
+
+        if (isset($response->error)) {
+            if (isset($response->error->message)) {
+                $errorMessage = (string)$response->error->message;
+            }
+
+            if (isset($response->error->details)) {
+                $errorMessage = '';
+
+                foreach ($response->error->details as $detail) {
+                    $errorMessage .= $detail->message;
+                }
+            }
+        }
+
+        return $errorMessage;
     }
 
     /**

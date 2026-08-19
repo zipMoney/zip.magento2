@@ -22,6 +22,19 @@ All notable changes to the Zip Payment module for Magento 2 are documented in th
   Matches `zipmoney/merchantapi-php` 1.0.21, which carries the same fix for the
   plugins that pull the library through Composer.
 
+### Changed
+- **Brought two fixes back from `zipmoney/merchantapi-php` 1.0.22.** The bundled
+  library is a hard copy, so improvements made upstream do not arrive on their
+  own. A failed call now reports what Zip actually said — the message or details
+  from the response body — instead of a bare `[500] Error connecting to the API`,
+  which told the merchant nothing about why a payment was refused. And a
+  transport-level cURL failure no longer hands `substr()` a boolean; the
+  `http_code === 0` path turns it into a proper `ApiException` as intended.
+
+  Going the other way, the retry policy this module gained in ZES-49 — retrying
+  5xx and backing off between attempts — is now in the library too, so the
+  plugins that consume it through Composer are no longer behind this one.
+
 ## 1.2.13
 
 ### Fixed
