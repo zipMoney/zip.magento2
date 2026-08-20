@@ -1,0 +1,57 @@
+# Builds the archive a tag publishes: the Composer package.
+#
+# composer.json sits at the root and there is no vendor/ — the Zip PHP library is a
+# declared dependency and Composer resolves it. That is the shape Adobe Commerce
+# Marketplace requires, and the shape `composer require` understands.
+#
+# Deliberately not built here: an archive for copying files into app/code. Such a
+# store needs the library inside vendor/ and the tree nested under Zip/ZipPayment/,
+# because Magento never reads a module's composer.json when the module is dropped
+# into app/code. That is a different archive with different contents, and until
+# someone asks for it, shipping one archive that only works one way is safer than
+# shipping two that can be mixed up.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Assemble the Composer package
+        run: |
+          set -eu
+          VERSION="${GITHUB_REF_NAME:-manual}"
+          STAGE="build/package"
+          mkdir -p "$STAGE"
+          # An allow list, not an exclude list: anything new in the repository stays
+          # out of the archive until someone adds it here on purpose.
+          for path in \
+            Block Controller Gateway Helper Logger Model ViewModel \
+            etc i18n view \
+            registration.php composer.json LICENSE README.md CHANGELOG.md
+          do
+            cp -R "$path" "$STAGE/"
+          done
+          test -f "$STAGE/composer.json"      # Marketplace reads this from the root
+          test -f "$STAGE/registration.php"   # autoload.files points at it
+          test ! -d "$STAGE/vendor"           # a Composer package must not carry one
+          ( cd "$STAGE" && zip -rq "../../zip-zippayment-${VERSION}.zip" . )
+          unzip -l "zip-zippayment-${VERSION}.zip" | tail -1
+
+      - name: Attach the archive to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: zip-zippayment-*.zip

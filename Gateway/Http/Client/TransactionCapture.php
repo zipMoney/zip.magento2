@@ -20,7 +20,7 @@ class TransactionCapture extends AbstractTransaction implements ClientInterface
         \Zip\ZipPayment\Helper\Logger $logger,
         \Zip\ZipPayment\Helper\Data $helper,
         \Zip\ZipPayment\Model\Config $config,
-        \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi $chargesApi,
+        \zipMoney\Api\ChargesApi $chargesApi,
         array $data = []
     ) {
         parent::__construct($context, $encryptor, $payloadHelper, $logger, $helper, $config);
@@ -49,7 +49,7 @@ class TransactionCapture extends AbstractTransaction implements ClientInterface
             );
             $response = ["api_response" => $charge];
             $this->_logger->debug("Capture Charge Response:- " . $this->_logger->sanitizePrivateData($charge));
-        } catch (\Zip\ZipPayment\MerchantApi\Lib\ApiException $e) {
+        } catch (\zipMoney\ApiException $e) {
 
             list($apiError, $message, $logMessage) = $this->_helper->handleException($e);
 

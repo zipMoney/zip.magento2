@@ -12,6 +12,22 @@
             <values>
                 <value id="zip_static" type="host">static.zip.co</value>
 				<value id="zip_co" type="host">zip.co</value>
+                <value id="zip_bpi" type="host">bpi.zip.co</value>
+            </values>
+        </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="zip_co_any" type="host">*.zip.co</value>
+            </values>
+        </policy>
+        <policy id="style-src">
+            <values>
+                <value id="zip_static" type="host">static.zip.co</value>
+            </values>
+        </policy>
+        <policy id="font-src">
+            <values>
+                <value id="zip_static" type="host">static.zip.co</value>
             </values>
         </policy>
         <policy id="frame-src">

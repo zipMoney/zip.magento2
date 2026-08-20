@@ -5,24 +5,24 @@ namespace Zip\ZipPayment\Helper;
 use \Magento\Framework\App\Helper\AbstractHelper;
 use \Magento\Checkout\Model\Type\Onepage;
 use \Magento\Sales\Model\Order;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequest as CheckoutRequest;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CreateTokenRequest as TokenRequest;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CreateChargeRequest as ChargeRequest;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CreateRefundRequest as RefundRequest;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutFeaturesTokenisation as Tokenisation;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CaptureChargeRequest;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\Shopper;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\Authority;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\OrderShipping;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\OrderShippingTracking;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\Address;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\OrderItem;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\ShopperStatistics;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\Metadata;
-use \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration;
-use Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutFeatures;
+use \zipMoney\Model\CreateCheckoutRequest as CheckoutRequest;
+use \zipMoney\Model\CreateTokenRequest as TokenRequest;
+use \zipMoney\Model\CreateChargeRequest as ChargeRequest;
+use \zipMoney\Model\CreateRefundRequest as RefundRequest;
+use \zipMoney\Model\CheckoutFeaturesTokenisation as Tokenisation;
+use \zipMoney\Model\CaptureChargeRequest;
+use \zipMoney\Model\Shopper;
+use \zipMoney\Model\CheckoutOrder;
+use \zipMoney\Model\ChargeOrder;
+use \zipMoney\Model\Authority;
+use \zipMoney\Model\OrderShipping;
+use \zipMoney\Model\OrderShippingTracking;
+use \zipMoney\Model\Address;
+use \zipMoney\Model\OrderItem;
+use \zipMoney\Model\ShopperStatistics;
+use \zipMoney\Model\Metadata;
+use \zipMoney\Model\CheckoutConfiguration;
+use zipMoney\Model\CheckoutFeatures;
 
 /**
  * @author    Zip Plugin Team <integrations@zip.co>
@@ -198,7 +198,7 @@ class Payload extends AbstractHelper
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @param bool $token
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateCheckoutRequest
+     * @return \zipMoney\Model\CreateCheckoutRequest
      */
     public function getCheckoutPayload($quote, $token = false)
     {
@@ -220,7 +220,7 @@ class Payload extends AbstractHelper
     /**
      * Prepares the shopper
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Shopper
+     * @return \zipMoney\Model\Shopper
      */
     public function getShopper()
     {
@@ -291,9 +291,9 @@ class Payload extends AbstractHelper
     /**
      * Get customer data for shopper section in json from existing quote if the customer does not exist
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\Shopper $shopper
+     * @param \zipMoney\Model\Shopper $shopper
      * @param mixed \Magento\Sales\Model\Order | \Magento\Quote\Model\Quote $order_or_quote
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Shopper
+     * @return \zipMoney\Model\Shopper
      */
     public function getOrderOrQuoteCustomer($shopper, $order_or_quote)
     {
@@ -351,9 +351,9 @@ class Payload extends AbstractHelper
     /**
      * Get data for customer data
      *
-     * @param \Zip\ZipPayment\MerchantApi\Lib\Model\Shopper $shopper
+     * @param \zipMoney\Model\Shopper $shopper
      * @param \Magento\Customer\Model\Customer $customer
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Shopper
+     * @return \zipMoney\Model\Shopper
      */
     public function getCustomer($shopper, $customer)
     {
@@ -463,7 +463,7 @@ class Payload extends AbstractHelper
      * Gets customer address
      *
      * @param \Magento\Sales\Model\Order\Address $address
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Address
+     * @return \zipMoney\Model\Address
      */
     protected function _getAddress($address)
     {
@@ -516,10 +516,10 @@ class Payload extends AbstractHelper
     /**
      * Prepares the Order details
      *
-     * @param mixed \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder
-     * | \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder $reqOrder
-     * @return mixed \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutOrder
-     * | \Zip\ZipPayment\MerchantApi\Lib\Model\ChargeOrder
+     * @param mixed \zipMoney\Model\CheckoutOrder
+     * | \zipMoney\Model\ChargeOrder $reqOrder
+     * @return mixed \zipMoney\Model\CheckoutOrder
+     * | \zipMoney\Model\ChargeOrder
      */
     public function getOrderDetails($reqOrder)
     {
@@ -624,7 +624,7 @@ class Payload extends AbstractHelper
     /**
      * Prepares the Order items
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\OrderItem[]
+     * @return \zipMoney\Model\OrderItem[]
      */
     public function getOrderItems()
     {
@@ -777,7 +777,7 @@ class Payload extends AbstractHelper
     /**
      * Prepares the shipping details
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\OrderShipping
+     * @return \zipMoney\Model\OrderShipping
      */
     public function getShippingDetails()
     {
@@ -817,7 +817,7 @@ class Payload extends AbstractHelper
     /**
      * Returns the metadata
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Metadata
+     * @return \zipMoney\Model\Metadata
      */
     public function getMetadata()
     {
@@ -833,7 +833,7 @@ class Payload extends AbstractHelper
     /**
      * Returns the Tokenisation feature
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutFeatures
+     * @return \zipMoney\Model\CheckoutFeatures
      */
     public function getTokenisationFeature()
     {
@@ -848,7 +848,7 @@ class Payload extends AbstractHelper
     /**
      * Returns the checkoutconfiguration
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CheckoutConfiguration
+     * @return \zipMoney\Model\CheckoutConfiguration
      */
     public function getCheckoutConfiguration($token = false)
     {
@@ -863,7 +863,7 @@ class Payload extends AbstractHelper
      * Prepares the charge payload
      *
      * @param \Magento\Sales\Model\Order $order
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateChargeRequest
+     * @return \zipMoney\Model\CreateChargeRequest
      */
     public function getChargePayload($order, $token)
     {
@@ -890,7 +890,7 @@ class Payload extends AbstractHelper
     /**
      * Prepares the Token payload
      *
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateTokenRequest
+     * @return \zipMoney\Model\CreateTokenRequest
      */
     public function getTokenPayload()
     {
@@ -902,7 +902,7 @@ class Payload extends AbstractHelper
     /**
      * Returns the authority
      * @param bool $token
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\Authority
+     * @return \zipMoney\Model\Authority
      */
     public function getAuthority($token = false)
     {
@@ -942,7 +942,7 @@ class Payload extends AbstractHelper
      * @param \Magento\Sales\Model\Order $order
      * @param float $amount
      * @param string $reason
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CreateRefundRequest
+     * @return \zipMoney\Model\CreateRefundRequest
      */
     public function getRefundPayload($order, $amount, $reason)
     {
@@ -970,7 +970,7 @@ class Payload extends AbstractHelper
      *
      * @param \Magento\Sales\Model\Order $order
      * @param float $amount
-     * @return \Zip\ZipPayment\MerchantApi\Lib\Model\CaptureChargeRequest
+     * @return \zipMoney\Model\CaptureChargeRequest
      */
     public function getCapturePayload($order, $amount)
     {
@@ -993,7 +993,7 @@ class Payload extends AbstractHelper
      */
     public function jsonEncode($object)
     {
-        return json_encode(\Zip\ZipPayment\MerchantApi\Lib\ObjectSerializer::sanitizeForSerialization($object));
+        return json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($object));
     }
 
     /**

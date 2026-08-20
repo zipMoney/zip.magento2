@@ -53,7 +53,7 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
         $config->expects(static::any())->method('getLogSetting')->willReturn(10);
 
         $this->_chargesApiMock = $this->getMockBuilder(
-            \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class
+            \zipMoney\Api\ChargesApi::class
         )->getMock();
 
         $quoteManagement = $this->getMockBuilder(Magento\Quote\Api\CartManagementInterface::class)
@@ -101,7 +101,7 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
         $orderMock->expects(static::any())->method('hasNominalItems')->willReturn(true);
         $orderMock->expects(static::any())->method('getGrandTotal')->willReturn(100);
 
-        $chargeResponse = new \Zip\ZipPayment\MerchantApi\Lib\Model\Charge;
+        $chargeResponse = new \zipMoney\Model\Charge;
 
         $chargeResponse->setId("112343");
         $chargeResponse->setState("captured");
@@ -182,7 +182,7 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
         $orderMock->expects(static::any())->method('hasNominalItems')->willReturn(true);
         $orderMock->expects(static::any())->method('getGrandTotal')->willReturn(100);
 
-        $chargeResponse = new \Zip\ZipPayment\MerchantApi\Lib\Model\Charge;
+        $chargeResponse = new \zipMoney\Model\Charge;
 
         $chargeResponse->setId("112343");
         $chargeResponse->setState("authorised");
@@ -220,7 +220,7 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
     public function testChargeRaisesInvalidChargeException()
     {
 
-        $chargeResponse = new \Zip\ZipPayment\MerchantApi\Lib\Model\Charge;
+        $chargeResponse = new \zipMoney\Model\Charge;
 
         $this->_chargesApiMock->expects(static::any())->method('chargesCreate')->willReturn($chargeResponse);
 
@@ -241,7 +241,7 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
      */
     public function testChargeRaisesCouldnotCreateChargeException()
     {
-        $chargeResponse = new \Zip\ZipPayment\MerchantApi\Lib\Model\Charge;
+        $chargeResponse = new \zipMoney\Model\Charge;
         $chargeResponse->error = new \stdClass;
 
         $this->_chargesApiMock->expects(static::any())->method('chargesCreate')->willReturn($chargeResponse);
@@ -279,11 +279,11 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
         // The core assertion: the order gets cancelled exactly once on charge failure.
         $helperMock->expects(static::once())->method('cancelOrder');
 
-        $chargesApiMock = $this->getMockBuilder(\Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class)
+        $chargesApiMock = $this->getMockBuilder(\zipMoney\Api\ChargesApi::class)
             ->getMock();
         $chargesApiMock->expects(static::any())->method('chargesCreate')
             ->willThrowException(
-                new \Zip\ZipPayment\MerchantApi\Lib\ApiException('Account locked', 402)
+                new \zipMoney\ApiException('Account locked', 402)
             );
 
         $chargeModel = $objManager->getObject(
@@ -330,7 +330,7 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
         $helperMock->expects(static::never())->method('handleException');
         $helperMock->expects(static::never())->method('cancelOrder');
 
-        $chargesApiMock = $this->getMockBuilder(\Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class)
+        $chargesApiMock = $this->getMockBuilder(\zipMoney\Api\ChargesApi::class)
             ->getMock();
         $chargesApiMock->expects(static::any())->method('chargesCreate')
             ->willThrowException(new \RuntimeException('unexpected'));

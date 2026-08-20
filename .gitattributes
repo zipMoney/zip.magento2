@@ -1,0 +1,14 @@
+# Normalize line endings to LF, on every platform and in every export.
+#
+# The repository is already all-LF, but `git archive` applies the same conversion
+# as a checkout — so on a machine with core.autocrlf=true it produced an archive
+# with CRLF in 94 files, and the Magento coding standard flagged every one of them.
+# Pinning it here makes the release archive identical no matter who builds it.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg text eol=lf
+*.zip binary

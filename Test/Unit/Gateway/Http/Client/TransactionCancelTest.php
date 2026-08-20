@@ -50,7 +50,7 @@ class TransactionCancelTest extends \PHPUnit\Framework\TestCase
         $config->expects(static::any())->method('getLogSetting')->willReturn(10);
 
         $this->_chargesApiMock = $this->getMockBuilder(
-            \Zip\ZipPayment\MerchantApi\Lib\Api\ChargesApi::class
+            \zipMoney\Api\ChargesApi::class
         )->getMock();
 
         $this->_clientMock = $objManager->getObject(
@@ -81,7 +81,7 @@ class TransactionCancelTest extends \PHPUnit\Framework\TestCase
 
     public function placeRequestDataProvider()
     {
-        $chargeResponse = new \Zip\ZipPayment\MerchantApi\Lib\Model\Charge;
+        $chargeResponse = new \zipMoney\Model\Charge;
 
         $chargeResponse->setId("112343");
         $chargeResponse->setState("cancelled");

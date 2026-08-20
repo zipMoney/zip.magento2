@@ -4,7 +4,7 @@ namespace Zip\ZipPayment\Model;
 
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+use Zip\ZipPayment\Model\CommonUtil;
 
 class Config implements ConfigInterface
 {
