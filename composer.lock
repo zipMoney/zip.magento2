@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a53cdd355416b860a4885f608b411575",
+    "content-hash": "edbcde66427f4878d07bf702dc77976c",
     "packages": [
         {
             "name": "zipmoney/merchantapi-php",
-            "version": "1.0.23",
+            "version": "1.0.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zipMoney/merchantapi-php.git",
-                "reference": "ab51dcb3b9a2248155d6600d4f9985451b2dba32"
+                "reference": "71884c7b0dea67e9f6c30d21424d33a8ff18a095"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zipMoney/merchantapi-php/zipball/ab51dcb3b9a2248155d6600d4f9985451b2dba32",
-                "reference": "ab51dcb3b9a2248155d6600d4f9985451b2dba32",
+                "url": "https://api.github.com/repos/zipMoney/merchantapi-php/zipball/71884c7b0dea67e9f6c30d21424d33a8ff18a095",
+                "reference": "71884c7b0dea67e9f6c30d21424d33a8ff18a095",
                 "shasum": ""
             },
             "require": {
@@ -60,9 +60,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zipMoney/merchantapi-php/issues",
-                "source": "https://github.com/zipMoney/merchantapi-php/tree/1.0.23"
+                "source": "https://github.com/zipMoney/merchantapi-php/tree/1.0.24"
             },
-            "time": "2026-08-19T04:35:56+00:00"
+            "time": "2026-08-20T10:31:07+00:00"
         }
     ],
     "packages-dev": [],

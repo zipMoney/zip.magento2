@@ -15,7 +15,7 @@
     "require": {
         "php": ">=8.1",
         "ext-curl": "*",
-        "zipmoney/merchantapi-php": "^1.0.23"
+        "zipmoney/merchantapi-php": "^1.0.24"
     },
     "minimum-stability": "dev",
     "autoload": {
