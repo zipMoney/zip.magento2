@@ -3,8 +3,8 @@
 namespace Zip\ZipPayment\Controller\Standard;
 
 use \Magento\Framework\App\Action\Action;
-use \Zip\ZipPayment\MerchantApi\Lib\Api\CheckoutsApi;
-use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+use \zipMoney\Api\CheckoutsApi;
+use Zip\ZipPayment\Model\CommonUtil;
 
 /**
  * @category  Zip
@@ -291,14 +291,14 @@ abstract class AbstractStandard extends Action
      * @param  $zip_checkout_id
      * @return \Magento\Framework\DataObject|\Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Zip\ZipPayment\MerchantApi\Lib\ApiException
+     * @throws \zipMoney\ApiException
      *
      * Retrieve quote details by using zip checkout get api call
      */
     protected function _getQuoteByUsingCheckoutApi($zip_checkout_id)
     {
         // Configure API Credentials
-        $apiConfig = \Zip\ZipPayment\MerchantApi\Lib\Configuration::getDefaultConfiguration();
+        $apiConfig = \zipMoney\Configuration::getDefaultConfiguration();
 
         $apiConfig->setApiKey('Authorization', $this->_config->getMerchantPrivateKey())
             ->setApiKeyPrefix('Authorization', 'Bearer')

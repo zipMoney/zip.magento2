@@ -2,7 +2,7 @@
 
 namespace Zip\ZipPayment\Gateway\Http\Client;
 
-use \Zip\ZipPayment\MerchantApi\Lib\Configuration;
+use \zipMoney\Configuration;
 
 /**
  * @author    Zip Plugin Team <integration@zip.co>

@@ -2,7 +2,7 @@
 
 namespace Zip\ZipPayment\Controller\Standard;
 
-use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+use Zip\ZipPayment\Model\CommonUtil;
 
 /**
  * @author    Zip Plugin Team <integrations@zip.co>

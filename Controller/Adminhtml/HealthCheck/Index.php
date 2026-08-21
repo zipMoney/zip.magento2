@@ -2,7 +2,7 @@
 
 namespace Zip\ZipPayment\Controller\Adminhtml\HealthCheck;
 
-use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+use Zip\ZipPayment\Model\CommonUtil;
 
 class Index extends \Magento\Backend\App\Action
 {

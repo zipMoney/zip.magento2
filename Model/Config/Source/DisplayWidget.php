@@ -2,7 +2,7 @@
 
 namespace Zip\ZipPayment\Model\Config\Source;
 
-use Zip\ZipPayment\MerchantApi\Lib\Model\CommonUtil;
+use Zip\ZipPayment\Model\CommonUtil;
 
 /**
  * Used in creating options for sandbox|production config value selection
