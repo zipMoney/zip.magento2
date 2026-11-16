@@ -8,30 +8,20 @@ use Magento\Framework\HTTP\Adapter\CurlFactory;
 /**
  * Admin Model of health check
  *
- * @author  Zip Co - Plugin Team <integrations@zip.co>
  **/
 class HealthCheck
 {
-    const STATUS_SUCCESS = 1;
-    const STATUS_WARNING = 2;
-    const STATUS_ERROR = 3;
-    const STATUS_OK = 0;
+    public const STATUS_SUCCESS = 1;
+    public const STATUS_WARNING = 2;
+    public const STATUS_ERROR = 3;
+    public const STATUS_OK = 0;
 
+    /**
+     * @var array
+     */
     protected $_result = [
         'overall_status' => self::STATUS_SUCCESS,
         'items' => []
-    ];
-
-    protected $_region = [
-        'au' => 'Australia',
-        'nz' => 'New Zealand',
-        'us' => 'United States',
-        'uk' => 'United Kingdom',
-        'za' => 'South Africa',
-        'ca' => 'Canada',
-        'ae' => 'United Arab Emirate',
-        'mx' => 'Mexico',
-        'sa' => 'Saudi Arabia',
     ];
 
     /**
@@ -94,9 +84,14 @@ class HealthCheck
     }
 
     /**
-     * check multiple items and get health result
+     * Check multiple items and get health result
+     *
+     * @param int|string $websiteId
+     * @param string|null $apiKey
+     * @param string|null $env
+     * @return array
      */
-    public function getHealthResult($websiteId, $apiKey = null, $publicKey = null, $env = null)
+    public function getHealthResult($websiteId, $apiKey = null, $env = null)
     {
         /** @var Curl $curlObject */
         $curlObject = $this->_curlFactory->create();
@@ -106,7 +101,6 @@ class HealthCheck
         $storeManager = $objectManager->create(\Magento\Store\Model\StoreManagerInterface::class);
 
         $storeId = $storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
-        $publicKey = $publicKey ?? $this->_config->getMerchantPublicKey($storeId);
         $privateKey = $apiKey ?? $this->_config->getMerchantPrivateKey($storeId);
         $environment = $env ?? $this->_config->getEnvironment($storeId);
         $apiConfig->setApiKey('Authorization', $privateKey)
@@ -152,7 +146,7 @@ class HealthCheck
 
                 // check api key length if it is more than or equal 50 then call SMI merchant info endpoint
                 // otherwise call checkout get api endpoint only for Australia
-                if (strlen($privateKey) <= 50) {
+                if (strlen((string)$privateKey) <= 50) {
                     $checkoutId = 'au-co_PxSeQfLlpaYn6bLMZSMv13';
                     $url = $apiConfig->getHost() . '/checkouts/' . $checkoutId;
                     $isAuEndpoint = true;
@@ -175,27 +169,7 @@ class HealthCheck
                     $this->appendItem(self::STATUS_ERROR, __("Your API credential is invalid"));
                 }
                 if (($httpCode >= 200 && $httpCode <= 299) && $isAuEndpoint == false) {
-                    $result = preg_split('/^\r?$/m', $response, 2);
-                    $result = trim($result[1]);
-                    $data = json_decode($result);
-                    $this->appendItem(self::STATUS_OK, "Api key is valid for " . $data->name);
-                    $regions = $data->regions;
-                    if ($regions) {
-                        $regionList = 'Api is valid for below regions:<br>';
-                        foreach ($regions as $region) {
-                            if ($region == 'uk') {
-                                $countryName = 'United Kingdom';
-                            } elseif ($region == 'twisto') {
-                                $countryName = 'Poland <br>';
-                                $countryName .= 'Czech Republic';
-                            } else {
-                                $country = $this->_countryFactory->create()->loadByCode($region);
-                                $countryName = $country->getName();
-                            }
-                            $regionList .= $countryName . '<br>';
-                        }
-                        $this->appendItem(self::STATUS_OK, $regionList);
-                    }
+                    $this->appendMerchantInfo($response);
                 }
 
                 if (($httpCode == 404 || ($httpCode >= 200 && $httpCode <= 299)) && $isAuEndpoint == true) {
@@ -220,7 +194,45 @@ class HealthCheck
     }
 
     /**
-     * append success and failed item into health result
+     * Append the merchant name and regions from the merchant info response
+     *
+     * @param string $response
+     * @return void
+     */
+    private function appendMerchantInfo($response)
+    {
+        $parts = preg_split('/^\r?$/m', (string)$response, 2);
+        $data = json_decode(trim($parts[1] ?? ''));
+        if (!is_object($data)) {
+            $this->appendItem(self::STATUS_WARNING, __("Could not read the merchant details from the API"));
+            return;
+        }
+        $this->appendItem(self::STATUS_OK, "Api key is valid for " . ($data->name ?? ''));
+        $regions = $data->regions ?? [];
+        if ($regions) {
+            $regionList = 'Api is valid for below regions:<br>';
+            foreach ($regions as $region) {
+                if ($region == 'uk') {
+                    $countryName = 'United Kingdom';
+                } elseif ($region == 'twisto') {
+                    $countryName = 'Poland <br>';
+                    $countryName .= 'Czech Republic';
+                } else {
+                    $country = $this->_countryFactory->create()->loadByCode($region);
+                    $countryName = $country->getName();
+                }
+                $regionList .= $countryName . '<br>';
+            }
+            $this->appendItem(self::STATUS_OK, $regionList);
+        }
+    }
+
+    /**
+     * Append success and failed item into health result
+     *
+     * @param int $status
+     * @param string|\Magento\Framework\Phrase $label
+     * @return void
      */
     protected function appendItem($status, $label)
     {
@@ -234,6 +246,11 @@ class HealthCheck
         ];
     }
 
+    /**
+     * Warn about active stores whose secure base URL is not https
+     *
+     * @return void
+     */
     protected function checkStoreSSLSettings()
     {
         $groups = $this->_storeManager->getWebsite()->getGroups();

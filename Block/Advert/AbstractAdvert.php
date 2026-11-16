@@ -7,9 +7,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use \Magento\Framework\Currency;
 
 /**
- * @category  Zip
- * @package   ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
@@ -31,8 +28,6 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
     protected $_registry;
 
     /**
-     * Checkout session
-     *
      * @var \Magento\Checkout\Model\Session
      */
     protected $_checkoutSession;
@@ -74,6 +69,17 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
         ]
     ];
 
+    /**
+     * AbstractAdvert constructor.
+     *
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \Magento\Framework\Registry $registry
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Zip\ZipPayment\Model\Config $config,
@@ -92,6 +98,11 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
         $this->_priceCurrency = $priceCurrency;
     }
 
+    /**
+     * Returns the final price of the current product
+     *
+     * @return float
+     */
     public function getProductPrice()
     {
         $product = $this->_registry->registry('current_product');
@@ -99,6 +110,11 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
         return $price;
     }
 
+    /**
+     * Returns the quote grand total
+     *
+     * @return float|int
+     */
     public function getCartTotal()
     {
         $totals = $this->_checkoutSession->getQuote()->getTotals();
@@ -109,6 +125,12 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
         return $totalAmount;
     }
 
+    /**
+     * Formats the price without the currency symbol
+     *
+     * @param float|int $price
+     * @return string
+     */
     public function getCurrencyFormat($price)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -116,6 +138,11 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
         return $currency->format($price, ['display' => Currency::NO_SYMBOL], false);
     }
 
+    /**
+     * Returns the current currency symbol
+     *
+     * @return string
+     */
     public function getCurrencySymbol()
     {
         return $this->_priceCurrency->getCurrencySymbol();
@@ -124,7 +151,9 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
     /**
      * Check if widget has been enabled
      *
-     * @return bool
+     * @param string $widget
+     * @param string $page
+     * @return mixed
      */
     protected function _configShow($widget, $page)
     {
@@ -138,6 +167,8 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
     /**
      * Check if widget html selector has value
      *
+     * @param string $widget
+     * @param string $page
      * @return bool
      */
     protected function _isSelectorExist($widget, $page)
@@ -149,7 +180,9 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
     /**
      * Returns the config path
      *
-     * @return bool
+     * @param string $widget
+     * @param string $page
+     * @return string|null
      */
     protected function _getConfigPath($widget, $page)
     {
@@ -161,7 +194,9 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * get element selectors for current widgets
+     * Get element selectors for current widgets
+     *
+     * @return array
      */
     public function getElementSelectors()
     {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9e1416dae191c939a4ff49d6dfec87a",
+    "content-hash": "d7fd4c5ce5da2675e25cfb1a43dbd702",
     "packages": [
         {
             "name": "zipmoney/merchantapi-php",
@@ -67,14 +67,14 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "dev",
-    "stability-flags": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "ext-curl": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.9.0"
 }

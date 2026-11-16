@@ -22,7 +22,6 @@ use Zip\ZipPayment\Helper\Logger;
 use Zip\ZipPayment\Helper\Data as ZipMoneyDataHelper;
 
 /**
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
@@ -38,8 +37,6 @@ class ChargeTest extends \PHPUnit\Framework\TestCase
      * @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $config;
-
-    protected $messageManager;
 
     public function setUp()
     {

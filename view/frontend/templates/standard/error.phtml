@@ -1,12 +1,12 @@
 <div class="zip-  -message">
     <img style="float: right; padding-right: 17px; padding-top: 5px;  width: 150px;"/>
-    <p><strong><?= $block->escapeHtml($block->getErrorTypeText()); ?></strong>
-    <?= $block->escapeHtml($block->getBodyText()); ?></p>
+    <p><strong><?= $escaper->escapeHtml($block->getErrorTypeText()); ?></strong>
+    <?= $escaper->escapeHtml($block->getBodyText()); ?></p>
 </div>
 
 <div class="buttons-set">
-    <button type="button" class="button" title="<?= $block->escapeHtml(__('Continue Shopping')) ?>"
-            onclick="window.location='<?= $block->escapeUrl($block->getUrl()) ?>'">
-        <span><span><?= $block->escapeHtml(__('Continue Shopping')) ?></span></span>
+    <button type="button" class="button" title="<?= $escaper->escapeHtml(__('Continue Shopping')) ?>"
+            onclick="window.location='<?= $escaper->escapeUrl($block->getUrl()) ?>'">
+        <span><span><?= $escaper->escapeHtml(__('Continue Shopping')) ?></span></span>
     </button>
 </div>

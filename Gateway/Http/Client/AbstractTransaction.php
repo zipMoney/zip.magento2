@@ -5,19 +5,45 @@ namespace Zip\ZipPayment\Gateway\Http\Client;
 use \zipMoney\Configuration;
 
 /**
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
 class AbstractTransaction
 {
-
+    /**
+     * @var \Magento\Framework\Encryption\EncryptorInterface
+     */
     protected $_encryptor;
+
+    /**
+     * @var \Zip\ZipPayment\Helper\Payload
+     */
     protected $_payloadHelper;
+
+    /**
+     * @var \Zip\ZipPayment\Helper\Logger
+     */
     protected $_logger;
+
+    /**
+     * @var \Zip\ZipPayment\Helper\Data
+     */
     protected $_helper;
+
+    /**
+     * @var \Zip\ZipPayment\Model\Config
+     */
     protected $_config;
 
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Zip\ZipPayment\Helper\Payload $payloadHelper
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Zip\ZipPayment\Helper\Data $helper
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,

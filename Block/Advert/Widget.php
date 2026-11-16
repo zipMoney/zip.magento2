@@ -10,7 +10,7 @@ class Widget extends AbstractAdvert implements CatalogBlock\ShortcutInterface
     /**
      * @const string
      */
-    const ADVERT_TYPE = "widget";
+    public const ADVERT_TYPE = "widget";
 
     /**
      * @var NotAllowedProductsProvider
@@ -22,6 +22,18 @@ class Widget extends AbstractAdvert implements CatalogBlock\ShortcutInterface
      */
     private $checkoutSession;
 
+    /**
+     * Widget constructor.
+     *
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \Magento\Framework\Registry $registry
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param CheckoutSession $checkoutSession
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param NotAllowedProductsProvider $notAllowedProductsProvider
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Zip\ZipPayment\Model\Config $config,
@@ -37,6 +49,11 @@ class Widget extends AbstractAdvert implements CatalogBlock\ShortcutInterface
         $this->checkoutSession = $checkoutSession;
     }
 
+    /**
+     * Returns the formatted cart total or product price for the current page
+     *
+     * @return string
+     */
     public function getPrice()
     {
         $price = 0;

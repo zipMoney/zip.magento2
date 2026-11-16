@@ -5,9 +5,6 @@ namespace Zip\ZipPayment\Model\Checkout;
 use \Magento\Checkout\Model\Type\Onepage;
 
 /**
- * @category  Zip
- * @package   ZipPayment
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
@@ -16,7 +13,7 @@ abstract class AbstractCheckout
     /**
      * @const
      */
-    const STATUS_MAGENTO_AUTHORIZED = "zip_authorised";
+    public const STATUS_MAGENTO_AUTHORIZED = "zip_authorised";
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
@@ -62,6 +59,16 @@ abstract class AbstractCheckout
      */
     protected $_customerFactory;
 
+    /**
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Zip\ZipPayment\Helper\Payload $payloadHelper
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Zip\ZipPayment\Helper\Data $helper
+     * @param \Zip\ZipPayment\Model\Config $config
+     */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -138,6 +145,7 @@ abstract class AbstractCheckout
     /**
      * Sets api instance
      *
+     * @param object|string $api
      * @return \Zip\ZipPayment\Model\Checkout\AbstractCheckout
      */
     public function setApi($api)
@@ -201,6 +209,7 @@ abstract class AbstractCheckout
     /**
      * Generates uniq id
      *
+     * @param string|null $seed
      * @return string
      */
     public function genIdempotencyKey($seed = null)

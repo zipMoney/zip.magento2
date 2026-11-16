@@ -6,20 +6,27 @@ use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\ClientException;
 
 /**
- * @category  Zip
- * @package   ZipPayment
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://www.zip.co
  */
 
-/**
- * Class TransactionCapture
- */
 class TransactionCancel extends AbstractTransaction implements ClientInterface
 {
+    /**
+     * @var \zipMoney\Api\ChargesApi
+     */
     protected $_service = null;
 
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Zip\ZipPayment\Helper\Payload $payloadHelper
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Zip\ZipPayment\Helper\Data $helper
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \zipMoney\Api\ChargesApi $chargesApi
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
@@ -37,6 +44,7 @@ class TransactionCancel extends AbstractTransaction implements ClientInterface
     }
 
     /**
+     * Send the cancel request to Zip
      *
      * @param \Magento\Payment\Gateway\Http\TransferInterface $transferObject
      * @return array

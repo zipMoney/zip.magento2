@@ -6,7 +6,6 @@ use Zip\ZipPayment\Model\CommonUtil;
 
 /**
  * Used in creating options for sandbox|production config value selection
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */

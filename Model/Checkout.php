@@ -7,7 +7,7 @@ use \Zip\ZipPayment\Model\Checkout\AbstractCheckout;
 
 class Checkout extends AbstractCheckout
 {
-    const STATUS_MAGENTO_AUTHORIZED = "zip_authorised";
+    public const STATUS_MAGENTO_AUTHORIZED = "zip_authorised";
     /**
      * @var Magento\Checkout\Helper\Data
      */
@@ -21,6 +21,25 @@ class Checkout extends AbstractCheckout
      */
     protected $_checkoutId = null;
 
+    /**
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Checkout\Model\PaymentInformationManagement $paymentInformationManagement
+     * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Zip\ZipPayment\Helper\Payload $payloadHelper
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Zip\ZipPayment\Helper\Data $helper
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \zipMoney\Api\CheckoutsApi $checkoutsApi
+     * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -65,7 +84,6 @@ class Checkout extends AbstractCheckout
     /**
      * Create quote in Zip side if not existed, and request for redirect url
      *
-     * @param \Magento\ $quote
      * @param bool $token
      * @return \zipMoney\Model\Checkout
      * @throws \Magento\Framework\Exception\LocalizedException

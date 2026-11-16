@@ -8,7 +8,6 @@ use Magento\Sales\Model\Order;
 use Zip\ZipPayment\Model\Checkout\AbstractCheckout;
 
 /**
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
@@ -16,27 +15,84 @@ use Zip\ZipPayment\Model\Checkout\AbstractCheckout;
 class Token extends AbstractCheckout
 {
     /**
-     * @var \Zip\ZipPayment\Model\TokenisationFactory
+     * @var \Zip\ZipPayment\Model\Tokenisation
      */
-
     protected $_tokenisationFactory;
-    /**
-     * Set quote and config instances
-     *
-     * @param array $params
-     */
 
+    /**
+     * @var \Magento\Quote\Api\CartManagementInterface
+     */
     protected $_quoteManagement;
+
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $_accountManagement;
+
+    /**
+     * @var \Magento\Framework\Message\ManagerInterface
+     */
     protected $_messageManager;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
     protected $_customerRepository;
+
+    /**
+     * @var \Magento\Customer\Model\Url
+     */
     protected $_customerUrl;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Email\Sender\OrderSender
+     */
     protected $_orderSender;
+
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
     protected $_orderRepository;
+
+    /**
+     * @var \Magento\Sales\Api\OrderPaymentRepositoryInterface
+     */
     protected $_orderPaymentRepository;
+
+    /**
+     * @var \Magento\Framework\DataObject\Copy
+     */
     protected $_objectCopyService;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
     protected $_dataObjectHelper;
- 
+
+    /**
+     * Token constructor.
+     *
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param \Magento\Sales\Api\OrderPaymentRepositoryInterface $orderPaymentRepository
+     * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Zip\ZipPayment\Helper\Payload $payloadHelper
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Zip\ZipPayment\Helper\Data $helper
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \zipMoney\Api\TokensApi $tokenApi
+     * @param \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory
+     */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,

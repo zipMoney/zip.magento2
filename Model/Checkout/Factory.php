@@ -5,7 +5,6 @@ namespace Zip\ZipPayment\Model\Checkout;
 /**
  * Factory class for \Zip\ZipPayment\Model\Checkout
  *
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */

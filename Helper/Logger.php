@@ -5,7 +5,6 @@ use \Magento\Framework\App\Helper\AbstractHelper;
 use \Zip\ZipPayment\Logger\Logger as ZipMoneyLogger;
 
 /**
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      http://zip.co
  */
@@ -24,11 +23,18 @@ class Logger extends AbstractHelper
         6 => 200, // 'INFO' ,
         7 => 100, // 'DEBUG'
     ];
+
+    /**
+     * @var array|null
+     */
     protected $_privateDataKeys = null;
+
     /**
      * Logs the info message to the logfile
      *
-     * @param string $message , int $storeId
+     * @param mixed $message
+     * @param int|null $storeId
+     * @return void
      */
     public function info($message, $storeId = null)
     {
@@ -38,7 +44,9 @@ class Logger extends AbstractHelper
     /**
      * Writes the log to the logfile
      *
-     * @param string $message , int $logLevel, int $storeId
+     * @param mixed $message
+     * @param int $logLevel
+     * @param int|null $storeId
      * @return bool
      */
     protected function _log($message, $logLevel = ZipMoneyLogger::INFO, $storeId = null)
@@ -70,7 +78,9 @@ class Logger extends AbstractHelper
     /**
      * Logs the debug message to the logfile
      *
-     * @param string $message , int $storeId
+     * @param mixed $message
+     * @param int|null $storeId
+     * @return void
      */
     public function debug($message, $storeId = null)
     {
@@ -80,7 +90,9 @@ class Logger extends AbstractHelper
     /**
      * Logs the warn message to the logfile
      *
-     * @param string $message , int $storeId
+     * @param mixed $message
+     * @param int|null $storeId
+     * @return void
      */
     public function warn($message, $storeId = null)
     {
@@ -90,7 +102,9 @@ class Logger extends AbstractHelper
     /**
      * Logs the notice message to the logfile
      *
-     * @param string $message , int $storeId
+     * @param mixed $message
+     * @param int|null $storeId
+     * @return void
      */
     public function notice($message, $storeId = null)
     {
@@ -100,7 +114,9 @@ class Logger extends AbstractHelper
     /**
      * Logs the error message to the logfile
      *
-     * @param string $message , int $storeId
+     * @param mixed $message
+     * @param int|null $storeId
+     * @return void
      */
     public function error($message, $storeId = null)
     {
@@ -110,7 +126,9 @@ class Logger extends AbstractHelper
     /**
      * Logs the critical message to the logfile
      *
-     * @param string $message , int $storeId
+     * @param mixed $message
+     * @param int|null $storeId
+     * @return void
      */
     public function critical($message, $storeId = null)
     {
@@ -120,7 +138,9 @@ class Logger extends AbstractHelper
     /**
      * Logs the alert message to the logfile
      *
-     * @param string $message , int $storeId
+     * @param mixed $message
+     * @param int|null $storeId
+     * @return void
      */
     public function alert($message, $storeId = null)
     {
@@ -130,7 +150,9 @@ class Logger extends AbstractHelper
     /**
      * Logs the emergency message to the logfile
      *
-     * @param string $message , int $storeId
+     * @param mixed $message
+     * @param int|null $storeId
+     * @return void
      */
     public function emergency($message, $storeId = null)
     {
@@ -138,8 +160,10 @@ class Logger extends AbstractHelper
     }
 
     /**
-     * hide the customer privacy data from our log
-     * such as phone, address, email, lastname, dob
+     * Masks customer private data (phone, address, email, last name, dob) in an array
+     *
+     * @param mixed $debugData
+     * @return mixed
      */
     protected function sanitizeArrData($debugData)
     {
@@ -150,7 +174,7 @@ class Logger extends AbstractHelper
                     $debugData[$key] = $this->sanitizeArrData($debugData[$key]);
                 } elseif (in_array($key, $this->getPrivateData()) && !is_numeric($key)) {
                     $debugData[$key] = '****';
-                } elseif (stristr($val, 'Authorization: Bearer') !== false) {
+                } elseif (stristr((string)$val, 'Authorization: Bearer') !== false) {
                     $debugData[$key] = '****';
                 }
             }
@@ -160,7 +184,9 @@ class Logger extends AbstractHelper
     }
 
     /**
-     * Need to protect privacy here before we logging
+     * Returns the keys whose values are masked before logging
+     *
+     * @return string[]
      */
     public function getPrivateData()
     {
@@ -175,9 +201,15 @@ class Logger extends AbstractHelper
         ];
     }
 
+    /**
+     * Masks private data in a JSON string or an array and returns it as a string
+     *
+     * @param mixed $debug
+     * @return string|false|null
+     */
     public function sanitizePrivateData($debug)
     {
-        if (is_null($debug)) {
+        if ($debug === null) {
             return null;
         }
 

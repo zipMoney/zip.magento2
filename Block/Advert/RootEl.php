@@ -6,7 +6,6 @@ use Zip\ZipPayment\Model\CommonUtil;
 use Magento\Catalog\Block as CatalogBlock;
 
 /**
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
@@ -15,13 +14,25 @@ class RootEl extends AbstractAdvert implements CatalogBlock\ShortcutInterface
     /**
      * Get country path
      */
-    const COUNTRY_CODE_PATH = 'general/country/default';
+    public const COUNTRY_CODE_PATH = 'general/country/default';
 
     /**
      * @var \Zip\ZipPayment\ViewModel\WidgetConfig
      */
     protected $widgetConfigViewModel;
 
+    /**
+     * RootEl constructor.
+     *
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \Magento\Framework\Registry $registry
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Zip\ZipPayment\ViewModel\WidgetConfig $widgetConfigViewModel
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Zip\ZipPayment\Model\Config $config,
@@ -67,7 +78,8 @@ class RootEl extends AbstractAdvert implements CatalogBlock\ShortcutInterface
     }
 
     /**
-     * get region
+     * Get region
+     *
      * @return string
      */
     public function getRegion()
@@ -75,23 +87,40 @@ class RootEl extends AbstractAdvert implements CatalogBlock\ShortcutInterface
         return $this->_config->getRegion();
     }
 
+    /**
+     * Get language code
+     *
+     * @return string
+     */
     public function getLanguageCode()
     {
         return $this->_config->getLanguageCode();
     }
 
+    /**
+     * Get minimum order total
+     *
+     * @return float
+     */
     public function getOrderTotalMinimum()
     {
         return $this->_config->getOrderTotalMinimum();
     }
 
+    /**
+     * Get maximum order total
+     *
+     * @return float
+     */
     public function getOrderTotalMaximum()
     {
         return $this->_config->getOrderTotalMaximum();
     }
 
     /**
-     * display product widget in line
+     * Display product widget in line
+     *
+     * @return string
      */
     public function isDisplayInlineWidget()
     {

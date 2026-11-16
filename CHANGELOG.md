@@ -2,6 +2,28 @@
 
 All notable changes to the Zip Payment module for Magento 2 are documented in this file.
 
+## 1.3.1
+
+### Changed
+- PHP 8.2 or later is required: PHP 8.1 is end of life and got no fix for
+  CVE-2026-109618 and CVE-2026-109619.
+- Region for Widget offers Australia only; a saved region other than Australia is
+  reset to it on upgrade.
+- The README describes the extension as available in Australia only.
+- The credential check no longer sends the public key, which it never used.
+- The code passes the Magento coding standard with no warnings.
+
+### Fixed
+- At checkout on Magento 2.4.7 and later the widget lost its region and environment:
+  the strict Content Security Policy blocked the inline script that sets them.
+- Checkout failed with a fatal error when a product image could not be loaded.
+- An unexpected error after a charge was created left the charge and the order open;
+  both are now cancelled, unless the charge can no longer be cancelled.
+- An invalid charge response ended in a PHP `TypeError` instead of the error message.
+- A failed charge cancellation was not logged.
+- PHP 8.2 deprecation notices from a dynamic property and from null passed to
+  `strlen()` and `stristr()`.
+
 ## 1.3.0
 
 ### Changed

@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      http://zip.co
  */
@@ -14,8 +13,13 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection
 {
-    const ZIP_CUSTOMER_TOKEN_TABLE_NAME = 'zip_customer_token';
+    public const ZIP_CUSTOMER_TOKEN_TABLE_NAME = 'zip_customer_token';
 
+    /**
+     * Initialise the model and resource model
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();

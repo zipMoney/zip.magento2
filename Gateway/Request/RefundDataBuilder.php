@@ -10,7 +10,6 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://www.zip.co
  */

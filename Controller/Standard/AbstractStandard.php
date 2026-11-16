@@ -7,32 +7,27 @@ use \zipMoney\Api\CheckoutsApi;
 use Zip\ZipPayment\Model\CommonUtil;
 
 /**
- * @category  Zip
- * @package   ZipPayment
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
 abstract class AbstractStandard extends Action
 {
-    const CHECKOUT_ID_KEY = 'id';
-    const CHECKOUT_STATUS_APPROVED = 'approved';
+    public const CHECKOUT_ID_KEY = 'id';
+    public const CHECKOUT_STATUS_APPROVED = 'approved';
     /**
      * Common Route
      *
      * @const
      */
-    const ZIPMONEY_STANDARD_ROUTE = "zippayment/standard";
-    const ZIPMONEY_COMPLETE_ROUTE = "zippayment/complete";
+    public const ZIPMONEY_STANDARD_ROUTE = "zippayment/standard";
+    public const ZIPMONEY_COMPLETE_ROUTE = "zippayment/complete";
     /**
      * Error Route
      *
      * @const
      */
-    const ZIPMONEY_ERROR_ROUTE = "zippayment/standard/error";
+    public const ZIPMONEY_ERROR_ROUTE = "zippayment/standard/error";
     /**
-     * Config
-     *
      * @var \Zip\ZipPayment\Model\Config
      */
     protected $_config;
@@ -172,6 +167,26 @@ abstract class AbstractStandard extends Action
      */
     protected $_storeManager;
 
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $pageFactory
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\Checkout\Model\PaymentInformationManagement $paymentInformationManagement
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $quoteCollectionFactory
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Zip\ZipPayment\Helper\Data $helper
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \Zip\ZipPayment\Model\Checkout\Factory $checkoutFactory
+     * @param \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $pageFactory,
@@ -218,6 +233,8 @@ abstract class AbstractStandard extends Action
     /**
      * Sets quote for the customer.
      *
+     * @param bool|string $token
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function _setCustomerQuote($token = false)
@@ -246,7 +263,8 @@ abstract class AbstractStandard extends Action
     /**
      * Checks if the Session Quote is valid, if not use the db quote.
      *
-     * @return \Magento\Quote\Model\Quote
+     * @param bool|string $token
+     * @return \Magento\Quote\Model\Quote|false
      */
     protected function _retrieveQuote($token = false)
     {
@@ -255,7 +273,6 @@ abstract class AbstractStandard extends Action
             return $sessionQuote;
         }
         $zipMoneyCheckoutId = $this->getRequest()->getParam('checkoutId');
-        $use_checkout_api_quote = false;
         if ($sessionQuote) {
             $addtionalPaymentInfo = $sessionQuote->getPayment()->getAdditionalInformation();
             if (array_key_exists('zip_checkout_id', $addtionalPaymentInfo)) {
@@ -268,32 +285,25 @@ abstract class AbstractStandard extends Action
             } else {
                 $this->_logger->error(__("Checkout Id does not exist in the session quote."));
             }
-            $use_checkout_api_quote = true;
         } else {
-            // Return Session Quote
             $this->_logger->error(__("Session Quote does not exist."));
-            $use_checkout_api_quote = true;
         }
-        //Retrurn DB Quote
-        if ($use_checkout_api_quote) {
-            $checkoutApiQuote = $this->_getQuoteByUsingCheckoutApi($zipMoneyCheckoutId);
-            if (!$checkoutApiQuote) {
-                $this->_logger->warn(__("Quote doesnot exist for the given checkout_id."));
-                return false;
-            } else {
-                $this->_logger->info(__("Loading Quote by using zip checkout get api"));
-            }
-            return $checkoutApiQuote;
+        $checkoutApiQuote = $this->_getQuoteByUsingCheckoutApi($zipMoneyCheckoutId);
+        if (!$checkoutApiQuote) {
+            $this->_logger->warn(__("Quote doesnot exist for the given checkout_id."));
+            return false;
         }
+        $this->_logger->info(__("Loading Quote by using zip checkout get api"));
+        return $checkoutApiQuote;
     }
 
     /**
-     * @param  $zip_checkout_id
+     * Retrieve quote details by using zip checkout get api call
+     *
+     * @param string $zip_checkout_id
      * @return \Magento\Framework\DataObject|\Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \zipMoney\ApiException
-     *
-     * Retrieve quote details by using zip checkout get api call
      */
     protected function _getQuoteByUsingCheckoutApi($zip_checkout_id)
     {
@@ -363,7 +373,9 @@ abstract class AbstractStandard extends Action
     }
 
     /**
-     * @param $quote
+     * Activates the quote unless it has already been converted to an order
+     *
+     * @param \Magento\Quote\Model\Quote $quote
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -391,6 +403,7 @@ abstract class AbstractStandard extends Action
     /**
      * Redirects to the referred page.
      *
+     * @return void
      */
     public function referredAction()
     {
@@ -412,6 +425,7 @@ abstract class AbstractStandard extends Action
     /**
      * Redirects to the error page.
      *
+     * @return void
      */
     public function errorAction()
     {
@@ -502,7 +516,8 @@ abstract class AbstractStandard extends Action
     /**
      * Sets checkout quote object
      *
-     * @return \Zip\ZipPayment\Controller\Standard\AsbtractStandard
+     * @param \Magento\Quote\Model\Quote $quote
+     * @return $this
      */
     protected function _setQuote($quote)
     {
@@ -545,6 +560,10 @@ abstract class AbstractStandard extends Action
 
     /**
      * Sets the Http Headers, Response Code and Responde Body
+     *
+     * @param mixed $data
+     * @param int $responseCode
+     * @return void
      */
     protected function _sendResponse($data, $responseCode = \Magento\Framework\Webapi\Response::HTTP_OK)
     {
@@ -571,6 +590,7 @@ abstract class AbstractStandard extends Action
     /**
      * Redirects to the cart or error page.
      *
+     * @return void
      */
     protected function _redirectToCartOrError()
     {
@@ -584,6 +604,7 @@ abstract class AbstractStandard extends Action
     /**
      * Redirects to the cart page.
      *
+     * @return void
      */
     protected function _redirectToCart()
     {
@@ -593,6 +614,7 @@ abstract class AbstractStandard extends Action
     /**
      * Redirects to the error page.
      *
+     * @return void
      */
     protected function _redirectToError()
     {
@@ -618,6 +640,8 @@ abstract class AbstractStandard extends Action
     }
 
     /**
+     * Returns the quote currency code
+     *
      * @return string
      */
     protected function _getCurrencyCode()
@@ -626,7 +650,9 @@ abstract class AbstractStandard extends Action
     }
 
     /**
-     * check database customer already has token
+     * Checks whether the customer already has a stored token
+     *
+     * @return bool
      */
     protected function _isCustomerSelectedTokenisationBefore()
     {
@@ -638,7 +664,9 @@ abstract class AbstractStandard extends Action
     }
 
     /**
-     * remove token from the database
+     * Removes the customer token from the database
+     *
+     * @return void
      */
     protected function _removeCustomerToken()
     {

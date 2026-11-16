@@ -4,12 +4,40 @@ namespace Zip\ZipPayment\ViewModel;
 
 class WidgetConfig implements \Magento\Framework\View\Element\Block\ArgumentInterface
 {
+    /**
+     * @var \Zip\ZipPayment\Model\Config
+     */
     protected \Zip\ZipPayment\Model\Config $config;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
     protected \Magento\Framework\Serialize\SerializerInterface $serializer;
+
+    /**
+     * @var \Zip\ZipPayment\Model\ResourceModel\NotAllowedProductsProvider
+     */
     protected \Zip\ZipPayment\Model\ResourceModel\NotAllowedProductsProvider $notAllowedProductsProvider;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected \Magento\Store\Model\StoreManagerInterface $storeManager;
+
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected \Magento\Framework\Registry $registry;
 
+    /**
+     * WidgetConfig constructor.
+     *
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \Zip\ZipPayment\Model\ResourceModel\NotAllowedProductsProvider $notAllowedProductsProvider
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Registry $registry
+     */
     public function __construct(
         \Magento\Framework\Serialize\SerializerInterface $serializer,
         \Zip\ZipPayment\Model\Config $config,
@@ -58,6 +86,7 @@ class WidgetConfig implements \Magento\Framework\View\Element\Block\ArgumentInte
 
     /**
      * Get list of product IDs that are not allowed for Zip payment
+     *
      * Only used for cart/checkout pages
      *
      * @return array
@@ -85,10 +114,6 @@ class WidgetConfig implements \Magento\Framework\View\Element\Block\ArgumentInte
             $config['currentProductId'] = $currentProductId;
             $config['isCurrentProductAllowed'] = $this->isCurrentProductAllowed();
             // Don't send full array on product pages
-        } else {
-            // For other pages (cart, checkout) - may need full list if implementing cart-level checks
-            // But usually validator handles this on server, so we can skip it
-            // $config['notAllowedProducts'] = $this->getNotAllowedProductIds();
         }
 
         return $this->serializer->serialize($config);

@@ -6,13 +6,12 @@ use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 
 /**
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
 class CaptureResponseValidator extends AbstractValidator
 {
-    const RESULT_CODE = 'RESULT_CODE';
+    public const RESULT_CODE = 'RESULT_CODE';
 
     /**
      * Performs validation of response

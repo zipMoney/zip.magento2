@@ -5,14 +5,26 @@ namespace Zip\ZipPayment\Gateway\Http\Client;
 use Magento\Payment\Gateway\Http\ClientInterface;
 
 /**
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://www.zip.co
  */
 class TransactionCapture extends AbstractTransaction implements ClientInterface
 {
+    /**
+     * @var \zipMoney\Api\ChargesApi
+     */
     protected $_service = null;
 
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Zip\ZipPayment\Helper\Payload $payloadHelper
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Zip\ZipPayment\Helper\Data $helper
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \zipMoney\Api\ChargesApi $chargesApi
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
@@ -29,6 +41,8 @@ class TransactionCapture extends AbstractTransaction implements ClientInterface
     }
 
     /**
+     * Send the capture request to Zip
+     *
      * @param \Magento\Payment\Gateway\Http\TransferInterface $transferObject
      * @return array
      */

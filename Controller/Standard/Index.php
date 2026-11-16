@@ -5,7 +5,6 @@ namespace Zip\ZipPayment\Controller\Standard;
 use Zip\ZipPayment\Model\CommonUtil;
 
 /**
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */

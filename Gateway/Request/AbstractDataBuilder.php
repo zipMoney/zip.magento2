@@ -9,12 +9,14 @@ namespace Zip\ZipPayment\Gateway\Request;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://www.zip.co
  */
 abstract class AbstractDataBuilder implements BuilderInterface
 {
+    /**
+     * @var \Zip\ZipPayment\Helper\Logger
+     */
     protected $_logger;
     /**
      * @var \Zip\ZipPayment\Helper\Payload
@@ -29,6 +31,12 @@ abstract class AbstractDataBuilder implements BuilderInterface
      */
     protected $_order;
 
+    /**
+     * @param \Magento\Sales\Model\Order $order
+     * @param \Zip\ZipPayment\Helper\Payload $payloadHelper
+     * @param \Zip\ZipPayment\Helper\Data $helper
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     */
     public function __construct(
         \Magento\Sales\Model\Order $order,
         \Zip\ZipPayment\Helper\Payload $payloadHelper,
@@ -41,6 +49,13 @@ abstract class AbstractDataBuilder implements BuilderInterface
         $this->_order = $order;
     }
 
+    /**
+     * Convert a base currency amount to the order currency
+     *
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @param float $baseAmount
+     * @return float
+     */
     public function getMultiCurrencyAmount($payment, $baseAmount)
     {
         $order = $payment->getOrder();

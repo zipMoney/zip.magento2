@@ -5,7 +5,6 @@ namespace Zip\ZipPayment\Block\Advert;
 use Magento\Catalog\Block as CatalogBlock;
 
 /**
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
@@ -14,7 +13,7 @@ class Banner extends AbstractAdvert implements CatalogBlock\ShortcutInterface
     /**
      * @const string
      */
-    const ADVERT_TYPE = "banner";
+    public const ADVERT_TYPE = "banner";
 
     /**
      * Get shortcut alias
