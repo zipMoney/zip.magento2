@@ -11,7 +11,6 @@ use Magento\Payment\Gateway\Http\TransferInterface;
 use Zip\ZipPayment\Model\Config;
 
 /**
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
@@ -27,8 +26,6 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
      * @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $config;
-
-    protected $messageManager;
 
     public function setUp()
     {

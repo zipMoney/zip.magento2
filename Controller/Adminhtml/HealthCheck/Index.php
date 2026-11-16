@@ -77,8 +77,9 @@ class Index extends \Magento\Backend\App\Action
     }
 
     /**
-     * get environment list
-     * @return array
+     * Return environments to check the credentials against
+     *
+     * @return string[]
      */
     private function getEnvironmentList()
     {

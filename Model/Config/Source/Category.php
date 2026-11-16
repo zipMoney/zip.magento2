@@ -4,11 +4,34 @@ namespace Zip\ZipPayment\Model\Config\Source;
 
 class Category implements \Magento\Framework\Data\OptionSourceInterface
 {
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private \Magento\Store\Model\StoreManagerInterface $storeManager;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     private \Magento\Framework\App\RequestInterface $request;
+
+    /**
+     * @var \Magento\Catalog\Helper\Category
+     */
     private \Magento\Catalog\Helper\Category $categoryHelper;
+
+    /**
+     * @var \Zip\ZipPayment\Model\Config\CategorySourceRegistry
+     */
     private \Zip\ZipPayment\Model\Config\CategorySourceRegistry $categorySourceRegistry;
 
+    /**
+     * Category constructor.
+     *
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Catalog\Helper\Category $categoryHelper
+     * @param \Zip\ZipPayment\Model\Config\CategorySourceRegistry $categorySourceRegistry
+     */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
@@ -21,6 +44,11 @@ class Category implements \Magento\Framework\Data\OptionSourceInterface
         $this->categorySourceRegistry = $categorySourceRegistry;
     }
 
+    /**
+     * Returns the category options, indented by level
+     *
+     * @return array
+     */
     public function toOptionArray(): array
     {
         $options = [];
@@ -30,6 +58,13 @@ class Category implements \Magento\Framework\Data\OptionSourceInterface
         return array_reverse($options);
     }
 
+    /**
+     * Appends the category and its children to the options
+     *
+     * @param array $categoryData
+     * @param array $optionsResult
+     * @return void
+     */
     private function renderSubCategory(array $categoryData, array &$optionsResult): void
     {
         if (isset($categoryData['children'])) {
@@ -48,6 +83,11 @@ class Category implements \Magento\Framework\Data\OptionSourceInterface
         ];
     }
 
+    /**
+     * Returns the store category tree, including inactive categories
+     *
+     * @return array
+     */
     private function getCategoriesTree(): array
     {
         $currentStoreId = $this->storeManager->getStore()->getId();
@@ -62,6 +102,12 @@ class Category implements \Magento\Framework\Data\OptionSourceInterface
         return $this->convertToTree($categories);
     }
 
+    /**
+     * Builds a tree from the flat category collection
+     *
+     * @param \Magento\Framework\Data\Collection $categories
+     * @return array
+     */
     private function convertToTree(\Magento\Framework\Data\Collection $categories): array
     {
         $categoryById = [];
@@ -83,6 +129,11 @@ class Category implements \Magento\Framework\Data\OptionSourceInterface
         return [];
     }
 
+    /**
+     * Returns the store id from the store or website request parameter
+     *
+     * @return int|null
+     */
     private function getStoreIdByRequest(): ?int
     {
         if ($storeId = $this->request->getParam('store')) {

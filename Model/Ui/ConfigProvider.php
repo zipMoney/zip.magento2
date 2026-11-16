@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      http://zip.co
  */
@@ -17,7 +16,6 @@ use Zip\ZipPayment\Model\Config;
 use Zip\ZipPayment\Model\CommonUtil;
 
 /**
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
@@ -26,7 +24,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * @const string
      */
-    const CODE = 'zippayment';
+    public const CODE = 'zippayment';
 
     /**
      * @var ResolverInterface
@@ -75,11 +73,12 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     protected $_storeManager;
 
-
     /**
      * @param ResolverInterface $localeResolver
      * @param CurrentCustomer $currentCustomer
      * @param PaymentHelper $paymentHelper
+     * @param Config $config
+     * @param \Zip\ZipPayment\Helper\Logger $logger
      * @param Session $customerSession
      * @param \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -129,7 +128,9 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     }
 
     /**
-     * check database customer already has token
+     * Check database customer already has token
+     *
+     * @return bool
      */
     protected function _isCustomerSelectedTokenisationBefore()
     {
@@ -146,11 +147,21 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
         return false;
     }
 
+    /**
+     * Check if tokenisation is enabled and the customer is logged in
+     *
+     * @return bool
+     */
     protected function _canCustomerSeeTokenisationOption()
     {
         return $this->_config->isTokenisationEnabled() && $this->_isCustomerLoggedin();
     }
 
+    /**
+     * Check if the customer is logged in
+     *
+     * @return bool
+     */
     protected function _isCustomerLoggedin()
     {
         if ($this->_customerSession->isLoggedIn()) {
@@ -159,6 +170,11 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
         return false;
     }
 
+    /**
+     * Check if the customer should be redirected using the saved token
+     *
+     * @return bool
+     */
     protected function _isRedirect()
     {
         return $this->_canCustomerSeeTokenisationOption() && $this->_isCustomerSelectedTokenisationBefore();

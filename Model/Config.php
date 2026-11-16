@@ -8,192 +8,192 @@ use Zip\ZipPayment\Model\CommonUtil;
 
 class Config implements ConfigInterface
 {
-    const MODULE_NAME = 'Zip_ZipPayment';
+    public const MODULE_NAME = 'Zip_ZipPayment';
     /**
      * Method Code name in magento
      *
      * @const
      */
-    const METHOD_CODE = 'zippayment';
+    public const METHOD_CODE = 'zippayment';
 
     /**
      * ZipMoney Authorised Status
      *
      * @const
      */
-    const STATUS_MAGENTO_AUTHORIZED = "zip_authorised";
+    public const STATUS_MAGENTO_AUTHORIZED = "zip_authorised";
 
     /**
      * Private Key
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_PRIVATE_KEY = 'merchant_private_key';
+    public const PAYMENT_ZIPMONEY_PRIVATE_KEY = 'merchant_private_key';
 
     /**
      * Public Key
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_PUBLIC_KEY = 'merchant_public_key';
+    public const PAYMENT_ZIPMONEY_PUBLIC_KEY = 'merchant_public_key';
 
     /**
      * API Envronment
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_ENVIRONMENT = 'environment';
+    public const PAYMENT_ZIPMONEY_ENVIRONMENT = 'environment';
 
     /**
      * Region
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_WIDGET_REGION = 'widget_region';
+    public const PAYMENT_ZIPMONEY_WIDGET_REGION = 'widget_region';
 
-    const PAYMENT_ZIPMONEY_WIDGET_DISPLAY_MODE = 'display_widget_mode';
+    public const PAYMENT_ZIPMONEY_WIDGET_DISPLAY_MODE = 'display_widget_mode';
 
     /**
      * Payment Method Title
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_TITLE = 'title';
+    public const PAYMENT_ZIPMONEY_TITLE = 'title';
 
     /**
      * Product Type
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_PRODUCT = 'product';
+    public const PAYMENT_ZIPMONEY_PRODUCT = 'product';
 
     /**
      * Log Setting
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_LOG_SETTINGS = 'log_settings';
+    public const PAYMENT_ZIPMONEY_LOG_SETTINGS = 'log_settings';
 
     /**
      * Payment Action
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_PAYMENT_ACTION = 'payment_action';
+    public const PAYMENT_ZIPMONEY_PAYMENT_ACTION = 'payment_action';
 
     /**
      * Incontext Checkout
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_ENABLE_TOKENISATION = 'enable_tokenisation';
+    public const PAYMENT_ZIPMONEY_ENABLE_TOKENISATION = 'enable_tokenisation';
 
     /**
      * Exclude Categories
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_EXCLUDE_CATEGORIES = 'exclude_categories';
+    public const PAYMENT_ZIPMONEY_EXCLUDE_CATEGORIES = 'exclude_categories';
 
     /**
      * Minimum Order Total
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_MINIMUM_TOTAL = 'min_order_total';
+    public const PAYMENT_ZIPMONEY_MINIMUM_TOTAL = 'min_order_total';
 
     /**
      * Maximum Order Total
      *
      * @const
      */
-    const PAYMENT_ZIPMONEY_MAXIMUM_TOTAL = 'max_order_total';
+    public const PAYMENT_ZIPMONEY_MAXIMUM_TOTAL = 'max_order_total';
 
     /**
      * Incontext Checkout
      *
      * @const
      */
-    const ADVERTS_HOMEPAGE_BANNER_ACTIVE = 'zip_advert/homepage/banner';
+    public const ADVERTS_HOMEPAGE_BANNER_ACTIVE = 'zip_advert/homepage/banner';
 
     /**
      * Homepage banner html element selector
      */
-    const ADVERTS_HOMEPAGE_BANNER_SELECTOR = 'zip_advert/homepage/banner_selector';
+    public const ADVERTS_HOMEPAGE_BANNER_SELECTOR = 'zip_advert/homepage/banner_selector';
 
     /**
      * Product Page Banner Active
      *
      * @const
      */
-    const ADVERTS_PRODUCT_BANNER_ACTIVE = 'zip_advert/productpage/banner';
+    public const ADVERTS_PRODUCT_BANNER_ACTIVE = 'zip_advert/productpage/banner';
 
     /**
      * Porduct page banner html selector
      */
-    const ADVERTS_PRODUCT_BANNER_SELECTOR = 'zip_advert/productpage/banner_selector';
+    public const ADVERTS_PRODUCT_BANNER_SELECTOR = 'zip_advert/productpage/banner_selector';
 
     /**
      * Cart Page Banner Active
      *
      * @const
      */
-    const ADVERTS_CART_BANNER_ACTIVE = 'zip_advert/cartpage/banner';
+    public const ADVERTS_CART_BANNER_ACTIVE = 'zip_advert/cartpage/banner';
 
     /**
      * Cart Page Banner html element selector
      */
-    const ADVERTS_CART_BANNER_SELECTOR = 'zip_advert/cartpage/banner_selector';
+    public const ADVERTS_CART_BANNER_SELECTOR = 'zip_advert/cartpage/banner_selector';
 
     /**
      * Category Page Banner Active
      *
      * @const
      */
-    const ADVERTS_CATEGORY_BANNER_ACTIVE = 'zip_advert/categorypage/banner';
+    public const ADVERTS_CATEGORY_BANNER_ACTIVE = 'zip_advert/categorypage/banner';
 
     /**
      * Category Page Banner html element selector
      */
-    const ADVERTS_CATEGORY_BANNER_SELECTOR = 'zip_advert/categorypage/banner_selector';
+    public const ADVERTS_CATEGORY_BANNER_SELECTOR = 'zip_advert/categorypage/banner_selector';
 
     /**
      * Product Page Widget Active
      *
      * @const
      */
-    const ADVERTS_PRODUCT_IMAGE_ACTIVE = 'zip_advert/productpage/widget';
+    public const ADVERTS_PRODUCT_IMAGE_ACTIVE = 'zip_advert/productpage/widget';
 
     /**
      * Product Page Widget html element selector
      *
      * @const
      */
-    const ADVERTS_PRODUCT_IMAGE_SELECTOR = 'zip_advert/productpage/widget_selector';
+    public const ADVERTS_PRODUCT_IMAGE_SELECTOR = 'zip_advert/productpage/widget_selector';
 
     /**
      * Cart Page Widget Active
      *
      * @const
      */
-    const ADVERTS_CART_IMAGE_ACTIVE = 'zip_advert/cartpage/widget';
+    public const ADVERTS_CART_IMAGE_ACTIVE = 'zip_advert/cartpage/widget';
 
     /**
      * Cart Page Widget html element selector
      *
      * @const
      */
-    const ADVERTS_CART_IMAGE_SELECTOR = 'zip_advert/cartpage/widget_selector';
+    public const ADVERTS_CART_IMAGE_SELECTOR = 'zip_advert/cartpage/widget_selector';
 
     /**
      * Payment Method Logo Url
      *
      * @const
      */
-    const PAYMENT_METHOD_LOGO_ZIP = "https://static.zip.co/logo/25px/zip.png";
+    public const PAYMENT_METHOD_LOGO_ZIP = "https://static.zip.co/logo/25px/zip.png";
 
     /**
-     * Error Codes Map
+     * Zip API error codes mapped to the codes shown to the customer
      *
      * @var array
      */
@@ -247,6 +247,11 @@ class Config implements ConfigInterface
     protected $_cacheTypeList;
 
     /**
+     * @var string|null
+     */
+    protected $pathPattern;
+
+    /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $_messageManager;
@@ -256,13 +261,27 @@ class Config implements ConfigInterface
      */
     protected $_locale;
 
+    /**
+     * @var \Magento\Framework\Module\ModuleListInterface
+     */
     protected $_moduleList;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var \Magento\Framework\UrlInterface
      */
     private $_urlBuilder;
 
+    /**
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Magento\Framework\Locale\Resolver $locale
+     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
+     */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -302,8 +321,7 @@ class Config implements ConfigInterface
     /**
      * Checks whether method is active or not
      *
-     * @param $method
-     * @param int $storeId
+     * @param int|null $storeId
      * @return bool
      */
     public function isMethodActive($storeId = null)
@@ -356,7 +374,7 @@ class Config implements ConfigInterface
      * Returns payment configuration value
      *
      * @param string $key
-     * @param null $storeId
+     * @param int|null $storeId
      * @return null|string
      */
     public function getValue($key, $storeId = null)
@@ -383,7 +401,8 @@ class Config implements ConfigInterface
     /**
      * Returns Merchant Private Key
      *
-     * @return int
+     * @param int|null $storeId
+     * @return string|null
      */
     public function getMerchantPrivateKey($storeId = null)
     {
@@ -393,6 +412,7 @@ class Config implements ConfigInterface
     /**
      * Returns Merchant Public key
      *
+     * @param int|null $storeId
      * @return string
      */
     public function getMerchantPublicKey($storeId = null)
@@ -403,6 +423,7 @@ class Config implements ConfigInterface
     /**
      * Returns Api Environment
      *
+     * @param int|null $storeId
      * @return string
      */
     public function getEnvironment($storeId = null)
@@ -413,6 +434,7 @@ class Config implements ConfigInterface
     /**
      * Returns Exclude Categories
      *
+     * @param int|null $storeId
      * @return array
      */
     public function getExcludeCategories($storeId = null): array
@@ -435,7 +457,7 @@ class Config implements ConfigInterface
     /**
      * Returns the default config
      *
-     * @param $path
+     * @param string $key
      * @return mixed
      */
     public function getDefaultConfig($key)
@@ -474,6 +496,7 @@ class Config implements ConfigInterface
     /**
      * Returns Region
      *
+     * @param int|null $storeId
      * @return string
      */
     public function getRegion($storeId = null)
@@ -483,7 +506,8 @@ class Config implements ConfigInterface
 
     /**
      * Returns Widget Display mode
-     * @param null $storeId
+     *
+     * @param int|null $storeId
      * @return mixed|string|null
      */
     public function getWidgetDisplayMode($storeId = null)
@@ -519,7 +543,7 @@ class Config implements ConfigInterface
     /**
      * Returns the minimum order total
      *
-     * @return bool
+     * @return float
      */
     public function getOrderTotalMinimum()
     {
@@ -527,9 +551,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Returns the minimum order total
+     * Returns the maximum order total
      *
-     * @return bool
+     * @return float
      */
     public function getOrderTotalMaximum()
     {
@@ -549,6 +573,7 @@ class Config implements ConfigInterface
     /**
      * Returns the log setting
      *
+     * @param int|null $storeId
      * @return int
      */
     public function getLogSetting($storeId = null)
@@ -559,7 +584,8 @@ class Config implements ConfigInterface
     /**
      * Returns the mapped error code
      *
-     * @return int
+     * @param string $errorCode
+     * @return string|null
      */
     public function getMappedErrorCode($errorCode)
     {
@@ -572,8 +598,8 @@ class Config implements ConfigInterface
     /**
      * Sets method instance used for retrieving method specific data
      *
-     * @param MethodInterface $method
-     * @return \Zip\ZipPayment\Model
+     * @param \Magento\Payment\Model\MethodInterface $methodInstance
+     * @return $this
      */
     public function setMethodInstance($methodInstance)
     {
@@ -654,8 +680,8 @@ class Config implements ConfigInterface
     /**
      * Returns the config
      *
-     * @param $path
-     * @param int $storeId
+     * @param string $path
+     * @param int|null $storeId
      * @return mixed
      */
     public function getStoreConfig($path, $storeId = null)
@@ -674,6 +700,11 @@ class Config implements ConfigInterface
         return $value;
     }
 
+    /**
+     * Returns the language part of the current locale, e.g. "en" for en_AU
+     *
+     * @return string
+     */
     public function getLanguageCode()
     {
         $currentLanguageCode = substr($this->_locale->getLocale(), 0, strpos($this->_locale->getLocale(), '_'));
@@ -681,7 +712,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * get module version
+     * Returns the module setup version
+     *
+     * @return string
      */
     public function getVersion()
     {

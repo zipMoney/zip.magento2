@@ -5,7 +5,6 @@ namespace Zip\ZipPayment\Block;
 use Magento\Framework\View\Element\Template;
 
 /**
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
@@ -14,18 +13,28 @@ class Error extends Template
     /**
      * @const string
      */
-    const ERROR_BODY = 'payment/zippayment/zip_messages/error_body';
+    public const ERROR_BODY = 'payment/zippayment/zip_messages/error_body';
     /**
      * @const string
      */
-    const ERROR_HEADER = 'payment/zippayment/zip_messages/error_header';
+    public const ERROR_HEADER = 'payment/zippayment/zip_messages/error_header';
 
     /**
-     * @var Magento\Framework\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $_messageManager;
+
+    /**
+     * @var \Zip\ZipPayment\Model\Config
+     */
     protected $_config;
 
+    /**
+     * @param Template\Context $context
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param array $data
+     */
     public function __construct(
         Template\Context $context,
         \Magento\Framework\Message\ManagerInterface $messageManager,

@@ -6,7 +6,6 @@ use \Zip\ZipPayment\Logger\Logger as ZipMoneyLogger;
 
 /**
  * Used in creating options for sandbox|production config value selection
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */

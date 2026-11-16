@@ -5,7 +5,6 @@ namespace Zip\ZipPayment\Model\Config\Source;
 use Zip\ZipPayment\Model\CommonUtil;
 
 /**
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
@@ -18,6 +17,7 @@ class Environment implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return CommonUtil::getEnvironmentList();
+        return [['value' => CommonUtil::SANDBOX, 'label' => __('Sandbox')],
+            ['value' => CommonUtil::PRODUCTION, 'label' => __('Production')]];
     }
 }

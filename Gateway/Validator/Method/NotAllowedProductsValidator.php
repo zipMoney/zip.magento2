@@ -4,8 +4,15 @@ namespace Zip\ZipPayment\Gateway\Validator\Method;
 
 class NotAllowedProductsValidator extends \Magento\Payment\Gateway\Validator\AbstractValidator
 {
+    /**
+     * @var \Zip\ZipPayment\Model\ResourceModel\NotAllowedProductsProvider
+     */
     private \Zip\ZipPayment\Model\ResourceModel\NotAllowedProductsProvider $notAllowedProductsProvider;
 
+    /**
+     * @param \Magento\Payment\Gateway\Validator\ResultInterfaceFactory $resultFactory
+     * @param \Zip\ZipPayment\Model\ResourceModel\NotAllowedProductsProvider $notAllowedProductsProvider
+     */
     public function __construct(
         \Magento\Payment\Gateway\Validator\ResultInterfaceFactory $resultFactory,
         \Zip\ZipPayment\Model\ResourceModel\NotAllowedProductsProvider $notAllowedProductsProvider
@@ -14,6 +21,12 @@ class NotAllowedProductsValidator extends \Magento\Payment\Gateway\Validator\Abs
         $this->notAllowedProductsProvider = $notAllowedProductsProvider;
     }
 
+    /**
+     * Fail validation when the quote holds a product from an excluded category
+     *
+     * @param array $validationSubject
+     * @return \Magento\Payment\Gateway\Validator\ResultInterface
+     */
     public function validate(array $validationSubject): \Magento\Payment\Gateway\Validator\ResultInterface
     {
         /** @var \Magento\Quote\Model\Quote $quote */
@@ -30,4 +43,3 @@ class NotAllowedProductsValidator extends \Magento\Payment\Gateway\Validator\Abs
         return $this->createResult(true);
     }
 }
-

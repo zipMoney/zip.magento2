@@ -32,7 +32,6 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
         parent::__construct($context, $authSession, $jsHelper, $data);
     }
 
-
     /**
      * Add custom css class
      *

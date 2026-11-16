@@ -9,7 +9,6 @@ use Zip\ZipPayment\Model\Checkout\AbstractCheckout;
 use Zip\ZipPayment\Model\CommonUtil;
 
 /**
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link      http://www.zipmoney.com.au/
@@ -67,26 +66,42 @@ class Charge extends AbstractCheckout
     protected $_dataObjectHelper;
 
     /**
-     * @var \Zip\ZipPayment\Model\TokenisationFactory
+     * @var \Zip\ZipPayment\Model\Tokenisation
      */
     protected $_tokenisationFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-
-    /**
-     * Set quote and config instances
-     *
-     * @param array $params
-     */
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-
     protected $_storeManager;
 
+    /**
+     * Charge constructor.
+     *
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param \Magento\Sales\Api\OrderPaymentRepositoryInterface $orderPaymentRepository
+     * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Zip\ZipPayment\Helper\Payload $payloadHelper
+     * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param \Zip\ZipPayment\Helper\Data $helper
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \zipMoney\Api\ChargesApi $chargesApi
+     * @param \Zip\ZipPayment\Model\TokenisationFactory $tokenFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -148,16 +163,16 @@ class Charge extends AbstractCheckout
     /**
      * Charges the customer against the order
      *
+     * @param bool $token
+     * @param string|null $checkoutId
      * @return \zipMoney\Model\Charge
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @param bool $token
      */
     public function charge($token, $checkoutId = null)
     {
         if (!$this->_order || !$this->_order->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The order does not exist.'));
         }
-
 
         $payload = $this->_payloadHelper->getChargePayload($this->_order, $token);
 
@@ -213,8 +228,10 @@ class Charge extends AbstractCheckout
                 try {
                     // Try to cancel the charge if we have it.
                     $this->_api->chargesCancel($charge->getId());
-                } catch (\Exception $e) {
-                    // do nothing
+                } catch (\Exception $cancelException) {
+                    $this->_logger->error(
+                        "Failed to cancel charge " . $charge->getId() . ": " . $cancelException->getMessage()
+                    );
                 }
             }
             // Cancel the order
@@ -328,9 +345,6 @@ class Charge extends AbstractCheckout
         $this->_logger->info($this->_helper->__("Payment Captured"));
 
         $this->_orderRepository->save($this->_order);
-
-        // Invoice
-        $invoice = $payment->getCreatedInvoice();
     }
 
     /**
@@ -350,6 +364,7 @@ class Charge extends AbstractCheckout
     /**
      * Checks if transaction exists
      *
+     * @param string $txnId
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _checkTransactionExists($txnId)
@@ -369,6 +384,7 @@ class Charge extends AbstractCheckout
     /**
      * Authorises the charge
      *
+     * @param string $txnId
      */
     protected function _authorise($txnId)
     {
@@ -639,7 +655,9 @@ class Charge extends AbstractCheckout
     }
 
     /**
-     * remove token from the database
+     * Remove token from the database
+     *
+     * @return void
      */
     protected function _removeCustomerToken()
     {

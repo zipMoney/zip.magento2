@@ -2,7 +2,6 @@
 namespace Zip\ZipPayment\Model\Config\Source;
 
 /**
- * @author    Zip Plugin Team <integratios@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */

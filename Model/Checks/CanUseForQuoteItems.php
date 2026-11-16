@@ -7,6 +7,13 @@ use Magento\Quote\Model\Quote;
 
 class CanUseForQuoteItems implements \Magento\Payment\Model\Checks\SpecificationInterface
 {
+    /**
+     * Check the quote items against the method's quote_items validator, if it has one
+     *
+     * @param MethodInterface $paymentMethod
+     * @param Quote $quote
+     * @return bool
+     */
     public function isApplicable(MethodInterface $paymentMethod, Quote $quote): bool
     {
         try {
@@ -19,4 +26,3 @@ class CanUseForQuoteItems implements \Magento\Payment\Model\Checks\Specification
         return $result->isValid();
     }
 }
-

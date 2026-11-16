@@ -11,6 +11,20 @@ All notable changes to the Zip Payment module for Magento 2 are documented in th
   Commerce release still in support runs on PHP 8.2 or later, 2.4.6 included.
 - The README now describes the extension as available in Australia only and matches
   the current admin configuration.
+- **Region for Widget offers Australia only.** The other eight countries in the list
+  are markets Zip no longer serves through this extension, and choosing one silently
+  hid tokenisation and every banner.
+- Templates escape output through `$escaper` instead of the deprecated block escape
+  methods.
+- The code passes the Magento coding standard with no warnings: unused constants,
+  properties and assignments removed, docblocks completed and corrected.
+
+### Fixed
+- **A failed attempt to cancel a charge was swallowed silently.** When a payment
+  fails after the charge is created, the module tries to cancel the charge; if that
+  call failed too, nothing was logged. It is now logged as an error with the charge id.
+- `Model\Config` created `$pathPattern` as a dynamic property, deprecated since
+  PHP 8.2.
 
 ## 1.3.0
 

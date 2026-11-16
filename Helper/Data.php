@@ -6,7 +6,6 @@ use \Magento\Framework\App\Helper\AbstractHelper;
 use zipMoney\ApiException;
 
 /**
- * @author    Zip Plugin Team <integration@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
@@ -38,6 +37,13 @@ class Data extends AbstractHelper
 
     /**
      * Set quote and config instances
+     *
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
+     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
+     * @param \Zip\ZipPayment\Model\Config $config
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -58,6 +64,7 @@ class Data extends AbstractHelper
     /**
      * Returns the json_encoded string
      *
+     * @param mixed $object
      * @return string
      */
     public function jsonEncode($object)
@@ -130,7 +137,7 @@ class Data extends AbstractHelper
      * Cancels the order
      *
      * @param \Magento\Sales\Model\Order $order
-     * @param string $customer_email
+     * @param string|null $order_comment
      */
     public function cancelOrder($order, $order_comment = null)
     {
@@ -180,6 +187,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Activates the quote unless it has already been converted to an order
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException

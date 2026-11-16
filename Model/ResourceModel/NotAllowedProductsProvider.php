@@ -4,9 +4,20 @@ namespace Zip\ZipPayment\Model\ResourceModel;
 
 class NotAllowedProductsProvider
 {
+    /**
+     * @var \Zip\ZipPayment\Model\Config
+     */
     private \Zip\ZipPayment\Model\Config $config;
+
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
     private \Magento\Framework\App\ResourceConnection $resourceConnection;
 
+    /**
+     * @param \Zip\ZipPayment\Model\Config $config
+     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     */
     public function __construct(
         \Zip\ZipPayment\Model\Config $config,
         \Magento\Framework\App\ResourceConnection $resourceConnection
@@ -15,6 +26,12 @@ class NotAllowedProductsProvider
         $this->resourceConnection = $resourceConnection;
     }
 
+    /**
+     * Return ids of products assigned to the excluded categories
+     *
+     * @param int|null $storeId
+     * @return int[]
+     */
     public function provideIds(?int $storeId = null): array
     {
         $excludedCategoriesIds = $this->config->getExcludeCategories($storeId);

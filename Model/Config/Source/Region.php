@@ -8,9 +8,19 @@ namespace Zip\ZipPayment\Model\Config\Source;
  */
 class Region implements \Magento\Framework\Option\ArrayInterface
 {
-    protected $_availableCountries = ["au","gb","mx","nz","ca","us","ae","sg","za"];
+    /**
+     * @var string[]
+     */
+    protected $_availableCountries = ["au"];
+
+    /**
+     * @var \Magento\Directory\Api\CountryInformationAcquirerInterface
+     */
     protected $countryInformationAcquirer;
 
+    /**
+     * @param \Magento\Directory\Api\CountryInformationAcquirerInterface $countryInformationAcquirer
+     */
     public function __construct(
         \Magento\Directory\Api\CountryInformationAcquirerInterface $countryInformationAcquirer
     ) {

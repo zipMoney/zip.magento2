@@ -9,7 +9,6 @@ use Zip\ZipPayment\Controller\Standard\AbstractStandard;
 use Zip\ZipPayment\Model\CommonUtil;
 
 /**
- * @author    Zip Plugin Team <integrations@zip.co>
  * @copyright 2020 Zip Co Limited
  * @link      https://zip.co
  */
