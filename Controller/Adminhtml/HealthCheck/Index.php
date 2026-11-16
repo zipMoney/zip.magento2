@@ -2,7 +2,7 @@
 
 namespace Zip\ZipPayment\Controller\Adminhtml\HealthCheck;
 
-use Zip\ZipPayment\Model\CommonUtil;
+use Zip\ZipPayment\Model\Config\Source\Environment;
 
 class Index extends \Magento\Backend\App\Action
 {
@@ -12,7 +12,7 @@ class Index extends \Magento\Backend\App\Action
     protected $resultFactory;
 
     /**
-     * @var Zip\ZipPayment\Model\Config\HealthCheck
+     * @var \Zip\ZipPayment\Model\Config\HealthCheck
      */
     protected $_healthCheck;
 
@@ -22,22 +22,30 @@ class Index extends \Magento\Backend\App\Action
     protected $_logger;
 
     /**
+     * @var Environment
+     */
+    private $environmentSource;
+
+    /**
      * Index constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Zip\ZipPayment\Model\Config\HealthCheck $healthCheck
      * @param \Zip\ZipPayment\Helper\Logger $logger
+     * @param Environment $environmentSource
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Zip\ZipPayment\Model\Config\HealthCheck $healthCheck,
-        \Zip\ZipPayment\Helper\Logger $logger
+        \Zip\ZipPayment\Helper\Logger $logger,
+        Environment $environmentSource
     ) {
         parent::__construct($context);
         $this->resultFactory = $resultJsonFactory;
         $this->_healthCheck = $healthCheck;
         $this->_logger = $logger;
+        $this->environmentSource = $environmentSource;
     }
 
     /**
@@ -48,13 +56,9 @@ class Index extends \Magento\Backend\App\Action
     public function execute()
     {
         $apiKey = $this->getRequest()->getParam('apikey');
-        $publicKey = $this->getRequest()->getParam('publickey');
         $environment = $this->getRequest()->getParam('env');
         if (preg_match('/^[\*]+$/m', $apiKey ?? '')) {
             $apiKey = null;
-        }
-        if (preg_match('/^[\*]+$/m', $publicKey ?? '')) {
-            $publicKey = null;
         }
         $environmentList = $this->getEnvironmentList();
         if (!in_array($environment, $environmentList)) {
@@ -65,7 +69,7 @@ class Index extends \Magento\Backend\App\Action
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create();
         try {
-            $healthCheck = $this->_healthCheck->getHealthResult($websiteId, $apiKey, $publicKey, $environment);
+            $healthCheck = $this->_healthCheck->getHealthResult($websiteId, $apiKey, $environment);
             $response = $healthCheck;
         } catch (\Exception $e) {
             $this->_logger->error($e->getMessage());
@@ -83,11 +87,6 @@ class Index extends \Magento\Backend\App\Action
      */
     private function getEnvironmentList()
     {
-        $result = [
-            CommonUtil::PRODUCTION,
-            CommonUtil::SANDBOX
-        ];
-
-        return $result;
+        return array_column($this->environmentSource->toOptionArray(), 'value');
     }
 }

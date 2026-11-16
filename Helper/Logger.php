@@ -174,7 +174,7 @@ class Logger extends AbstractHelper
                     $debugData[$key] = $this->sanitizeArrData($debugData[$key]);
                 } elseif (in_array($key, $this->getPrivateData()) && !is_numeric($key)) {
                     $debugData[$key] = '****';
-                } elseif (stristr($val, 'Authorization: Bearer') !== false) {
+                } elseif (stristr((string)$val, 'Authorization: Bearer') !== false) {
                     $debugData[$key] = '****';
                 }
             }

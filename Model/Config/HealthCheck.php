@@ -88,11 +88,10 @@ class HealthCheck
      *
      * @param int|string $websiteId
      * @param string|null $apiKey
-     * @param string|null $publicKey
      * @param string|null $env
      * @return array
      */
-    public function getHealthResult($websiteId, $apiKey = null, $publicKey = null, $env = null)
+    public function getHealthResult($websiteId, $apiKey = null, $env = null)
     {
         /** @var Curl $curlObject */
         $curlObject = $this->_curlFactory->create();
@@ -147,7 +146,7 @@ class HealthCheck
 
                 // check api key length if it is more than or equal 50 then call SMI merchant info endpoint
                 // otherwise call checkout get api endpoint only for Australia
-                if (strlen($privateKey) <= 50) {
+                if (strlen((string)$privateKey) <= 50) {
                     $checkoutId = 'au-co_PxSeQfLlpaYn6bLMZSMv13';
                     $url = $apiConfig->getHost() . '/checkouts/' . $checkoutId;
                     $isAuEndpoint = true;
@@ -202,11 +201,14 @@ class HealthCheck
      */
     private function appendMerchantInfo($response)
     {
-        $result = preg_split('/^\r?$/m', $response, 2);
-        $result = trim($result[1]);
-        $data = json_decode($result);
-        $this->appendItem(self::STATUS_OK, "Api key is valid for " . $data->name);
-        $regions = $data->regions;
+        $parts = preg_split('/^\r?$/m', (string)$response, 2);
+        $data = json_decode(trim($parts[1] ?? ''));
+        if (!is_object($data)) {
+            $this->appendItem(self::STATUS_WARNING, __("Could not read the merchant details from the API"));
+            return;
+        }
+        $this->appendItem(self::STATUS_OK, "Api key is valid for " . ($data->name ?? ''));
+        $regions = $data->regions ?? [];
         if ($regions) {
             $regionList = 'Api is valid for below regions:<br>';
             foreach ($regions as $region) {

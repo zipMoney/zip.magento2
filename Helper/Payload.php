@@ -780,12 +780,15 @@ class Payload extends AbstractHelper
     protected function _getProductImage($item)
     {
         $imageUrl = '';
+        $product = null;
         try {
             //only use visible product do not care type $item must be visible cart product
             $product = $item->getProduct();
             $imageUrl = (string) $this->_imageHelper->init($product, 'thumbnail')->getUrl();
         } catch (\Exception $e) {
-            $this->_logger->warning('An error occurred during getting item image for product ' . $product->getId());
+            $this->_logger->warn(
+                'An error occurred during getting item image for product ' . ($product ? $product->getId() : '')
+            );
             $this->_logger->error($e->getMessage());
             $this->_logger->debug($e->getTraceAsString());
         }

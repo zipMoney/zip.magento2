@@ -5,26 +5,24 @@ All notable changes to the Zip Payment module for Magento 2 are documented in th
 ## 1.3.1
 
 ### Changed
-- **PHP 8.2 or later is now required.** PHP 8.1 reached end of life on 31 December
-  2025 and received no fix for CVE-2026-109618 and CVE-2026-109619, the remote code
-  execution flaws patched in PHP 8.2.35, 8.3.36, 8.4.27 and 8.5.12. Every Adobe
-  Commerce release still in support runs on PHP 8.2 or later, 2.4.6 included.
-- The README now describes the extension as available in Australia only and matches
-  the current admin configuration.
-- **Region for Widget offers Australia only.** The other eight countries in the list
-  are markets Zip no longer serves through this extension, and choosing one silently
-  hid tokenisation and every banner.
-- Templates escape output through `$escaper` instead of the deprecated block escape
-  methods.
-- The code passes the Magento coding standard with no warnings: unused constants,
-  properties and assignments removed, docblocks completed and corrected.
+- PHP 8.2 or later is required: PHP 8.1 is end of life and got no fix for
+  CVE-2026-109618 and CVE-2026-109619.
+- Region for Widget offers Australia only; a saved region other than Australia is
+  reset to it on upgrade.
+- The README describes the extension as available in Australia only.
+- The credential check no longer sends the public key, which it never used.
+- The code passes the Magento coding standard with no warnings.
 
 ### Fixed
-- **A failed attempt to cancel a charge was swallowed silently.** When a payment
-  fails after the charge is created, the module tries to cancel the charge; if that
-  call failed too, nothing was logged. It is now logged as an error with the charge id.
-- `Model\Config` created `$pathPattern` as a dynamic property, deprecated since
-  PHP 8.2.
+- At checkout on Magento 2.4.7 and later the widget lost its region and environment:
+  the strict Content Security Policy blocked the inline script that sets them.
+- Checkout failed with a fatal error when a product image could not be loaded.
+- An unexpected error after a charge was created left the charge and the order open;
+  both are now cancelled, unless the charge can no longer be cancelled.
+- An invalid charge response ended in a PHP `TypeError` instead of the error message.
+- A failed charge cancellation was not logged.
+- PHP 8.2 deprecation notices from a dynamic property and from null passed to
+  `strlen()` and `stristr()`.
 
 ## 1.3.0
 

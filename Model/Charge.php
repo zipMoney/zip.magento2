@@ -206,13 +206,12 @@ class Charge extends AbstractCheckout
             }
 
             $this->_chargeResponse($charge, $this->_config->isCharge());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorMessage = $cancelOrderMessage = "Unexpected behavior ." . $e->getMessage();
-            if (!$e instanceof \zipMoney\ApiException
-                && !$e instanceof \Magento\Framework\Exception\LocalizedException
-            ) {
+            $isExpected = $e instanceof \zipMoney\ApiException
+                || $e instanceof \Magento\Framework\Exception\LocalizedException;
+            if (!$isExpected) {
                 $this->_logger->alert($errorMessage);
-                throw $e;
             }
 
             if ($e instanceof \zipMoney\ApiException) {
@@ -224,19 +223,40 @@ class Charge extends AbstractCheckout
                 $cancelOrderMessage = $apiError;
             }
 
+            $chargeReleased = true;
             if (isset($charge) && $charge->getId()) {
                 try {
                     // Try to cancel the charge if we have it.
                     $this->_api->chargesCancel($charge->getId());
                 } catch (\Exception $cancelException) {
+                    $chargeReleased = false;
                     $this->_logger->error(
                         "Failed to cancel charge " . $charge->getId() . ": " . $cancelException->getMessage()
                     );
                 }
             }
-            // Cancel the order
-            $this->_helper->cancelOrder($this->_order, $cancelOrderMessage);
-            throw new \Magento\Framework\Exception\LocalizedException($errorMessage);
+            if ($isExpected) {
+                $this->_helper->cancelOrder($this->_order, $cancelOrderMessage);
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    $errorMessage instanceof \Magento\Framework\Phrase ? $errorMessage : __('%1', $errorMessage)
+                );
+            }
+            if (!$chargeReleased) {
+                $this->_logger->alert(
+                    "Charge " . $charge->getId() . " could not be cancelled; order "
+                    . $this->_order->getIncrementId() . " is left open for manual review"
+                );
+                throw $e;
+            }
+            try {
+                $this->_helper->cancelOrder($this->_order, $cancelOrderMessage);
+            } catch (\Throwable $cancelOrderException) {
+                $this->_logger->error(
+                    "Failed to cancel order " . $this->_order->getIncrementId() . ": "
+                    . $cancelOrderException->getMessage()
+                );
+            }
+            throw $e;
         }
         return $charge;
     }
