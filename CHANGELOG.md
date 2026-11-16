@@ -2,6 +2,16 @@
 
 All notable changes to the Zip Payment module for Magento 2 are documented in this file.
 
+## 1.3.1
+
+### Changed
+- **PHP 8.2 or later is now required.** PHP 8.1 reached end of life on 31 December
+  2025 and received no fix for CVE-2026-109618 and CVE-2026-109619, the remote code
+  execution flaws patched in PHP 8.2.35, 8.3.36, 8.4.27 and 8.5.12. Every Adobe
+  Commerce release still in support runs on PHP 8.2 or later, 2.4.6 included.
+- The README now describes the extension as available in Australia only and matches
+  the current admin configuration.
+
 ## 1.3.0
 
 ### Changed

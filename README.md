@@ -1,12 +1,14 @@
-# Magento2 zippayment
+# Zip Payment for Magento 2
 
-Zip gives customers the ability to shop now and pay later with no interest while you as the merchant get paid immediately. Customers select Zip at checkout and get approved instantly and shop securely. Zip is fully integrated with the store’s online checkout and can integrate seamlessly with your store directly via API or by using one of our platform plugins.
+Zip gives customers the ability to shop now and pay later with no interest while you as the merchant get paid immediately. Customers select Zip at checkout, get approved instantly and shop securely.
+
+The extension is available to merchants in Australia.
 
 ## Prerequisites
 
-- PHP 8.1 or above
+- PHP 8.2 or above
 - Composer
-- Configuration credentials
+- A Zip merchant account and its API keys
 
 ## Installation instructions
 
@@ -52,45 +54,39 @@ because Magento never reads a module's `composer.json` when the module is droppe
 there. If that route is needed, it has to be a separate archive — ask rather than
 improvise one from this repository, which carries no library at all.
 
-### Install using Magento Marketplace
+### Install from Adobe Commerce Marketplace
 
-Note:- This extension is not yet available in the Magento Marketplace. This
-section will be updated once it is released there.
+The extension is also listed on
+[Adobe Commerce Marketplace](https://commercemarketplace.adobe.com/zip-magento2.html).
+Marketplace delivers the same Composer package through `repo.magento.com`, so the
+commands above apply once the extension is added to your Marketplace account.
 
 ## Configuration
 
-### Payment Section
+Request your API keys from Zip at integrations@zip.co.
 
-1. Contact Zip instegrations support through one of the following channels depending on your region to request your configuration credentials:
-    - **UK: integrationsuk@zip.co**
-    - **NZ: integrationsnz@zip.co**
-    - **AU: integrations@zip.co**
-1. Open the Magento Admin
-1. Click    the Stores  icon    in  the left    hand menu   and from    there   choose  Settings    >   Configuration
-1. The  configuration   page    will    open.   From  the little  menu    on  the left    hand    side    of  this    screen  you must    click   Sales  and then
-choose  Payment Methods when    it  expands.
-1. On   the Payment Methods page,   click   Other   Payment Methods so  it  expands.
+In the Magento Admin, go to **Stores > Settings > Configuration > Sales > Payment
+Methods** and expand the Zip section.
 
-![Alt text](https://static.zip.co/github-images/payment-section-2.jpg "Payment Section")
+1. Set **Enable** to Yes and enter a **Title** for the payment method, e.g. "Zip".
+1. Set **Environment** to Sandbox for a test site or Production for a live one.
+1. Enter the **Public Key** and **Private Key**.
+1. Set **Region for Widget** to Australia.
+1. Set **Capture Method** to Capture to take payment when the order is placed, or to
+   Authorise to authorise at checkout and capture later.
+1. Set **Log Setting** to Info, or to Debug to log debug information as well.
+1. Optionally restrict the payment method by country, product category and minimum
+   or maximum order value.
+1. Set **Sort Order** to 0 to place Zip at the top of the payment methods.
 
-1. Set Enable  to  Yes and a   title   for the payment method  “Zip"
-1. Enter the   Private Key and Public  Key.
-1. Set  payment action to Capture, or Authorise if you want to authorise  on checkout completion and capture later
+Banners and widgets for the home, product, category and cart pages are
+configured under **Marketing Banners Widgets and Banners** in the same section. At
+checkout the Zip payment method always shows its own description and "Learn More"
+popup; there is nothing to configure for it.
 
-### Note: Authorise is only available for AU region only
+Click **Save Config**.
 
-1. Set  log settings    to  Info or Debug if you want to log all the debug information as well.
-1. Set  environment to  either  Sandbox (for    your    test    or  development site)   or  Production  (for    your    live    website)
-1. Set  Sort    Order   to  0 to place the payment method on top.
+## Questions and feedback
 
-### Marketing Banners and Widgets Section
-
-![Alt text](https://static.zip.co/github-images/marketing-section.png "Markting Banners and Widgets Section")
-
-1. Scroll down  and expand  Marketing   Banners and Widgets section
-1. Expand   everything  and set all options to Yes/No as per your requirement.
-1. Click    Save    Config  up  the top
-
-### Questions and feedback
-
-If you have any questions concerning this product or the implementation please contact integrations@zip.co for assistance.
+If you have any questions about this extension or its implementation, contact
+integrations@zip.co.
